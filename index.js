@@ -5,9 +5,10 @@ const app = express();
 const host = "localhost";
 const port = 3000;
 
+
 app.use(json());
 
-app.get("/", (res, req) => {
+app.get("/", (req, res) => {
   res.header("Content-Type", "application/json");
   res.send(JSON.stringify({ message: "Hello World" }));
 });
@@ -25,6 +26,6 @@ app.listen(port, host, () => {
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });
-});
+})
 
 
