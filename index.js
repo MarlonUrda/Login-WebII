@@ -1,10 +1,11 @@
-const express = require("express");
+import express, { json } from "express";
+
+
+const app = express();
 const host = "localhost";
 const port = 3000;
 
-const app = express();
-
-app.use(express.json());
+app.use(json());
 
 app.get("/", (res, req) => {
   res.header("Content-Type", "application/json");
@@ -21,3 +22,9 @@ app.post("/toProcess", async (req, res) => {
 app.listen(port, host, () => {
   console.log(`Server running at http://${host}:${port}/`);
 });
+
+app.use((req, res) => {
+  res.status(404).send({ error: "Not found" });
+});
+
+
