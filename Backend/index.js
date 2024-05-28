@@ -30,14 +30,14 @@ app.use(express.static( parentDirectory +"/client/dist"));
 
 app.get("/", (req, res) => {
   console.log(__dirname);
-  // Usa sendFile en lugar de sendfile, y asegúrate de que la ruta al archivo index.html es correcta
+  //muestra log in
   res.sendFile(parentDirectory + "/client/dist/index.html");
 });
 
 app.get('/create-session', (req, res) => {
   req.session.user = {
-    id: '004', // Aquí puedes poner el ID del usuario
-    name: 'nose' // Aquí puedes poner el nombre del usuario
+    id: '004', 
+    name: 'nose' 
   };
   res.send('signed in');
 });
