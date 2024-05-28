@@ -1,16 +1,20 @@
 import express from "express";
 import session from "express-session";
 import { fileURLToPath } from "url";
-import { dirname } from "path";
+import { dirname, resolve } from "path";
+import morgan from "morgan";
 
 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const parentDirectory = resolve(__dirname, '..');
 
 const app = express();
 const host = "localhost";
 const port = 3000;
+
+app.use(morgan(parentDirectory));
 
 app.use(session({
   secret: "secret",
@@ -22,15 +26,29 @@ app.use(session({
 app.use(express.json());
 
 // Sirve los archivos estáticos de Vue desde la carpeta dist
-app.use(express.static("C:/Users/ATS/Documents/Visual studio/Universidad/Login-WebII/client/dist"));
+app.use(express.static( parentDirectory +"/client/dist"));
 
 app.get("/", (req, res) => {
   console.log(__dirname);
   // Usa sendFile en lugar de sendfile, y asegúrate de que la ruta al archivo index.html es correcta
-  res.sendFile("C:/Users/ATS/Documents/Visual studio/Universidad/Login-WebII/client/dist" + "/index.html");
+  res.sendFile(parentDirectory + "/client/dist/index.html");
 });
 
+app.get('/create-session', (req, res) => {
+  req.session.user = {
+    id: '004', // Aquí puedes poner el ID del usuario
+    name: 'nose' // Aquí puedes poner el nombre del usuario
+  };
+  res.send('signed in');
+});
 
+app.get('/get-session', (req, res) => {
+  if (req.session.user) {
+    res.send(`Session exists for user ${req.session.user.name}`);
+  } else {
+    res.send('No session exists');
+  }
+});
 
 app.post("/toProcess", async (req, res) => {
   const obj = await import("./" + req.body.objectName + ".js");
