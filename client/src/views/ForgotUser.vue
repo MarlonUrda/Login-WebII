@@ -32,7 +32,7 @@ import { Label } from '@/components/ui/label'
       </div>
       <div class="mt-4 text-center text-sm">
         
-        <router-link to="/Forgot" class="underline">
+        <router-link to="/ForgotPass" class="underline">
             Forgot your password?
         </router-link>
 

@@ -29,7 +29,7 @@ import { Label } from '@/components/ui/label'
         <div class="grid gap-2">
           <div class="flex items-center">
             <Label for="password">Password</Label>
-            <router-link to="/Forgot" class="ml-auto inline-block text-sm underline">
+            <router-link to="/ForgotPass" class="ml-auto inline-block text-sm underline">
               Forgot your password?
             </router-link>
           </div>
@@ -38,9 +38,7 @@ import { Label } from '@/components/ui/label'
         <Button type="submit" class="w-full">
           Login
         </Button>
-        <Button variant="outline" class="w-full">
-          Login with Google
-        </Button>
+
       </div>
       <div class="mt-4 text-center text-sm">
         Don't have an account?
