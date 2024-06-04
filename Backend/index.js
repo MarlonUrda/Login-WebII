@@ -5,6 +5,7 @@ import { dirname, resolve } from "path";
 import morgan from "morgan";
 import { getConnection } from "./database/pool.js";
 import { login } from "./odk/login.js";
+import { regApi } from "./odk/register.js";
 import cors from "cors";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -64,6 +65,10 @@ app.post("/toProcess", async (req, res) => {
   const instance = new obj.default();
   res.send(instance[req.body.methodName](req.body.params));
   res.status(200);
+});
+
+app.post("/Register", cors(), async (req, res) => {
+  regApi(req, res);
 });
 
 app.listen(port, "0.0.0.0", () => {

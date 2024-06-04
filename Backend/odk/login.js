@@ -24,3 +24,8 @@ export const login = async (req, res) => {
     req.session.loggedin = true;
   }
 };
+
+export const logout = (req, res) => {
+  req.session.destroy();
+  res.status(200).send({ message: "You logged out succesfully!" });
+};
