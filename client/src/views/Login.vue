@@ -6,50 +6,58 @@ import { Label } from '@/components/ui/label'
 </script>
 
 <template>
-  <Card class="mx-auto max-w-sm">
+  <div class="mt-36 max-w-md" id="pos">
+  <Card class="shadow-none border-none">
     <CardHeader>
-      <CardTitle class="text-2xl">
-        Login
+      <CardTitle class=" text-3xl">
+        Inicio de Sesión
       </CardTitle>
       <CardDescription>
-        Enter your email below to login to your account
+        Ingresa tu correo para iniciar sesión en tu cuenta.
       </CardDescription>
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
-        <div class="grid gap-2">
-          <Label for="email">Email</Label>
+        <div class="mt-12 grid gap-2">
+          <Label for="email">Correo Electrónico</Label>
           <Input
             id="email"
             type="email"
-            placeholder="m@example.com"
+            placeholder="correo@ejemplo.com"
             required
           />
         </div>
         <div class="grid gap-2">
           <div class="flex items-center">
-            <Label for="password">Password</Label>
+            <Label for="password">Contraseña</Label>
             <router-link to="/ForgotPass" class="ml-auto inline-block text-sm underline">
-              Forgot your password?
+              ¿Olvidaste tu contraseña?
             </router-link>
           </div>
-          <Input id="password" type="password" required />
+          <Input id="password" type="password" placeholder="Ingresa la contraseña de tu cuenta." required />
         </div>
-        <Button type="submit" class="w-full">
-          Login
+        <Button type="submit" class="mt-12 w-full">
+          Iniciar Sesión
         </Button>
 
       </div>
-      <div class="mt-4 text-center text-sm">
-        Don't have an account?
+      <div class="mt-2 text-center text-sm">
+        ¿No tienes una cuenta?
         <router-link to="/Register" class="underline">
-              Sing up
+              Regístrate
         </router-link>
       </div>
     </CardContent>
   </Card>
+</div>
 </template>
 
 <style scoped>
-
+#pos{
+  position: absolute;
+  width: 50%;
+  max-height: 100%;
+  right: 4.5%;
+  z-index: 50;
+}
 </style>
