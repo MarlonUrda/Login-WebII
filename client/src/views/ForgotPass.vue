@@ -1,13 +1,20 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 </script>
 
 <template>
   <Card class="mt-36 max-w-md shadow-none border-none" id="pos">
     <CardHeader>
+
       <CardTitle class="text-3xl">
         Olvidé mi Contraseña
       </CardTitle>
@@ -26,6 +33,7 @@ import { Label } from '@/components/ui/label'
             required
           />
         </div>
+
         <Button type="submit" class="w-full">
           Siguiente
         </Button>
@@ -33,11 +41,13 @@ import { Label } from '@/components/ui/label'
       <div class="mt-2 text-center text-sm">
         <router-link to="/Login" class="underline">
             Volver al inicio de sesión
+
         </router-link>
       </div>
     </CardContent>
   </Card>
 </template>
+
 
 <style scoped>
 #pos{
@@ -48,3 +58,4 @@ import { Label } from '@/components/ui/label'
   z-index: 50;
 }
 </style>
+
