@@ -1,8 +1,14 @@
 <script setup lang="ts">
-import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+import { Button } from "../components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
 </script>
 
 <template>
@@ -31,16 +37,13 @@ import { Label } from '@/components/ui/label'
         </Button>
       </div>
       <div class="mt-4 text-center text-sm">
-        
         <router-link to="/ForgotPass" class="underline">
             ¿Olvidaste tu Contraseña?
         </router-link>
-
       </div>
     </CardContent>
   </Card>
 </template>
-
 <style>
 @import 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css';
 </style>
