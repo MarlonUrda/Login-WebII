@@ -14,26 +14,36 @@ import { Label } from "../components/ui/label";
 <template>
   <Card class="mx-auto max-w-sm">
     <CardHeader>
-      <CardTitle class="text-2xl"> Enter your email address </CardTitle>
+      <CardTitle class="text-2xl">
+        Olvidé mi Nombre de Usuario
+      </CardTitle>
       <CardDescription>
-        Recovering your username starts with the email linked to your account.
+        Escribe tu correo electrónico y recupera tus datos.
       </CardDescription>
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
         <div class="grid gap-2">
-          <Label for="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" required />
+            <Label for="email">Correo Electrónico</Label>
+          <Input
+            id="email"
+            type="email"
+            placeholder="correo@ejemplo.com"
+            required
+          />
         </div>
-        <Button type="submit" class="w-full"> Next </Button>
+        <Button type="submit" class="w-full">
+          Siguiente
+        </Button>
       </div>
       <div class="mt-4 text-center text-sm">
         <router-link to="/ForgotPass" class="underline">
-          Forgot your password?
+            ¿Olvidaste tu Contraseña?
         </router-link>
       </div>
     </CardContent>
   </Card>
 </template>
-
-<style scoped></style>
+<style>
+@import 'https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css';
+</style>

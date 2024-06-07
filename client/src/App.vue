@@ -1,16 +1,23 @@
+<script>
+import Background from './components/Background.vue'
+import TitleCard from './views/TitleCard.vue'
+export default {
+  name: 'App',
+  components: {
+    Background,
+    TitleCard
+  }
+}
+</script>
+
 <template>
   <div id="app">
-
+    
+    <TitleCard />
+    <Background />
     <router-view/>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'App',
-}
-</script>
-
-<style>
-/* Estilos globales */
+<style scoped>
 </style>
