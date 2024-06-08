@@ -12,7 +12,7 @@ import { Label } from "../components/ui/label";
 </script>
 
 <template>
-  <Card class="mt-36 max-w-md shadow-none border-none" id="pos">
+  <Card class="max-w-md shadow-none border-none" id="pos">
     <CardHeader>
 
       <CardTitle class="text-3xl">
@@ -24,7 +24,7 @@ import { Label } from "../components/ui/label";
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
-        <div class="mt-20 grid gap-2">
+        <div class="mt-16 grid gap-2">
             <Label for="">Correo de verificación</Label>
           <Input
             id="mail"
@@ -52,9 +52,10 @@ import { Label } from "../components/ui/label";
 <style scoped>
 #pos{
   position: absolute;
+  top: 20.5%;
   width: 50%;
   max-height: 100%;
-  right: 4.5%;
+  right: 4.8%;
   z-index: 50;
 }
 </style>

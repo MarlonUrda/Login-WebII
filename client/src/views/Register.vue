@@ -12,7 +12,7 @@ import { Label } from "../components/ui/label";
 </script>
 
 <template>
-  <Card class="mt-36 max-w-md shadow-none border-none" id="pos">
+  <Card class="max-w-md shadow-none border-none" id="pos">
     <CardHeader>
       <CardTitle class="text-3xl">
         Crea tu Cuenta
@@ -22,8 +22,8 @@ import { Label } from "../components/ui/label";
       </CardDescription>
     </CardHeader>
     <CardContent>
-      <div class="grid gap-4">
-        <div class="mt-5 grid gap-2">
+      <div class="grid gap-4 mt-2">
+        <div class="grid gap-2">
           <Label for="email">Correo Electrónico</Label>
           <Input
             id="email"
@@ -46,11 +46,11 @@ import { Label } from "../components/ui/label";
             required
           />
         </div>
-        <Button type="submit" class="mt-6 w-full">
+        <Button type="submit" class="w-full mt-2">
           Registrarse
         </Button>
       </div>
-      <div class="mt-2 text-center text-sm">
+      <div class="text-center text-sm mt-2">
         <router-link to="/Login" class="underline">
             Volver al inicio de sesión
         </router-link>
@@ -63,8 +63,9 @@ import { Label } from "../components/ui/label";
 #pos{
   position: absolute;
   width: 50%;
+  top: 20.5%;
   max-height: 100%;
-  right: 4.5%;
+  right: 4.8%;
   z-index: 50;
 }
 </style>
