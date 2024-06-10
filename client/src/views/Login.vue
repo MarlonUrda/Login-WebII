@@ -41,7 +41,7 @@ import { Label } from '@/components/ui/label'
         </Button>
 
       </div>
-      <div class="mt-2 text-center text-sm">
+      <div class="mt-2 text-center text-sm" id ="link">
         ¿No tienes una cuenta?
         <router-link to="/Register" class="underline">
               Regístrate
@@ -60,5 +60,8 @@ import { Label } from '@/components/ui/label'
   max-height: 100%;
   right: 4.8%;
   z-index: 50;
+}
+#link{
+  z-index: 1000;
 }
 </style>
