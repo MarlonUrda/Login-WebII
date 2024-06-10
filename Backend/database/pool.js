@@ -21,11 +21,11 @@ export const pool = new Pool({
 });
 
 export const getConnection = () => {
-  pool.connect((error) => {
-    if (error) {
-      console.log("error: " + error);
-    } else {
+  pool.connect()
+    .then(() => {
       console.log("Connected to database");
-    }
-  });
+    })
+    .catch((error) => {
+      console.error("Error connecting to database:", error);
+    });
 };
