@@ -62,6 +62,6 @@ import { Label } from '@/components/ui/label'
   z-index: 50;
 }
 #link{
-  z-index: 1000;
+  z-index: 10;
 }
 </style>

@@ -90,7 +90,7 @@ body{
     top: 81.5%;
     left: 75%;
     width: 12%;
-    z-index: 600;
+    z-index: 5;
 }
 
 @keyframes animate{
