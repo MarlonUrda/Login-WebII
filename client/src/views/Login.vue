@@ -1,8 +1,33 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+
+
+const email = ref("");
+const password = ref("");
+
+const sendData = async () => {
+  console.log("hola");
+
+  const response = await fetch("http://localhost:3000/get-session", {
+    credentials: "include",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value,
+    }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+};
+
 </script>
 
 <template>
@@ -21,6 +46,7 @@ import { Label } from '@/components/ui/label'
         <div class="mt-8 grid gap-2">
           <Label for="email">Correo Electrónico</Label>
           <Input
+            v-model="email"
             id="email"
             type="email"
             placeholder="correo@ejemplo.com"
@@ -34,18 +60,16 @@ import { Label } from '@/components/ui/label'
               ¿Olvidaste tu contraseña?
             </router-link>
           </div>
-          <Input id="password" type="password" placeholder="Ingresa la contraseña de tu cuenta." required />
+          <Input v-model="password" id="password" type="password" placeholder="Ingresa la contraseña de tu cuenta." required/>
         </div>
-        <Button type="submit" class="mt-10 w-full">
+        <Button @click="sendData" type="submit" class="mt-12 w-full">
           Iniciar Sesión
         </Button>
 
       </div>
       <div class="mt-2 text-center text-sm" id ="link">
         ¿No tienes una cuenta?
-        <router-link to="/Register" class="underline">
-              Regístrate
-        </router-link>
+        <router-link to="/Register" class="underline"> Sing up </router-link>
       </div>
     </CardContent>
   </Card>
