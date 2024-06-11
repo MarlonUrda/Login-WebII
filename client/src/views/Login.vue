@@ -35,7 +35,7 @@ const sendData = async () => {
 </script>
 
 <template>
-  <div class="mt-36 max-w-md" id="pos">
+  <div class="max-w-md" id="pos">
   <Card class="shadow-none border-none">
     <CardHeader>
       <CardTitle class=" text-3xl">
@@ -47,7 +47,7 @@ const sendData = async () => {
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
-        <div class="mt-12 grid gap-2">
+        <div class="mt-8 grid gap-2">
           <Label for="email">Correo Electrónico</Label>
           <Input
             v-model="email"
@@ -66,13 +66,13 @@ const sendData = async () => {
           </div>
           <Input v-model="password" id="password" type="password" placeholder="Ingresa la contraseña de tu cuenta." required />
         </div>
-        <Button @click="sendData" type="submit" class="mt-12 w-full">
+        <Button @click="sendData" type="submit" class="mt-10 w-full">
           Iniciar Sesión
         </Button>
       </div>
-      <div class="mt-2 text-center text-sm">
+      <div class="mt-2 text-center text-sm" id ="link">
         ¿No tienes una cuenta?
-        <router-link to="/Register" class="underline">
+        <router-link to="/Register" class="underline" id ="link">
               Regístrate
         </router-link>
       </div>
@@ -85,8 +85,12 @@ const sendData = async () => {
 #pos{
   position: absolute;
   width: 50%;
+  top: 20.5%;
   max-height: 100%;
-  right: 4.5%;
+  right: 4.8%;
   z-index: 50;
+}
+#link{
+  z-index: 1000;
 }
 </style>
