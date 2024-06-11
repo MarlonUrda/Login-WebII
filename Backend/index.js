@@ -17,7 +17,7 @@ const host = "localhost";
 const port = 3000;
 
 app.use(cors());
-app.use(morgan(parentDirectory));
+app.use(morgan("dev"));
 getConnection();
 
 app.use(
