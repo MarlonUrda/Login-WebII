@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { Button } from "../components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "../components/ui/card";
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 const email = ref("");
 const password = ref("");
@@ -39,7 +39,7 @@ const print = () => {
             placeholder="correo@ejemplo.com"
             required
           />
-          <Label for="">Usuario</Label>
+          <Label for="username">Usuario</Label>
           <Input
             v-model="username"
             id="user"
@@ -47,7 +47,7 @@ const print = () => {
             placeholder="Ingresa tu nombre de usuario."
             required
           />
-          <Label for="">Contraseña</Label>
+          <Label for="password">Contraseña</Label>
           <Input
             v-model="password"
             id="password"
