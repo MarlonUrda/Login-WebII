@@ -10,3 +10,10 @@ export const encryptPass = (password) => {
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return encrypted.toString("hex");
 };
+
+export const decryptPass = (encrypted) => {
+  const decipher = crypto.createDecipheriv(algorithm, key, iv);
+  let decrypted = decipher.update(encrypted, "hex", "utf8");
+  decrypted += decipher.final("utf8");
+  return decrypted;
+};

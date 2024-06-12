@@ -1,4 +1,5 @@
 import { pool } from "../database/pool.js";
+import { decryptPass } from "./encrypt.js";
 
 export const login = async (req, res) => {
   console.log(req.body.email, req.body.password);
@@ -15,9 +16,19 @@ export const login = async (req, res) => {
     return;
   }
 
+  if (req.body.email !== user.email) {
+    res.status(401).send({ message: "Incorrect Email" });
+    return;
+  }
+
   if (!user || !user.password) {
-    res.status(401).send({ message: "Usuario no autorizado" });
-  } else if (user.password.trim() === req.body.password.trim()) {
+    res.status(401).send({ message: "Incorrect Password" });
+    return;
+  }
+
+  const decPass = decryptPass(user.password);
+
+  if (decPass.trim() === req.body.password.trim()) {
     res.status(200).send({ message: "You logged in succesfully!" });
     console.log(user);
     req.session.user = user;
