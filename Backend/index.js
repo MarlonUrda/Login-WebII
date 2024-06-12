@@ -67,7 +67,7 @@ app.post("/toProcess", async (req, res) => {
   res.status(200);
 });
 
-app.post("/Register", cors(), async (req, res) => {
+app.post("/register", cors(), (req, res) => {
   regApi(req, res);
 });
 

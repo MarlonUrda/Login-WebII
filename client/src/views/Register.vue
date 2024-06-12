@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref } from "vue";
 import { Button } from "../components/ui/button";
 import {
   Card,
@@ -9,14 +10,20 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+
+const email = ref("");
+const password = ref("");
+const username = ref("");
+
+const print = () => {
+  console.log(email, password, username);
+};
 </script>
 
 <template>
   <Card class="max-w-md shadow-none border-none" id="pos">
     <CardHeader>
-      <CardTitle class="text-3xl">
-        Crea tu Cuenta
-      </CardTitle>
+      <CardTitle class="text-3xl"> Crea tu Cuenta </CardTitle>
       <CardDescription>
         Llena la información abajo para crear una nueva cuenta.
       </CardDescription>
@@ -26,6 +33,7 @@ import { Label } from "../components/ui/label";
         <div class="grid gap-2">
           <Label for="email">Correo Electrónico</Label>
           <Input
+            v-model="email"
             id="email"
             type="email"
             placeholder="correo@ejemplo.com"
@@ -33,6 +41,7 @@ import { Label } from "../components/ui/label";
           />
           <Label for="">Usuario</Label>
           <Input
+            v-model="username"
             id="user"
             type="text"
             placeholder="Ingresa tu nombre de usuario."
@@ -40,19 +49,20 @@ import { Label } from "../components/ui/label";
           />
           <Label for="">Contraseña</Label>
           <Input
+            v-model="password"
             id="password"
             type="password"
             placeholder="Ingresa tu nueva contraseña."
             required
           />
         </div>
-        <Button type="submit" class="w-full mt-2">
+        <Button type="submit" @click="print" class="w-full mt-2">
           Registrarse
         </Button>
       </div>
       <div class="text-center text-sm mt-2">
         <router-link to="/Login" class="underline">
-            Volver al inicio de sesión
+          Volver al inicio de sesión
         </router-link>
       </div>
     </CardContent>
@@ -60,7 +70,7 @@ import { Label } from "../components/ui/label";
 </template>
 
 <style scoped>
-#pos{
+#pos {
   position: absolute;
   width: 50%;
   top: 20.5%;
