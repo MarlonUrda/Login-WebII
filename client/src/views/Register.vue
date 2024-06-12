@@ -15,7 +15,7 @@ const email = ref("");
 const password = ref("");
 const username = ref("");
 
-const print = () => {
+const mostrar = () => {
   console.log(email, password, username);
 };
 </script>
@@ -56,7 +56,7 @@ const print = () => {
             required
           />
         </div>
-        <Button type="submit" @click="print" class="w-full mt-2">
+        <Button @click="mostrar" type="submit" class="w-full mt-2">
           Registrarse
         </Button>
       </div>
