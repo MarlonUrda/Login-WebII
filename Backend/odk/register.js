@@ -1,10 +1,10 @@
 import { pool } from "../database/pool.js";
-import { encryptPass } from "./encrypt.js";
+import { encrypt } from "./encrypt.js";
 
 export const regApi = async (req, res) => {
   const { username, email, password } = req.body;
 
-  const passwordEncrypt = encryptPass(password);
+  const passwordEncrypt = await encrypt(password);
 
   const values = [email, passwordEncrypt, username];
   try {
@@ -27,6 +27,7 @@ export const regApi = async (req, res) => {
       "INSERT INTO users (email, password, name) VALUES ($1, $2, $3)",
       values
     );
+
     res.status(201).send({ message: "Datos insertados: " + values });
   } catch (error) {
     console.log(error);

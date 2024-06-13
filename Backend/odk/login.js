@@ -1,6 +1,5 @@
 import { pool } from "../database/pool.js";
-import { decryptPass } from "./encrypt.js";
-
+import { compare } from "./encrypt.js";
 export const login = async (req, res) => {
   try {
     console.log(req.body.email, req.body.password);
@@ -10,7 +9,9 @@ export const login = async (req, res) => {
 
     let user = response.rows[0];
 
-    const decPass = decryptPass(user.password);
+    const decPass = await compare(req.body.password, user.password);
+
+    console.log(decPass);
 
     console.log(response.rows);
 
@@ -19,21 +20,24 @@ export const login = async (req, res) => {
       return;
     }
 
-    if (user.length) {
+    if (user === undefined) {
       res.status(401).send({ message: "Incorrect Email" });
       return;
     }
 
-    if (!user || !user.password) {
-      res.status(401).send({ message: "Incorrect Password" });
-      return;
-    }
+    // if (!user || !user.password) {
+    //   res.status(401).send({ message: "Incorrect Password" });
+    //   return;
+    // }
 
-    if (decPass.trim() === req.body.password.trim()) {
+    if (decPass) {
       res.status(200).send({ message: "You logged in succesfully!" });
       console.log(user);
       req.session.user = user;
       req.session.loggedin = true;
+    } else if (!decPass) {
+      res.status(401).send({ message: "Incorrect Password" });
+      return;
     }
   } catch (error) {
     console.log(error.message);

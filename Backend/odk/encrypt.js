@@ -1,26 +1,11 @@
-import crypto from "crypto";
+import bc from "bcryptjs";
 
-const algorithm = "aes-256-cbc";
-const key = crypto.randomBytes(32);
-const iv = crypto.randomBytes(16);
-
-const pass = "Lamamadelamama";
-
-export const encryptPass = (password) => {
-  const cipher = crypto.createCipheriv(algorithm, key, iv);
-  let encrypted = cipher.update(password);
-  encrypted = Buffer.concat([encrypted, cipher.final()]);
-  return encrypted.toString("hex");
+export const encrypt = async (password) => {
+  const salt = await bc.genSalt(10);
+  const hash = await bc.hash(password, salt);
+  return hash;
 };
 
-export const decryptPass = (encrypted) => {
-  const decipher = crypto.createDecipheriv(algorithm, key, iv);
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-  return decrypted;
+export const compare = async (password, encrypted) => {
+  return await bc.compare(password, encrypted);
 };
-const test = encryptPass(pass);
-console.log(test);
-
-const test2 = decryptPass(test);
-console.log(test2);
