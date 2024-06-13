@@ -14,9 +14,10 @@ import { Label } from "../components/ui/label";
 const email = ref("");
 const password = ref("");
 const username = ref("");
+const errorMessage = ref("");
 
 const sendUser = async () => {
-  console.log("hola");
+  console.log("sendUser");
 
   try{
 
@@ -39,6 +40,13 @@ const sendUser = async () => {
     const data = await response.json();
 
     console.log(data);
+
+    if (response.status > 300) {
+    errorMessage.value = data.message;
+    } else {
+      errorMessage.value = "";
+    }
+
   }catch(err){
     console.log(err)
   }
@@ -83,6 +91,7 @@ const sendUser = async () => {
               required
               autocomplete="off"
             />
+            <p class="text-red-500">{{ errorMessage }}</p> 
           </div>
           <Button type="submit" class="w-full mt-2">
             Registrarse
