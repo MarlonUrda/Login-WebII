@@ -16,6 +16,7 @@ import { faFolderOpen } from '@fortawesome/free-regular-svg-icons'
 
 library.add(faFolderOpen, faUsersGear, faUsersRectangle, faCloud, faComments, faCalendarDays, faClipboard, faPaperclip, faPencil, faList, faEye, faMoneyBill, faChartColumn, faGlobe, faGears, faWifi, faAddressBook, faHandshake, faBusinessTime, faLayerGroup, faGauge, faPhoneVolume, faDatabase, faBarsProgress, faHourglassHalf, faSitemap)
 
-createApp(App).component('font-awesome-icon', FontAwesomeIcon).mount('#app')
-
-createApp(App).use(router).mount('#app')
+createApp(App)
+  .use(router)
+  .component('font-awesome-icon', FontAwesomeIcon)
+  .mount('#app')
