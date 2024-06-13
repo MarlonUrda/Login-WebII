@@ -16,22 +16,32 @@ const password = ref("");
 const username = ref("");
 
 const sendUser = async () => {
-  const response = await fetch("http://localhost:3000/register", {
-    credentials: "include",
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      email: email.value,
-      password: password.value,
-      username: username.value,
-    }),
-  });
+  console.log("hola");
 
-  const data = await response.json();
+  try{
 
-  console.log(data);
+    const response = await fetch("http://localhost:3000/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email.value,
+        password: password.value,
+        username: username.value,
+      }),
+    })
+
+    email.value = "";
+    password.value = "";
+    username.value = "";
+
+    const data = await response.json();
+
+    console.log(data);
+  }catch(err){
+    console.log(err)
+  }
 };
 </script>
 
@@ -45,35 +55,39 @@ const sendUser = async () => {
     </CardHeader>
     <CardContent>
       <div class="grid gap-4 mt-2">
-        <div class="grid gap-2">
-          <Label for="email">Correo Electrónico</Label>
-          <Input
-            v-model="email"
-            id="email"
-            type="email"
-            placeholder="correo@ejemplo.com"
-            required
-          />
-          <Label for="username">Usuario</Label>
-          <Input
-            v-model="username"
-            id="user"
-            type="text"
-            placeholder="Ingresa tu nombre de usuario."
-            required
-          />
-          <Label for="password">Contraseña</Label>
-          <Input
-            v-model="password"
-            id="password"
-            type="password"
-            placeholder="Ingresa tu nueva contraseña."
-            required
-          />
-        </div>
-        <Button @click="sendUser" type="submit" class="w-full mt-2">
-          Registrarse
-        </Button>
+        <form @submit.prevent="sendUser">
+          <div class="grid gap-2">
+            <Label for="email">Correo Electrónico</Label>
+            <Input
+              v-model="email"
+              id="email"
+              type="email"
+              placeholder="correo@ejemplo.com"
+              required
+            />
+            <Label for="username">Usuario</Label>
+            <Input
+              v-model="username"
+              id="user"
+              type="text"
+              placeholder="Ingresa tu nombre de usuario."
+              required
+              autocomplete="off"
+            />
+            <Label for="password">Contraseña</Label>
+            <Input
+              v-model="password"
+              id="password"
+              type="password"
+              placeholder=" Ingresa tu contraseña."
+              required
+              autocomplete="off"
+            />
+          </div>
+          <Button type="submit" class="w-full mt-2">
+            Registrarse
+          </Button>
+        </form>
       </div>
       <div class="text-center text-sm mt-2">
         <router-link to="/Login" class="underline">
