@@ -15,8 +15,23 @@ const email = ref("");
 const password = ref("");
 const username = ref("");
 
-const mostrar = () => {
-  console.log(email, password, username);
+const sendUser = async () => {
+  const response = await fetch("http://localhost:3000/register", {
+    credentials: "include",
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email.value,
+      password: password.value,
+      username: username.value,
+    }),
+  });
+
+  const data = await response.json();
+
+  console.log(data);
 };
 </script>
 
@@ -56,7 +71,7 @@ const mostrar = () => {
             required
           />
         </div>
-        <Button @click="mostrar" type="submit" class="w-full mt-2">
+        <Button @click="sendUser" type="submit" class="w-full mt-2">
           Registrarse
         </Button>
       </div>
