@@ -16,11 +16,11 @@ export const regApi = async (req, res) => {
     ]);
 
     if (em.rows.length > 0) {
-      res.status(400).json({ message: "El email ya existe" });
+      return res.status(400).json({ message: "El email ya existe" });
     }
 
     if (pass.rows.length > 0) {
-      res.status(400).json({ message: "La contraseña ya existe" });
+      return res.status(400).json({ message: "La contraseña ya existe" });
     }
 
     const result = await pool.query(
