@@ -16,7 +16,10 @@ const app = express();
 const host = "localhost";
 const port = 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173', // reemplaza esto con tu origen
+  credentials: true
+}));
 app.use(morgan("dev"));
 getConnection();
 
@@ -34,21 +37,15 @@ app.use(express.json());
 // Sirve los archivos estáticos de Vue desde la carpeta dist
 app.use(express.static(parentDirectory + "/client/dist"));
 
-app.get("/", (req, res) => {
+app.get("/*", (req, res) => {
   console.log(__dirname);
   //muestra log in
   res.sendFile(parentDirectory + "/client/dist/index.html");
 });
 
-app.get("/create-session", (req, res) => {
-  req.session.user = {
-    id: "004",
-    name: "nose",
-  };
-  res.send("signed in");
-});
 
-app.get("/get-session", cors(), (req, res) => {
+
+app.get("/get-session",  (req, res) => {
   if (req.session.user) {
     res.send(`Session exists for user ${req.session.user.name}`);
   } else {
@@ -56,7 +53,7 @@ app.get("/get-session", cors(), (req, res) => {
   }
 });
 
-app.post("/get-session", cors(), (req, res) => {
+app.post("/get-session", (req, res) => {
   login(req, res);
 });
 
@@ -67,7 +64,7 @@ app.post("/toProcess", async (req, res) => {
   res.status(200);
 });
 
-app.post("/register", cors(), (req, res) => {
+app.post("/register",  (req, res) => {
   regApi(req, res);
 });
 
