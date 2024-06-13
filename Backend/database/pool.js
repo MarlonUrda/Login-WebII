@@ -6,7 +6,7 @@ const result = dotenv.config({ path: "./env/.env" });
 if (result.error) {
   throw result.error;
 } else {
-  console.log(result.parsed);
+  // console.log(result.parsed);
 }
 
 const { Pool } = pkg;
