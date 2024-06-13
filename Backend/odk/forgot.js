@@ -37,6 +37,8 @@ export const regApi = async (req, res) => {
         }
       });
 
+    }else{
+      return res.status(400).json({ message: "El email no existe" });
     }
 
 
