@@ -1,44 +1,49 @@
+
+
 import { pool } from "../database/pool.js";
 import nodemailer from "nodemailer";
 
-export const regApi = async (req, res) => {
+export const emailapi = async (req, res) => {
   const {email } = req.body;
 
 
 
-  const values = [email];
+
   try {
     const em = await pool.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
 
     if (em.rows.length > 0) {
+      console
       //El email ya existe
       let transporter = nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-          user: 'nose',
-          pass: 'ni idea'
+          user: 'bettrello@gmail.com',
+          pass: 'rphx noed gtne zalh'
         }
       });
       
       let mailOptions = {
-        from: 'nose ',
+        from: 'bettrello@gmail.com',
         to: email,
         subject: 'Se te olvido tu contraseña?', 
-        text: 'Bobo'
+        text: 'Bobo,entra al link para cambiar tu contraseña:'
       };
       
       transporter.sendMail(mailOptions, function(error, info){
         if (error) {
           console.log(error);
         } else {
-          console.log('Email sent: ' + info.response);
+           res.status(201).json({ message: `El email si existe Bobo2 ${email}` });
         }
       });
 
     }else{
-      return res.status(400).json({ message: "El email no existe" });
+      return res.status(400).json({ message: `El email no existe Bobo2 ${email}` });
     }
 
 

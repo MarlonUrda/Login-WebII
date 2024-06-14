@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { Button } from "../components/ui/button";
+import { ref } from "vue";
 import {
   Card,
   CardContent,
@@ -9,6 +10,29 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+
+const email = ref("");
+
+const sendEmail = async () => {
+  console.log("sendEmail");
+  console.log(email.value);
+
+  const response = await fetch("http://localhost:3000/emailProccess", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      email: email.value,
+    }),
+  });
+  console.log("response");
+
+  const data = await response.json();
+  console.log(data);
+};
+
+
 </script>
 
 <template>
@@ -25,8 +49,9 @@ import { Label } from "../components/ui/label";
     <CardContent>
       <div class="grid gap-4">
         <div class="mt-16 grid gap-2">
-            <Label for="">Correo de verificación</Label>
+            <Label for="email">Correo de verificación</Label>
           <Input
+            v-model="email"
             id="mail"
             type="text"
             placeholder="correo@ejemplo.com"
@@ -34,7 +59,7 @@ import { Label } from "../components/ui/label";
           />
         </div>
 
-        <Button type="submit" class="w-full">
+        <Button  @click="sendEmail" type="submit" class="w-full">
           Siguiente
         </Button>
       </div>

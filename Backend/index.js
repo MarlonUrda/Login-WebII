@@ -7,6 +7,7 @@ import { getConnection } from "./database/pool.js";
 import { login } from "./odk/login.js";
 import { regApi } from "./odk/register.js";
 import cors from "cors";
+import { emailapi } from "./odk/forgot.js"; 
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -51,6 +52,11 @@ app.get("/get-session",  (req, res) => {
   } else {
     res.send("No session exists");
   }
+});
+
+app.post("/emailProccess", (req, res) => {
+  console.log("req.body.email");
+  emailapi(req, res);
 });
 
 app.post("/get-session", (req, res) => {
