@@ -10,11 +10,13 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { useRouter } from 'vue-router';
 
 const email = ref("");
 const password = ref("");
 const username = ref("");
 const errorMessage = ref("");
+const router = useRouter();
 
 const sendUser = async () => {
   console.log("sendUser");
@@ -40,11 +42,20 @@ const sendUser = async () => {
     const data = await response.json();
 
     console.log(data);
+    
 
     if (response.status > 300) {
-    errorMessage.value = data.message;
+      errorMessage.value = data.message;
     } else {
       errorMessage.value = "";
+      router.push({
+      name: 'Registered',
+      params: {
+        email: email.value,
+        password: password.value,
+        username: username.value,
+      },
+    });
     }
 
   }catch(err){

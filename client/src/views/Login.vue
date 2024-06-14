@@ -79,7 +79,7 @@ const sendData = async () => {
         </div>
         <div class="mt-2 text-center text-sm" id="link">
           ¿No tienes una cuenta?
-          <router-link to="/Register" class="underline"> Sing up </router-link>
+          <router-link to="/Register" class="underline"> Regístrate </router-link>
         </div>
       </CardContent>
     </Card>
