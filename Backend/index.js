@@ -30,14 +30,18 @@ app.use(
     secret: "secret",
     resave: false,
     saveUninitialized: false,
-    cookie: { maxAge: 60000 },
+    cookie: { 
+      maxAge: 600000, 
+      sameSite: false,
+    },
   })
 );
 
 app.use(express.json());
 
-// Sirve los archivos estáticos de Vue desde la carpeta dist
+
 app.use(express.static(parentDirectory + "/client/dist"));
+
 
 
 app.get("/user-data", (req, res) => {
@@ -67,10 +71,16 @@ app.post("/register",  (req, res) => {
   regApi(req, res);
 });
 
-app.listen(port, "0.0.0.0", () => {
-  console.log(`Server running at http://${host}:${port}/`);
+app.get('*', (req, res) => {
+  res.sendFile(parentDirectory + '/client/dist/index.html');
 });
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });
 });
+
+app.listen(port, "0.0.0.0", () => {
+  console.log(`Server running at http://${host}:${port}/`);
+});
+
+

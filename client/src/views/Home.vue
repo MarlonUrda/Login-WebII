@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 
 import {
   Card,
@@ -15,19 +15,29 @@ const email = ref('');
 const username = ref('');
 
 const userData =async () => {
-  console.log("hola");
   try {
-  const response = await fetch("http://localhost:3000/user-data", {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
+    let headersList = {
+      'Content-Type': 'application/json',
     }
-  });
-  const data = await response.json();
-  console.log(data);
 
-    //email.value = data.user.email;
-    //username.value = data.user.name;
+    let response = await fetch("http://localhost:3000/user-data", { 
+      method: "GET",
+      headers: headersList
+    });
+
+    let data = await response.json();
+    console.log(data);
+    console.log(typeof data); 
+
+    if (data && data.user) {
+        console.log(data.user.email);
+        console.log(data.user.name);
+        email.value = data.user.email;
+        username.value = data.user.name;
+    } else {
+        console.log('data or data.user is undefined');
+    }
+
 
   } catch (error) {
 
@@ -65,6 +75,7 @@ onMounted(() => {
         </CardDescription>
         </div>
       </CardHeader>
+      <!-- <button @click="userData" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4">Actualizar</button> -->
       <CardContent>
 
         <div class="mt-12 text-center text-sm font-semibold" id="link">
