@@ -1,5 +1,6 @@
 import { pool } from "../database/pool.js";
 import { compare } from "./encrypt.js";
+
 export const login = async (req, res) => {
   try {
     console.log(req.body.email, req.body.password);
@@ -7,37 +8,33 @@ export const login = async (req, res) => {
       req.body.email,
     ]);
 
-    let user = response.rows[0];
 
+
+    let user = response.rows[0];
+    
+    if (user === undefined) {
+      console.log("Incorrect Email");
+      return res.status(401).send({ message: "Incorrect Email" });
+    }
+    
     const decPass = await compare(req.body.password, user.password);
 
-    console.log(decPass);
 
-    console.log(response.rows);
-
-    if (response.length === 0) {
-      res.status(404).send({ message: "User not found" });
-      return;
-    }
-
-    if (user === undefined) {
-      res.status(401).send({ message: "Incorrect Email" });
-      return;
-    }
-
-    // if (!user || !user.password) {
-    //   res.status(401).send({ message: "Incorrect Password" });
-    //   return;
-    // }
 
     if (decPass) {
-      res.status(200).send({ message: "You logged in succesfully!" });
-      console.log(user);
+      console.log("You logged in succesfully!");
       req.session.user = user;
+      req.session.email = req.body.email;
       req.session.loggedin = true;
+      res
+        .status(301)
+        //.redirect("/Home");
+        .send({ message: "You logged in succesfully!" });
+
+
     } else if (!decPass) {
-      res.status(401).send({ message: "Incorrect Password" });
-      return;
+      
+      return res.status(401).send({ message: "Incorrect Password" });
     }
   } catch (error) {
     console.log(error.message);

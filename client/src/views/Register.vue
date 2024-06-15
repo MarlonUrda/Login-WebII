@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 import { ref } from "vue";
 import { Button } from "../components/ui/button";
 import {
@@ -35,9 +35,7 @@ const sendUser = async () => {
       }),
     })
 
-    email.value = "";
-    password.value = "";
-    username.value = "";
+
 
     const data = await response.json();
 
@@ -48,15 +46,11 @@ const sendUser = async () => {
       errorMessage.value = data.message;
     } else {
       errorMessage.value = "";
-      router.push({
-      name: 'Registered',
-      params: {
-        email: email.value,
-        password: password.value,
-        username: username.value,
-      },
-    });
+      router.push({name:'Registered',  params: { email:email.value, password:password.value,username:username.value } });
     }
+    email.value = "";
+    password.value = "";
+    username.value = "";
 
   }catch(err){
     console.log(err)

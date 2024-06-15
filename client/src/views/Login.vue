@@ -10,13 +10,16 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { useRouter } from 'vue-router';
 
 const email = ref("");
 const password = ref("");
+const errorMessage = ref("");
+const router = useRouter();
 
 const sendData = async () => {
   console.log("hola");
-
+  try {
   const response = await fetch("http://localhost:3000/get-session", {
     credentials: "include",
     method: "POST",
@@ -30,7 +33,22 @@ const sendData = async () => {
   });
 
   const data = await response.json();
-  console.log(data);
+  if (response.status ==301) {
+    router.push({path: '/Home'});
+  } 
+
+  if (response.status > 303) {
+      errorMessage.value = data.message;
+    } else {
+      errorMessage.value = "";
+    }
+    email.value = "";
+    password.value = "";
+  } catch (error) {
+
+    console.error('Error:', error);
+  }
+
 };
 </script>
 
@@ -45,37 +63,43 @@ const sendData = async () => {
       </CardHeader>
       <CardContent>
         <div class="grid gap-4">
-          <div class="mt-8 grid gap-2">
-            <Label for="email">Correo Electrónico</Label>
-            <Input
-              v-model="email"
-              id="email"
-              type="email"
-              placeholder="correo@ejemplo.com"
-              required
-            />
-          </div>
-          <div class="grid gap-2">
-            <div class="flex items-center">
-              <Label for="password">Contraseña</Label>
-              <router-link
-                to="/ForgotPass"
-                class="ml-auto inline-block text-sm underline"
-              >
-                ¿Olvidaste tu contraseña?
-              </router-link>
+          <form @submit.prevent="sendData">
+            <div class="mt-8 grid gap-2">
+              
+              <Label for="email">Correo Electrónico</Label>
+              <Input
+                v-model="email"
+                id="email"
+                type="email"
+                placeholder="correo@ejemplo.com"
+                required
+                autocomplete="email"
+              />
             </div>
-            <Input
-              v-model="password"
-              id="password"
-              type="password"
-              placeholder="Ingresa la contraseña de tu cuenta."
-              required
-            />
-          </div>
-          <Button @click="sendData" type="submit" class="mt-12 w-full">
-            Iniciar Sesión
-          </Button>
+            <div class="grid gap-2">
+              <div class="flex items-center">
+                <Label for="password">Contraseña</Label>
+                <router-link
+                  to="/ForgotPass"
+                  class="ml-auto inline-block text-sm underline"
+                >
+                  ¿Olvidaste tu contraseña?
+                </router-link>
+              </div>
+              <Input
+                v-model="password"
+                id="password"
+                type="password"
+                placeholder="Ingresa la contraseña de tu cuenta."
+                required
+                autocomplete="off"
+              />
+              <p class="text-red-500">{{ errorMessage }}</p> 
+            </div>
+            <Button  type="submit" class="mt-12 w-full">
+              Iniciar Sesión
+            </Button>
+          </form>
         </div>
         <div class="mt-2 text-center text-sm" id="link">
           ¿No tienes una cuenta?

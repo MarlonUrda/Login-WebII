@@ -8,6 +8,7 @@ import { login } from "./odk/login.js";
 import { regApi } from "./odk/register.js";
 import cors from "cors";
 import { emailapi } from "./odk/forgot.js"; 
+import { userData } from "./odk/home.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -38,21 +39,13 @@ app.use(express.json());
 // Sirve los archivos estáticos de Vue desde la carpeta dist
 app.use(express.static(parentDirectory + "/client/dist"));
 
-app.get("/*", (req, res) => {
-  console.log(__dirname);
-  //muestra log in
-  res.sendFile(parentDirectory + "/client/dist/index.html");
+
+app.get("/user-data", (req, res) => {
+  console.log("userData");
+  userData(req, res);
+
 });
 
-
-
-app.get("/get-session",  (req, res) => {
-  if (req.session.user) {
-    res.send(`Session exists for user ${req.session.user.name}`);
-  } else {
-    res.send("No session exists");
-  }
-});
 
 app.post("/emailProccess", (req, res) => {
   console.log("req.body.email");
