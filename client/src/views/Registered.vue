@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup >
 
 import {
   Card,
@@ -16,9 +16,9 @@ const password = ref('');
 const username = ref('');
 
 onMounted(() => {
-//   email.value = route.params.email;
-//   password.value = route.params.password;
-//   username.value = route.params.username;
+  email.value = route.params.email;
+  password.value = route.params.password;
+  username.value = route.params.username;
 });
 
 </script>
@@ -29,7 +29,10 @@ onMounted(() => {
       <CardHeader>
         <CardTitle class="text-3xl"> ¡Te registraste con exito! </CardTitle>
         <CardDescription>
+            
+          <router-link to="/Login" class="underline">
             Ya puedes iniciar sesión en tu cuenta.
+          </router-link>
         </CardDescription>
         <CardTitle class="text-2xl mt-16 italic"> Los datos de tu cuenta: </CardTitle>
         <CardTitle class=" text-base font-normal italic"> (No los olvides, está será la última vez que podrás verlos). </CardTitle>
