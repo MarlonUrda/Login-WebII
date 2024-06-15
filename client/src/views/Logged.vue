@@ -1,4 +1,4 @@
-<script setup >
+<script setup lang="ts">
 
 import {
   Card,
@@ -12,13 +12,11 @@ import { useRoute } from 'vue-router';
 
 const route = useRoute();
 const email = ref('');
-const password = ref('');
 const username = ref('');
 
 onMounted(() => {
 //   email.value = route.params.email;
 //   password.value = route.params.password;
-//   username.value = route.params.username;
 });
 
 </script>
@@ -27,15 +25,12 @@ onMounted(() => {
   <div id="pos">
     <Card class="shadow-none border-none">
       <CardHeader>
-        <CardTitle class="text-3xl"> ¡Te registraste con exito! </CardTitle>
+        <CardTitle class="text-3xl"> ¡Ya estás en el sistema! </CardTitle>
         <CardDescription>
-            
-          <router-link to="/Login" class="underline">
-            Ya puedes iniciar sesión en tu cuenta.
-          </router-link>
+            Iniciaste sesión en tu cuenta exitosamente.
         </CardDescription>
         <CardTitle class="text-2xl mt-16 italic"> Los datos de tu cuenta: </CardTitle>
-        <CardTitle class=" text-base font-normal italic"> (No los olvides, está será la última vez que podrás verlos). </CardTitle>
+        <CardTitle class=" text-base font-normal italic"> (La información de tu sesión actual): </CardTitle>
     <div class="font-bold mt-3">
             <CardDescription class="text-xl italic">
             Tu correo electrónico: {{ email }}
@@ -44,14 +39,14 @@ onMounted(() => {
             Tu nombre de usuario: {{ username }}
         </CardDescription>
         <CardDescription class="text-xl italic">
-            Tu contraseña: {{ password }}
+            Tu contraseña: (Encriptada y segura)
         </CardDescription>
         </div>
       </CardHeader>
       <CardContent>
 
         <div class="mt-12 text-center text-sm font-semibold" id="link">
-          <router-link to="/Login" class="underline text-base"> Ir al Inicio de Sesión </router-link>
+          <router-link to="/Login" class="underline text-base"> Cerrar la Sesión </router-link>
         </div>
       </CardContent>
     </Card>

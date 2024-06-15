@@ -36,7 +36,8 @@ const sendEmail = async () => {
 </script>
 
 <template>
-  <Card class="max-w-md shadow-none border-none" id="pos">
+  <div id="pos">
+  <Card class="shadow-none border-none">
     <CardHeader>
 
       <CardTitle class="text-3xl">
@@ -48,7 +49,7 @@ const sendEmail = async () => {
     </CardHeader>
     <CardContent>
       <div class="grid gap-4">
-        <div class="mt-16 grid gap-2">
+        <div class="mt-[20%] grid gap-2">
             <Label for="email">Correo de verificación</Label>
           <Input
             v-model="email"
@@ -59,7 +60,7 @@ const sendEmail = async () => {
           />
         </div>
 
-        <Button  @click="sendEmail" type="submit" class="w-full">
+        <Button  @click="sendEmail" type="submit" class="w-full mt-[1%]">
           Siguiente
         </Button>
       </div>
@@ -71,6 +72,7 @@ const sendEmail = async () => {
       </div>
     </CardContent>
   </Card>
+  </div>
 </template>
 
 
