@@ -44,7 +44,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="max-w-md" id="pos">
+  <div id="pos">
     <Card class="shadow-none border-none">
       <CardHeader>
         <CardTitle class="text-3xl"> ¡Ya estás en el sistema! </CardTitle>

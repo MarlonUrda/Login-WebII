@@ -78,10 +78,10 @@ const sendData = async () => {
             </div>
             <div class="grid gap-2">
               <div class="flex items-center">
-                <Label for="password">Contraseña</Label>
+                <Label for="password" class="mt-[4%]">Contraseña</Label>
                 <router-link
                   to="/ForgotPass"
-                  class="ml-auto inline-block text-sm underline"
+                  class="ml-auto inline-block text-sm underline mt-[4%]"
                 >
                   ¿Olvidaste tu contraseña?
                 </router-link>
