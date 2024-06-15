@@ -65,7 +65,8 @@ const sendUser = async () => {
 </script>
 
 <template>
-  <Card class="max-w-md shadow-none border-none" id="pos">
+  <div id="pos">
+  <Card class="shadow-none border-none">
     <CardHeader>
       <CardTitle class="text-3xl"> Crea tu Cuenta </CardTitle>
       <CardDescription>
@@ -104,7 +105,7 @@ const sendUser = async () => {
             />
             <p class="text-red-500">{{ errorMessage }}</p> 
           </div>
-          <Button type="submit" class="w-full mt-2">
+          <Button type="submit" class="w-full mt-[10%]">
             Registrarse
           </Button>
         </form>
@@ -116,6 +117,7 @@ const sendUser = async () => {
       </div>
     </CardContent>
   </Card>
+</div>
 </template>
 
 <style scoped>
