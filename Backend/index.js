@@ -85,7 +85,7 @@ app.get('/reset/:token', async (req, res) => {
     const user = result.rows[0];
     const tokenFromDatabase = user.resetpasswordtoken; // Aquí cambiamos 'resetPasswordToken' por 'resetpasswordtoken'
 
-    // Imprime el token en la consola
+
     console.log(tokenFromDatabase);
   }catch (error) {
     console.error(error);
