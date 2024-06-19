@@ -17,7 +17,7 @@ const routes = [
   { path: '/ForgotUser', component: ForgotUser },
   { path: '/Home', component: Home },
   { path: '/Registered', name: 'Registered', component: Registered },
-  { path: '/NewPass', name: 'NewPass', component: NewPass }
+  { path: '/NewPass/:token', name: 'NewPass', component: NewPass }
 ]
 
 const router = createRouter({
