@@ -6,6 +6,7 @@ import Register from './views/Register.vue'
 import ForgotUser from './views/ForgotUser.vue'
 import Home from './views/Home.vue'
 import Registered from './views/Registered.vue'
+import NewPass from './views/NewPass.vue'
 
 const routes = [
     { path: '/', redirect: '/Login' },
@@ -15,7 +16,8 @@ const routes = [
   { path: '/Register', component: Register },
   { path: '/ForgotUser', component: ForgotUser },
   { path: '/Home', component: Home },
-  { path: '/Registered',name:'Registered', component: Registered }
+  { path: '/Registered', name: 'Registered', component: Registered },
+  { path: '/NewPass', name: 'NewPass', component: NewPass }
 ]
 
 const router = createRouter({
