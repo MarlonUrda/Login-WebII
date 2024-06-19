@@ -10,14 +10,18 @@ import {
 } from "../components/ui/card";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
+import { useRoute } from 'vue-router';
+
 
 const password = ref("");
+const route = useRoute();
 
 const sendPassword = async () => {
   console.log("sendPassword");
   console.log(password.value);
+  let token = route.params.token;
 
-  const response = await fetch("http://localhost:3000/reset/", {
+const response = await fetch(`http://localhost:3000/reset/${token}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
