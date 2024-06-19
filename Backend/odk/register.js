@@ -28,7 +28,11 @@ export const regApi = async (req, res) => {
       values
     );
 
-    res.status(201).send({ message: "Datos insertados: " + values });
+    if (result) {
+      res.status(201).send({ message: "Datos insertados: " + values });
+    } else {
+      return res.status(400).send({ message: "Error al insertar los datos" });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });
