@@ -4,12 +4,12 @@ import { fileURLToPath } from "url";
 import { dirname, resolve } from "path";
 import morgan from "morgan";
 import { getConnection, pool } from "./database/pool.js";
-import { login } from "./odk/login.js";
-import { regApi } from "./odk/register.js";
+import { login } from "./processes/login.js";
+import { regApi } from "./processes/register.js";
 import cors from "cors";
-import { emailapi } from "./odk/forgot.js";
-import { userData } from "./odk/home.js";
-import { encrypt } from "./odk/encrypt.js";
+import { emailapi } from "./processes/forgot.js";
+import { userData } from "./processes/home.js";
+import { encrypt } from "./processes/encrypt.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -61,7 +61,8 @@ app.post("/get-session", (req, res) => {
 app.post("/toProcess", async (req, res) => {
   const obj = await import("./" + req.body.objectName + ".js");
   const instance = new obj.default();
-  res.send(instance[req.body.methodName](req.body.params));
+  instance[req.body.methodName](req.body.params);
+  res.send({ message: "Metodo Ejecutado con exito!" });
   res.status(200);
 });
 
@@ -79,16 +80,14 @@ app.get("/reset/:token", async (req, res) => {
       [token, Date.now()]
     );
     if (!(result.rows.length > 0)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "El token de restablecimiento de contraseña es inválido o ha expirado.",
-        });
+      return res.status(400).json({
+        message:
+          "El token de restablecimiento de contraseña es inválido o ha expirado.",
+      });
     }
     // Obtén el token del resultado
     const user = result.rows[0];
-    const tokenFromDatabase = user.resetpasswordtoken; 
+    const tokenFromDatabase = user.resetpasswordtoken;
 
     console.log(tokenFromDatabase);
   } catch (error) {
@@ -109,12 +108,10 @@ app.post("/reset/:token", async (req, res) => {
       [token, Date.now()]
     );
     if (!(result.rows.length > 0)) {
-      return res
-        .status(400)
-        .json({
-          message:
-            "El token de restablecimiento de contraseña es inválido o ha expirado.",
-        });
+      return res.status(400).json({
+        message:
+          "El token de restablecimiento de contraseña es inválido o ha expirado.",
+      });
     }
 
     const user = result.rows;
