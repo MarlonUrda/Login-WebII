@@ -1,14 +1,18 @@
-import { pool } from "../database/pool.js";
-import { compare } from "./encrypt.js";
+
 
 export const userData = async (req, res) => {
     try {
+      if (req.session.user){
         console.log(req.body.email, req.body.password);
         const user = req.session.user;
         console.log(user);
         res.json({
             user: user
           });
+      }
+      else{
+        res.status(401).send({ message: "You are not logged in!" });
+      }
     } catch (error) {
         console.log(error.message);
     }

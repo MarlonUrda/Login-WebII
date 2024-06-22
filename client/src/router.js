@@ -9,7 +9,6 @@ import Registered from './views/Registered.vue'
 import NewPass from './views/NewPass.vue'
 
 const routes = [
-    { path: '/', redirect: '/Login' },
   { path: '/Home', component: Home },
   { path: '/Login', component: Login },
   { path: '/ForgotPass', component: ForgotPass },

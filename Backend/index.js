@@ -1,19 +1,14 @@
 import express from "express";
 import session from "express-session";
-import { fileURLToPath } from "url";
-import { dirname, resolve } from "path";
 import morgan from "morgan";
-import { getConnection, pool } from "./database/pool.js";
-import { login } from "./processes/login.js";
-import { regApi } from "./processes/register.js";
 import cors from "cors";
-import { emailapi } from "./processes/forgot.js";
-import { userData } from "./processes/home.js";
-import { encrypt } from "./processes/encrypt.js";
+import { login } from "./controller/login.js";
+import { register } from "./controller/register.js";
+import { forgotPass } from "./controller/forgot.js";
+import { userData } from "./controller/home.js";
+import ResetControler  from "./controller/ResetControler.js";
+import "./instances/dbinstances.js";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const parentDirectory = resolve(__dirname, "..");
 
 const app = express();
 const host = "localhost";
@@ -26,7 +21,8 @@ app.use(
   })
 );
 app.use(morgan("dev"));
-getConnection();
+
+
 
 app.use(
   session({
@@ -42,21 +38,18 @@ app.use(
 
 app.use(express.json());
 
-app.use(express.static(parentDirectory + "/client/dist"));
 
-app.get("/user-data", (req, res) => {
-  console.log("userData");
-  userData(req, res);
-});
+app.get("/user-data",userData)//home
 
-app.post("/emailProccess", (req, res) => {
-  console.log("req.body.email");
-  emailapi(req, res);
-});
+app.post("/forgot-password", forgotPass);
 
-app.post("/get-session", (req, res) => {
-  login(req, res);
-});
+app.post("/login", login);
+
+app.post("/register", register);
+
+app.get("/reset/:token", ResetControler.resetPasswordGet);
+
+app.post("/reset/:token", ResetControler.resetPasswordPost);
 
 app.post("/toProcess", async (req, res) => {
   const obj = await import("./" + req.body.objectName + ".js");
@@ -64,69 +57,6 @@ app.post("/toProcess", async (req, res) => {
   instance[req.body.methodName](req.body.params);
   res.send({ message: "Metodo Ejecutado con exito!" });
   res.status(200);
-});
-
-app.post("/register", (req, res) => {
-  regApi(req, res);
-});
-
-app.get("/reset/:token", async (req, res) => {
-  const { token } = req.params;
-  console.log(token);
-
-  try {
-    const result = await pool.query(
-      "SELECT * FROM users WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
-      [token, Date.now()]
-    );
-    if (!(result.rows.length > 0)) {
-      return res.status(400).json({
-        message:
-          "El token de restablecimiento de contraseña es inválido o ha expirado.",
-      });
-    }
-    // Obtén el token del resultado
-    const user = result.rows[0];
-    const tokenFromDatabase = user.resetpasswordtoken;
-
-    console.log(tokenFromDatabase);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error al procesar la solicitud." });
-  }
-});
-
-app.post("/reset/:token", async (req, res) => {
-  const { token } = req.params;
-  const { password } = req.body;
-  console.log(token);
-  console.log(password);
-
-  try {
-    const result = await pool.query(
-      "SELECT * FROM users WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
-      [token, Date.now()]
-    );
-    if (!(result.rows.length > 0)) {
-      return res.status(400).json({
-        message:
-          "El token de restablecimiento de contraseña es inválido o ha expirado.",
-      });
-    }
-
-    const user = result.rows;
-
-    const hashedPassword = await encrypt(password, 10);
-    await pool.query(
-      "UPDATE users SET password = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
-      [hashedPassword, user[0].email]
-    );
-
-    res.json({ message: "Contraseña restablecida con éxito." });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Error al restablecer la contraseña." });
-  }
 });
 
 app.use((req, res) => {
