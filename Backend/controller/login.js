@@ -7,6 +7,7 @@ export const login = async (req, res) => {
     if(req.body.email === undefined || req.body.password === undefined){
       return res.status(400).send({ message: "Email or Password is missing" });
     }
+    console.log(req.body)
 
     const response = await dbQueries.getUsersByEmail(req.body.email);
     
@@ -16,7 +17,6 @@ export const login = async (req, res) => {
       console.log("Incorrect Email");
       return res.status(401).send({ message: "Incorrect Email" });
     }
-    console.log("user", user);
     
     
     const isPasswordMatch  = await compare(req.body.password, user.password);
@@ -26,7 +26,7 @@ export const login = async (req, res) => {
     } 
 
     console.log("You logged in succesfully!");
-    req.session.user = user;
+    req.session.user = user.name;
     req.session.email = req.body.email;
     req.session.loggedin = true;
     return res

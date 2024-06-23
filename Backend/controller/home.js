@@ -2,12 +2,17 @@
 
 export const userData = async (req, res) => {
     try {
+      console.log('cookies:',req.cookies);
+      console.log('session:',req.session);
       if (req.session.user){
-        console.log(req.body.email, req.body.password);
+
         const user = req.session.user;
-        console.log(user);
+        const email = req.session.email;
+        const loggedin = req.session.loggedin;
         res.json({
-            user: user
+            user: user,
+            email: email,
+            loggedin: loggedin,
           });
       }
       else{

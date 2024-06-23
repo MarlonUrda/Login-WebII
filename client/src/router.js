@@ -3,11 +3,11 @@ import { createRouter, createWebHistory } from 'vue-router'
 import Login from './views/Login.vue'
 import ForgotPass from './views/ForgotPass.vue'
 import Register from './views/Register.vue'
-import ForgotUser from './views/ForgotUser.vue'
 import Home from './views/Home.vue'
 import Registered from './views/Registered.vue'
 import NewPass from './views/NewPass.vue'
 import NotFound from './views/NotFound.vue'
+import InvalidAcces from './views/InvalidAcces.vue'
 
 const routes = [
   { path: '/', redirect: '/Login' },
@@ -15,10 +15,11 @@ const routes = [
   { path: '/Login', component: Login },
   { path: '/ForgotPass', component: ForgotPass },
   { path: '/Register', component: Register },
-  { path: '/ForgotUser', component: ForgotUser },
   { path: '/Registered', name: 'Registered', component: Registered },
   { path: '/NewPass/:token', name: 'NewPass', component: NewPass },
-  { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound }
+  { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
+  { path: '/InvalidAccess', name: 'InvalidAccess', component: InvalidAcces}
+  
 ]
 
 const router = createRouter({
