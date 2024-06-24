@@ -16,9 +16,9 @@ const password = ref('');
 const username = ref('');
 
 onMounted(() => {
-//   email.value = route.params.email;
-//   password.value = route.params.password;
-//   username.value = route.params.username;
+   email.value = route.params.email;
+   password.value = route.params.password;
+   username.value = route.params.username;
 });
 
 </script>
