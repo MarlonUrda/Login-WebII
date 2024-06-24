@@ -24,7 +24,7 @@ export const forgotPass = async (req, res) => {
 
     const subject = 'Password Reset';
     const text = `entra al link para cambiar tu contraseña:\n\n 
-            http://${req.headers.host}/reset/${token}\n\n
+            http://localhost:5173/NewPass/${token}\n\n
             Si tú no solicitaste esto, por favor ignora este correo y tu contraseña permanecerá sin cambios.\n`
 
     sendMail(email, subject, text);
