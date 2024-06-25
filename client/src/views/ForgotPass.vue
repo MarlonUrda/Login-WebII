@@ -12,12 +12,13 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 
 const email = ref("");
+const errorMessage = ref("");
 
 const sendEmail = async () => {
   console.log("sendEmail");
   console.log(email.value);
 
-  const response = await fetch("http://localhost:3000/emailProccess", {
+  const response = await fetch("http://localhost:3000/forgot-password", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -29,6 +30,11 @@ const sendEmail = async () => {
   console.log("response");
 
   const data = await response.json();
+  if (response.status > 303) {
+      errorMessage.value = data.message;
+    } else {
+      errorMessage.value = "mensaje enviado";
+  }
   console.log(data);
 };
 
@@ -58,8 +64,9 @@ const sendEmail = async () => {
             placeholder="correo@ejemplo.com"
             required
           />
+        
         </div>
-
+        <p class="text-red-500">{{ errorMessage }}</p> 
         <Button  @click="sendEmail" type="submit" class="w-full mt-[1%]">
           Siguiente
         </Button>

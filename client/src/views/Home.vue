@@ -8,11 +8,12 @@ import {
   CardTitle,
 } from "../components/ui/card";
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRouter } from 'vue-router';
 
-const route = useRoute();
+const router = useRouter();
 const email = ref('');
 const username = ref('');
+
 
 const userData =async () => {
   try {
@@ -22,20 +23,19 @@ const userData =async () => {
 
     let response = await fetch("http://localhost:3000/user-data", { 
       method: "GET",
+      credentials: 'include',
       headers: headersList
     });
 
     let data = await response.json();
     console.log(data);
-    console.log(typeof data); 
+
 
     if (data && data.user) {
-        console.log(data.user.email);
-        console.log(data.user.name);
-        email.value = data.user.email;
-        username.value = data.user.name;
+        email.value = data.email;
+        username.value = data.user;
     } else {
-        console.log('data or data.user is undefined');
+      router.push({path: '/InvalidAccess'});
     }
 
 
@@ -44,6 +44,26 @@ const userData =async () => {
     console.error('Error:', error);
   }
 
+}
+
+const cerrarSesion = async () => {
+  try {
+    let headersList = {
+      'Content-Type': 'application/json',
+    }
+
+    let response = await fetch("http://localhost:3000/logout", { 
+      method: "GET",
+      credentials: 'include',
+      headers: headersList
+    });
+
+    let data = await response.json();
+    console.log(data);
+    router.push({path: '/Login'});
+  } catch (error) {  
+    console.error('Error:', error);
+  }
 }
 
 onMounted(() => {
@@ -79,7 +99,7 @@ onMounted(() => {
       <CardContent>
 
         <div class="mt-12 text-center text-sm font-semibold" id="link">
-          <router-link to="/Login" class="underline text-base"> Cerrar la Sesión </router-link>
+          <a  @click="cerrarSesion"  class="underline text-base"> Cerrar la Sesión </a>
         </div>
       </CardContent>
     </Card>

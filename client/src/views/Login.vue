@@ -20,7 +20,7 @@ const router = useRouter();
 const sendData = async () => {
   console.log("hola");
   try {
-  const response = await fetch("http://localhost:3000/get-session", {
+  const response = await fetch("http://localhost:3000/login", {
     credentials: "include",
     method: "POST",
     headers: {
@@ -41,7 +41,7 @@ const sendData = async () => {
       errorMessage.value = data.message;
     } else {
       errorMessage.value = "";
-    }
+  }
     email.value = "";
     password.value = "";
   } catch (error) {

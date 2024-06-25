@@ -15,6 +15,7 @@ import { useRoute } from 'vue-router';
 
 const password = ref("");
 const route = useRoute();
+const errorMessage = ref("");
 
 const sendPassword = async () => {
   console.log("sendPassword");
@@ -31,8 +32,14 @@ const response = await fetch(`http://localhost:3000/reset/${token}`, {
     }),
   });
   console.log("response");
-
+  
   const data = await response.json();
+
+  if (response.status > 303) {
+      errorMessage.value = data.message;
+    } else {
+      errorMessage.value = "contraseña cambiada";
+  }
   console.log(data);
 };
 
@@ -73,7 +80,7 @@ const response = await fetch(`http://localhost:3000/reset/${token}`, {
             required
           />
         </div> -->
-
+        <p class="text-red-500">{{ errorMessage }}</p> 
         <Button  @click="sendPassword" type="submit" class="w-full mt-[1.5%]">
           Enviar
         </Button>
