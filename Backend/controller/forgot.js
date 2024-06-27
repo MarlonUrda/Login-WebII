@@ -9,14 +9,14 @@ export const forgotPass = async (req, res) => {
     const user = await dbQueries.getUsersByEmail(email);
 
     if (!(user.rows.length > 0)) {
-      return res.status(404).json({ message: `El email no existe: ${email}` });
+      return res.status(404).json({ message: `La dirección de E-mail ${email} no existe.` });
     }
 
     const token = crypto.randomBytes(20).toString("hex");
     const expires = Date.now() + 3600000; // 1 hour
 
     const subject = "Password Reset";
-    const text = `entra al link para cambiar tu contraseña:\n\n 
+    const text = `Entra al siguiente link para cambiar tu contraseña:\n\n 
             http://localhost:5173/NewPass/${token}\n\n
             Si tú no solicitaste esto, por favor ignora este correo y tu contraseña permanecerá sin cambios.\n`;
 
@@ -25,7 +25,7 @@ export const forgotPass = async (req, res) => {
     await dbQueries.updateResetPasswordToken(email, token, expires);
     res
       .status(200)
-      .json({ message: "Se ha enviado un correo a la dirección indicada" });
+      .json({ message: "Se ha enviado un correo a la dirección indicada." });
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: error.message });

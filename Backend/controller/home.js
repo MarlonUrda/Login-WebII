@@ -16,7 +16,7 @@ export const userData = async (req, res) => {
           });
       }
       else{
-        res.status(401).send({ message: "You are not logged in!" });
+        res.status(401).send({ message: "¡No has iniciado sesión!" });
       }
     } catch (error) {
         console.log(error.message);
@@ -25,5 +25,5 @@ export const userData = async (req, res) => {
 
 export const logout = (req, res) => {
   req.session.destroy();
-  res.status(200).send({ message: "You logged out succesfully!" });
+  res.status(200).send({ message: "¡Saliste de la sesión con éxito!" });
 };

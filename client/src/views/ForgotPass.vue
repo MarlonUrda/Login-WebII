@@ -66,8 +66,8 @@ const sendEmail = async () => {
           />
         
         </div>
-        <p class="text-red-500">{{ errorMessage }}</p> 
-        <Button  @click="sendEmail" type="submit" class="w-full mt-[1%]">
+        <p class="text-green-600">{{ errorMessage }}</p> 
+        <Button  @click="sendEmail" type="submit" class="w-full">
           Siguiente
         </Button>
       </div>

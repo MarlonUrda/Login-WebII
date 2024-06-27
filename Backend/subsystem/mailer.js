@@ -31,8 +31,8 @@ export function sendMail( destinationEmail, subject, text) {
   
     transporter.sendMail(mailOptions, function(error, info){
         if (error) {
-        return console.error("Error al enviar el email");
+        return console.error("Error al enviar el E-mail.");
         }  
-        res.status(201).json({ message: `email  enviado` });
+        res.status(201).json({ message: `E-mail  enviado.` });
     });
 }

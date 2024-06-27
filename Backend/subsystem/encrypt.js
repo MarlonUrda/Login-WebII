@@ -22,6 +22,6 @@ export const compare = async (password, encrypted) => {
     const match = await bc.compare(password, encrypted);
     return match;
   } catch (error) {
-    console.log("La contraseña no coincide");
+    console.log("La contraseña no coincide.");
   }
 };

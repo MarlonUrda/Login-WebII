@@ -13,9 +13,9 @@ import {
   <div id="pos">
   <Card class="shadow-none border-none">
     <CardHeader>
-      <CardTitle class="text-3xl">404 Not found </CardTitle>
-      <CardDescription>
-      
+      <CardTitle class="text-5xl mt-[37%]">Error 404</CardTitle>
+      <CardDescription class="text-xl">
+      La página que buscas no existe.
       </CardDescription>
     </CardHeader>
     <CardContent>

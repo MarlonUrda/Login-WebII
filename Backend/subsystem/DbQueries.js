@@ -56,6 +56,30 @@ class DbQueries {
   }
 
   /**
+   * Insertar una persona en la base de datos
+   * @param {string} name
+   * @param {string} lastname
+   * @param {string} phone
+   * @returns {boolean}
+  */
+
+  async insertPerson(name, lastname, phone) {
+    try {
+      const result = await this.pool.query(
+        "INSERT INTO person (name, lastname, phone) VALUES ($1, $2, $3)",
+        [name, lastname, phone]
+      )
+      if(1 != result.rowCount){
+        console.log("Error insertando persona")
+        return false
+      }
+      return true
+    } catch (error) {
+      console.error("Error: ", error)
+    }
+  }
+
+  /**
    * Actualizar el token de restablecimiento de contraseña
    * @param {string} email
    * @param {string} token
@@ -70,7 +94,7 @@ class DbQueries {
       );
       if (1 != result.rowCount) {
         console.log(
-          "Error al actualizar el token de restablecimiento de contraseña"
+          "Error al actualizar el token de restablecimiento de contraseña."
         );
         return false;
       }

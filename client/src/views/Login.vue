@@ -96,14 +96,14 @@ const sendData = async () => {
               />
               <p class="text-red-500">{{ errorMessage }}</p> 
             </div>
-            <Button  type="submit" class="mt-12 w-full">
+            <Button  type="submit" class="mt-10 w-full">
               Iniciar Sesión
             </Button>
           </form>
         </div>
         <div class="mt-2 text-center text-sm" id="link">
           ¿No tienes una cuenta?
-          <router-link to="/Register" class="underline"> Regístrate </router-link>
+          <router-link to="/NewPerson" class="underline"> Regístrate </router-link>
         </div>
       </CardContent>
     </Card>

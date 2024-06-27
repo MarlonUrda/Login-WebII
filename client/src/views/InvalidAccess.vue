@@ -13,7 +13,7 @@ import {
   <div id="pos">
   <Card class="shadow-none border-none">
     <CardHeader>
-      <CardTitle class="text-3xl">Invalid Access </CardTitle>
+      <CardTitle class="text-5xl mt-[42%]">Acceso inválido.</CardTitle>
       <CardDescription>
       
       </CardDescription>

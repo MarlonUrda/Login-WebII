@@ -7,7 +7,8 @@ import Home from './views/Home.vue'
 import Registered from './views/Registered.vue'
 import NewPass from './views/NewPass.vue'
 import NotFound from './views/NotFound.vue'
-import InvalidAcces from './views/InvalidAcces.vue'
+import InvalidAccess from './views/InvalidAccess.vue'
+import NewPerson from './views/NewPerson.vue'
 
 const routes = [
   { path: '/', redirect: '/Login' },
@@ -18,7 +19,8 @@ const routes = [
   { path: '/Registered', name: 'Registered', component: Registered },
   { path: '/NewPass/:token', name: 'NewPass', component: NewPass },
   { path: '/:pathMatch(.*)*', name: 'not-found', component: NotFound },
-  { path: '/InvalidAccess', name: 'InvalidAccess', component: InvalidAcces}
+  { path: '/InvalidAccess', name: 'InvalidAccess', component: InvalidAccess },
+  { path: '/NewPerson', name: 'NewPerson', component: NewPerson } 
   
 ]
 

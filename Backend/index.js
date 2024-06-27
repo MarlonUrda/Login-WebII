@@ -4,7 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { login , logout} from "./controller/login.js";
-import { register } from "./controller/register.js";
+import { register, registerPerson } from "./controller/register.js";
 import { forgotPass } from "./controller/forgot.js";
 import { userData } from "./controller/home.js";
 import ResetControler  from "./controller/ResetControler.js";
@@ -52,6 +52,7 @@ app.post("/forgot-password", forgotPass);
 
 app.post("/login", login);
 
+//Añadir el registro de personas
 app.post("/register", register);
 
 app.get("/reset/:token", ResetControler.resetPasswordGet);

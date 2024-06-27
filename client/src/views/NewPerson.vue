@@ -12,13 +12,13 @@ import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useRouter } from 'vue-router';
 
-const email = ref("");
-const password = ref("");
-const username = ref("");
+const name = ref("");
+const lastname = ref("");
+const phoneNumber = ref("");
 const errorMessage = ref("");
 const router = useRouter();
 
-const sendUser = async () => {
+const sendPerson = async () => {
   console.log("sendUser");
 
   try{
@@ -29,9 +29,9 @@ const sendUser = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        email: email.value,
-        password: password.value,
-        username: username.value,
+        name: name.value,
+        lastname: lastname.value,
+        phone: phoneNumber.value,
       }),
     })
 
@@ -48,9 +48,9 @@ const sendUser = async () => {
       errorMessage.value = "";
       router.push({name:'Registered',  params: { email:email.value, password:password.value,username:username.value } });
     }
-    email.value = "";
-    password.value = "";
-    username.value = "";
+    name.value = "";
+    lastname.value = "";
+    phoneNumber.value = "";
 
   }catch(err){
     console.log(err)
@@ -62,44 +62,44 @@ const sendUser = async () => {
   <div id="pos">
   <Card class="shadow-none border-none">
     <CardHeader>
-      <CardTitle class="text-3xl"> Termina de Crear tu Cuenta </CardTitle>
+      <CardTitle class="text-3xl"> Crea tu Nueva Cuenta </CardTitle>
       <CardDescription>
-        Ingresa tus credenciales abajo para crear una nueva cuenta.
+        Ingresa tu información personal para crear tu cuenta nueva.
       </CardDescription>
     </CardHeader>
     <CardContent>
       <div class="grid gap-4 mt-2">
-        <form @submit.prevent="sendUser">
+        <form @submit.prevent="sendPerson">
           <div class="grid gap-2">
-            <Label for="email">Correo Electrónico</Label>
+            <Label for="phone">Numero de C.I.: </Label>
             <Input
-              v-model="email"
-              id="email"
-              type="email"
-              placeholder="correo@ejemplo.com"
-              required
-            />
-            <Label for="username" class="mt-[2%]">Nombre de Usuario</Label>
-            <Input
-              v-model="username"
-              id="user"
+              v-model="id"
+              id="phone"
               type="text"
-              placeholder="Ingresa el alias de tu cuenta."
+              placeholder="Ej.: 12345678"
               required
               autocomplete="off"
             />
-            <Label for="password" class="mt-[2%]">Contraseña</Label>
+            <Label for="name">Nombre:</Label>
             <Input
-              v-model="password"
-              id="password"
-              type="password"
-              placeholder="Ingresa la contraseña de tu nueva cuenta."
+              v-model="name"
+              id="name"
+              type="text"
+              placeholder="Ej.: Jubert"
+              required
+            />
+            <Label for="lastName">Apellido:</Label>
+            <Input
+              v-model="lastname"
+              id="lastName"
+              type="text"
+              placeholder="Ej.: Pérez"
               required
               autocomplete="off"
             />
             <p class="text-red-500">{{ errorMessage }}</p> 
           </div>
-          <Button type="submit" class="w-full mt-[6%]">
+          <Button type="submit" class="w-full mt-[7%]">
             Siguiente
           </Button>
         </form>

@@ -70,20 +70,15 @@ const response = await fetch(`http://localhost:3000/reset/${token}`, {
             required
           />
         </div>
-        <!-- <div class="mt-[2%] grid gap-2">
-            <Label for="password">Comprobación de Contraseña</Label>
-          <Input
-            v-model="password"
-            id="password2"
-            type="text"
-            placeholder="Ambas contraseñas deben coincidir"
-            required
-          />
-        </div> -->
-        <p class="text-red-500">{{ errorMessage }}</p> 
-        <Button  @click="sendPassword" type="submit" class="w-full mt-[1.5%]">
+        <p class="text-blue-500">{{ errorMessage }}</p> 
+        <Button  @click="sendPassword" type="submit" class="w-full mt-[1%]">
           Enviar
         </Button>
+      </div>
+      <div class="text-center text-sm mt-2">
+        <router-link to="/Login" class="underline">
+          Volver al inicio de sesión
+        </router-link>
       </div>
     </CardContent>
   </Card>
