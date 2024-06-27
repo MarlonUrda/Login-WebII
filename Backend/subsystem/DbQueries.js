@@ -123,7 +123,22 @@ class DbQueries {
     }
   }
 
-  async getPermissions() {}
+  async getPermissions() {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM perfil pf 
+            join metodo_perfil mp on pf.id_perfil = mp.id_perfil
+            join metodo met on mp.id_metodo  = met.id_metodo
+            join clase c on met.id_clase = c.id_clase
+            join modulo m on c.id_modulo = m.id_modulo
+            join modulo_perfil mop on m.id_modulo = mop.id_modulo;` //Tentativo
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
 }
 
 export default DbQueries;
