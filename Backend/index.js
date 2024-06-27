@@ -3,13 +3,12 @@ import session from "express-session";
 import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
-import { login , logout} from "./controller/login.js";
-import { register } from "./controller/register.js";
+import { login, logout } from "./controller/login.js";
+import { registerPerson, register } from "./controller/register.js";
 import { forgotPass } from "./controller/forgot.js";
 import { userData } from "./controller/home.js";
-import ResetControler  from "./controller/ResetControler.js";
+import ResetControler from "./controller/ResetControler.js";
 import "./instances/dbinstances.js";
-
 
 const app = express();
 const host = "localhost";
@@ -21,12 +20,9 @@ app.use(
   cors({
     origin: "http://localhost:5173",
     credentials: true,
-    
   })
 );
 app.use(morgan("dev"));
-
-
 
 app.use(
   session({
@@ -40,11 +36,9 @@ app.use(
   })
 );
 
-
 app.use(express.json());
 
-
-app.get("/user-data",userData)//home
+app.get("/user-data", userData); //home
 
 app.get("/logout", logout);
 

@@ -13,7 +13,7 @@ class DbQueries {
    */
   async getUsersByEmail(email) {
     const result = await this.pool.query(
-      "SELECT * FROM users WHERE email = $1",
+      "SELECT * FROM usuario WHERE email = $1",
       [email]
     );
     return result;
@@ -26,7 +26,7 @@ class DbQueries {
    */
   async getUsersByPassword(password) {
     const result = await this.pool.query(
-      "SELECT * FROM users WHERE password = $1",
+      "SELECT * FROM usuario WHERE pass_usuario = $1",
       [password]
     );
     return result;
@@ -39,11 +39,11 @@ class DbQueries {
    * @param {string} name
    * @returns {Promise<boolean}
    */
-  async insertUser(email, password, name) {
+  async insertUser(email, password, name, id_persona) {
     try {
       const result = await this.pool.query(
-        "INSERT INTO users (email, password, name) VALUES ($1, $2, $3)",
-        [email, password, name]
+        "INSERT INTO usuario (pass_usuario, nombre_usuario, id_persona, email) VALUES ($1, $2, $3, $4)",
+        [password, name, id_persona, email]
       );
       if (1 != result.rowCount) {
         console.log("Error insertando usuario");
@@ -52,6 +52,26 @@ class DbQueries {
       return true;
     } catch (error) {
       console.error("Error :", error);
+    }
+  }
+
+  async insertPerson(name, phone, lastname) {
+    try {
+      const result = await this.pool.query(
+        `INSERT INTO persona (nombre_persona, telefono, apellido_persona) VALUES ($1, $2, $3) 
+             RETURNING id_persona
+            `,
+        [name, phone, lastname]
+      );
+
+      if (1 != result.rowCount) {
+        console.log("Error insertando persona");
+        return false;
+      }
+
+      return true, result;
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -65,7 +85,7 @@ class DbQueries {
   async updateResetPasswordToken(email, token, expires) {
     try {
       const result = await this.pool.query(
-        "UPDATE users SET resetPasswordToken = $1, resetPasswordExpires = $2 WHERE email = $3",
+        "UPDATE usuario SET resetPasswordToken = $1, resetPasswordExpires = $2 WHERE email = $3",
         [token, expires, email]
       );
       if (1 != result.rowCount) {
@@ -88,7 +108,7 @@ class DbQueries {
   async getUserwithValidToken(token) {
     try {
       const result = await this.pool.query(
-        "SELECT * FROM users WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
+        "SELECT * FROM usuario WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
         [token, Date.now()]
       );
       return result;
@@ -110,7 +130,7 @@ class DbQueries {
   async UpdatePassword(email, Hashedpassword) {
     try {
       const result = await this.pool.query(
-        "UPDATE users SET password = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
+        "UPDATE usuario SET password = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
         [Hashedpassword, email]
       );
       if (1 != result.rowCount) {
