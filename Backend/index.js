@@ -4,7 +4,7 @@ import morgan from "morgan";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { login, logout } from "./controller/login.js";
-import { registerPerson, register } from "./controller/register.js";
+import { register } from "./controller/register.js";
 import { forgotPass } from "./controller/forgot.js";
 import { userData } from "./controller/home.js";
 import ResetControler from "./controller/ResetControler.js";

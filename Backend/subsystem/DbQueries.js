@@ -55,13 +55,13 @@ class DbQueries {
     }
   }
 
-  async insertPerson(name, phone, lastname) {
+  async insertPerson(name, lastname, ident) {
     try {
       const result = await this.pool.query(
-        `INSERT INTO persona (nombre_persona, telefono, apellido_persona) VALUES ($1, $2, $3) 
+        `INSERT INTO persona (nombre_persona, apellido_persona, ident) VALUES ($1, $2, $3) 
              RETURNING id_persona
             `,
-        [name, phone, lastname]
+        [name, lastname, ident]
       );
 
       if (1 != result.rowCount) {
