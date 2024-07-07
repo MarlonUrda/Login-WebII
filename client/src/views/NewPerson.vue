@@ -18,47 +18,6 @@ const ident = ref("");
 const errorMessage = ref("");
 const router = useRouter();
 
-// const sendPerson = async () => {
-//   console.log("sendUser");
-
-//   try {
-//     const response = await fetch("http://localhost:3000/register", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify({
-//         name: name.value,
-//         lastname: lastname.value,
-//         ident: phoneNumber.value,
-//       }),
-//     });
-
-//     const data = await response.json();
-
-//     console.log(data);
-
-//     if (response.status > 300) {
-//       errorMessage.value = data.message;
-//     } else {
-//       errorMessage.value = "";
-//       router.push({
-//         name: "Register",
-//         params: {
-//           ident: ident.value,
-//           name: name.value,
-//           lastname: lastname.value,
-//         },
-//       });
-//     }
-//     ident.value = "";
-//     name.value = "";
-//     lastname.value = "";
-//   } catch (err) {
-//     console.log(err);
-//   }
-// };
-
 const sendPerson = () => {
   router.push({
     name: "Register",
