@@ -130,7 +130,7 @@ class DbQueries {
   async UpdatePassword(email, Hashedpassword) {
     try {
       const result = await this.pool.query(
-        "UPDATE usuario SET password = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
+        "UPDATE usuario SET pass_usuario = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
         [Hashedpassword, email]
       );
       if (1 != result.rowCount) {
