@@ -172,6 +172,18 @@ class DbQueries {
       console.log("Error: ", error);
     }
   }
+
+  async eliminateProject(idProject) {
+    try {
+      const result = await this.pool.query(
+        "DELETE FROM proyecto WHERE id_proyecto = $1",
+        [idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 export default DbQueries;

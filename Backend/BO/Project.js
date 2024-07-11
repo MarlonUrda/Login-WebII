@@ -26,6 +26,23 @@ class Project {
       return false;
     }
   }
+
+  async deleteProject(params) {
+    const [idP] = params;
+    try {
+      const query = await dbQueries.eliminateProject(idP);
+      if (query) {
+        console.log("Proyecto eliminado con éxito!");
+        return true;
+      } else {
+        console.error("Error al eliminar el proyecto");
+        return false;
+      }
+    } catch (error) {
+      console.error("Error al conectar con la base de datos: ", error);
+      return false;
+    }
+  }
 }
 
 export default Project;
