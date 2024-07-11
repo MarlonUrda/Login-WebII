@@ -9,3 +9,5 @@ class Project {
     console.log("Proyecto: " + params[0] + "creado");
   }
 }
+
+export default Project;

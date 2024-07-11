@@ -54,15 +54,17 @@ class Security {
   }
 
   // {modulo: "Proyecto", objectName: "B", "metodo": "addObjetive", perfil: "recurso"}
-  async validPermissions(req, res) {
+  async validPermissions(req) {
     let { modulo, clase, metodo, perfil } = req.body;
     const k = modulo + "_" + clase + "_" + metodo + "_" + perfil; // Proyecto_administracion_addTask_developer
     console.log(k);
     if (this.permissions.get(k.toLowerCase())) {
-      res.status(200).send({ message: "Permisos validos" });
+      console.log("Permisos Validos!");
+      return true;
+    } else {
+      console.log("Permisos Inválidos!");
+      return false;
     }
-    res.status(401).send({ message: "Permisos no validos" });
-    return false;
   }
 }
 

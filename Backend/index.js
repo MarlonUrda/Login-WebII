@@ -56,17 +56,13 @@ app.get("/reset/:token", ResetControler.resetPasswordGet);
 app.post("/reset/:token", ResetControler.resetPasswordPost);
 
 app.post("/toProcess", async (req, res) => {
-  // if (req.session) {
-  //   const validate = await s.validPermissions(req, res);
-  //   if (validate) {
-  //     const obj = await import("./" + req.body.objectName + ".js");
-  //     const instance = new obj.default();
-  //     instance[req.body.methodName](req.body.params);
-  //     res.send({ message: "Metodo Ejecutado con exito!" });
-  //     res.status(200);
-  //   }
-  // }
-  await s.validPermissions(req, res);
+  const validate = await s.validPermissions(req);
+  if (validate) {
+    const obj = await import("./BO/" + req.body.clase + ".js");
+    const instance = new obj.default();
+    instance[req.body.metodo](req.body.params);
+    res.status(200).send({ message: "Metodo Ejecutado con exito!" });
+  }
 });
 
 app.use((req, res) => {
