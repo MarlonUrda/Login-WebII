@@ -173,6 +173,66 @@ class DbQueries {
     }
   }
 
+  async updateProjectName(newName, idProject) {
+    try {
+      const result = await this.pool.query(
+        "UPDATE proyecto SET nombre_proyecto = $1 WHERE id_proyecto = $2",
+        [newName, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateTypeProject(newType, idProject) {
+    try {
+      const result = await this.pool.query(
+        "UPDATE proyecto SET tipo_proyecto = $1 WHERE id_proyecto = $2",
+        [newType, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateStateProject(newState, idProject) {
+    try {
+      const result = await this.pool.query(
+        "UPDATE proyecto SET id_estado = $1 WHERE id_proyecto = $2",
+        [newState, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateStartDateProject(newDate, idProject) {
+    try {
+      const result = await this.pool.query(
+        "UPDATE proyecto SET fecha_inicio = $1 WHERE id_proyecto = $2",
+        [newDate, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async updateEndDateProject(newDate, idProject) {
+    try {
+      const result = await this.pool.query(
+        "UPDATE proyecto SET fecha_final = $1 WHERE id_proyecto = $2",
+        [newDate, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async eliminateProject(idProject) {
     try {
       const result = await this.pool.query(
