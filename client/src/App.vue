@@ -13,7 +13,7 @@ export default {
   setup() {
     const route = useRoute()
     const showComponents = computed(() => {
-      return !['/Registered', '/LoggedIn'].includes(route.path)
+      return !['/Home'].includes(route.path)
     })
     return { showComponents }
   }
@@ -22,9 +22,8 @@ export default {
 
 <template>
   <div id="app">
-    <!-- <TitleCard v-if="showComponents" /> -->
+    <TitleCard v-if="showComponents" />
     <!-- <Background v-if="showComponents" /> -->
-    <TitleCard/>
     <Background/>
     <router-view/>
   </div>
