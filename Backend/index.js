@@ -62,6 +62,10 @@ app.post("/toProcess", async (req, res) => {
     const instance = new obj.default();
     instance[req.body.metodo](req.body.params);
     res.status(200).send({ message: "Metodo Ejecutado con exito!" });
+  } else {
+    res
+      .status(401)
+      .send({ error: "No tiene autorizacion para ejecutar el metodo!" });
   }
 });
 
