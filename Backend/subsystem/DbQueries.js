@@ -146,14 +146,27 @@ class DbQueries {
   async getPermissions() {
     try {
       const result = await this.pool.query(
-        `SELECT * FROM perfil pf 
-            join metodo_perfil mp on pf.id_perfil = mp.id_perfil
-            join metodo met on mp.id_metodo  = met.id_metodo
-            join clase c on met.id_clase = c.id_clase
-            join modulo m on c.id_modulo = m.id_modulo
-            join modulo_perfil mop on m.id_modulo = mop.id_modulo;` //Tentativo
+        `SELECT DISTINCT desc_perfil AS perfil, nombre_metodo AS metodo, nombre_clase AS clase, desc_modulo AS modulo 
+          FROM perfil pf 
+          INNER JOIN metodo_perfil mp ON pf.id_perfil = mp.id_perfil
+          INNER JOIN metodo met ON mp.id_metodo = met.id_metodo
+          INNER JOIN clase c ON met.id_clase = c.id_clase
+          INNER JOIN modulo m ON c.id_modulo = m.id_modulo
+          INNER JOIN modulo_perfil mop ON m.id_modulo = mop.id_modulo;` //Arreglado
       );
 
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async insertProject(nameP, typeP, state, start, end) {
+    try {
+      const result = await this.pool.query(
+        "INSERT INTO proyecto (nombre_proyecto, tipo_proyecto, id_estado, fecha_inicio, fecha_final) VALUES ($1, $2, $3, $4, $5)",
+        [nameP, typeP, state, start, end]
+      );
       return result;
     } catch (error) {
       console.log("Error: ", error);

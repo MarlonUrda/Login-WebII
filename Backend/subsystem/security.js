@@ -1,46 +1,68 @@
-import { dbQueries } from "../instances/dbinstances";
+import { dbQueries } from "../instances/dbinstances.js";
 
 class Security {
   constructor() {
     this.permissions = new Map();
+    this.permissionsLoaded = false;
     this.loadPermissions();
-    this.value = true;
   }
 
   async loadPermissions() {
+    if (this.permissionsLoaded) return;
     try {
       const result = await dbQueries.getPermissions();
+      const value = true;
 
-      if (!(result.length > 0)) {
-        return res.status(404).json({ message: "No se encontraron permisos" });
+      console.log(result.rows.length);
+
+      if (!(result.rows.length > 0)) {
+        return "No se encontraron permisos.";
       }
 
-      result.rows.forEach((row) => {
+      const replica = new Map();
+      const unica = result.rows.filter((row) => {
+        const key = `${row.modulo.toLowerCase()}_${row.clase.toLowerCase()}_${row.metodo.toLowerCase()}_${row.perfil.toLowerCase()}`;
+
+        if (!replica.has(key)) {
+          replica.set(key, true);
+          return true;
+        }
+
+        return false;
+      });
+
+      unica.forEach((row) => {
         this.permissions.set(
-          row.modulo +
+          row.modulo.toLowerCase() +
             "_" +
-            row.objectName +
+            row.clase.toLowerCase() +
             "_" +
-            row.metodo +
+            row.metodo.toLowerCase() +
             "_" +
-            row.perfil,
+            row.perfil.toLowerCase(),
           value
         );
       });
+      console.log("Permisos cargados");
+      this.permissions.forEach((value, key) => {
+        console.log(`${key}: ${value}`);
+      });
+      this.permissionsLoaded = true;
     } catch (error) {
       console.log(error);
-      return res.status(500).json({ message: "Error al cargar permisos" });
     }
   }
 
   // {modulo: "Proyecto", objectName: "B", "metodo": "addObjetive", perfil: "recurso"}
   async validPermissions(req, res) {
-    let { modulo, objectName, metodo, perfil } = req.body;
-    const k = modulo + "_" + objectName + "_" + metodo + "_" + perfil; // Proyecto_administracion_addTask_developer
+    let { modulo, clase, metodo, perfil } = req.body;
+    const k = modulo + "_" + clase + "_" + metodo + "_" + perfil; // Proyecto_administracion_addTask_developer
+    console.log(k);
     if (this.permissions.get(k.toLowerCase())) {
-      return res.status(200).json({ message: "Permisos validos" });
+      res.status(200).send({ message: "Permisos validos" });
     }
-    return res.status(401).json({ message: "Permisos no validos" });
+    res.status(401).send({ message: "Permisos no validos" });
+    return false;
   }
 }
 

@@ -8,11 +8,14 @@ import { register } from "./controller/register.js";
 import { forgotPass } from "./controller/forgot.js";
 import { userData } from "./controller/home.js";
 import ResetControler from "./controller/ResetControler.js";
+import Security from "./subsystem/security.js";
 import "./instances/dbinstances.js";
 
 const app = express();
 const host = "localhost";
 const port = 3000;
+
+const s = new Security();
 
 app.use(cookieParser());
 
@@ -53,17 +56,23 @@ app.get("/reset/:token", ResetControler.resetPasswordGet);
 app.post("/reset/:token", ResetControler.resetPasswordPost);
 
 app.post("/toProcess", async (req, res) => {
-  const obj = await import("./" + req.body.objectName + ".js");
-  const instance = new obj.default();
-  instance[req.body.methodName](req.body.params);
-  res.send({ message: "Metodo Ejecutado con exito!" });
-  res.status(200);
+  // if (req.session) {
+  //   const validate = await s.validPermissions(req, res);
+  //   if (validate) {
+  //     const obj = await import("./" + req.body.objectName + ".js");
+  //     const instance = new obj.default();
+  //     instance[req.body.methodName](req.body.params);
+  //     res.send({ message: "Metodo Ejecutado con exito!" });
+  //     res.status(200);
+  //   }
+  // }
+  await s.validPermissions(req, res);
 });
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });
 });
 
-app.listen(port, "0.0.0.0", () => {
+app.listen(port, "0.0.0.0", async () => {
   console.log(`Server running at http://${host}:${port}/`);
 });
