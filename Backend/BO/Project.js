@@ -27,6 +27,24 @@ class Project {
     }
   }
 
+  async updateProject(params) {
+    const [newValue, idProject] = params;
+
+    try {
+      const query = await dbQueries.updateProjectName(newValue, idProject);
+
+      if (query) {
+        console.log("Nombre del proyecto cambiado a: " + newValue);
+        return true;
+      } else {
+        console.log("Error al actualizar el proyecto.");
+        return false;
+      }
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   async deleteProject(params) {
     const [idP] = params;
     try {

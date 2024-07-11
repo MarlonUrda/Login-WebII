@@ -173,6 +173,21 @@ class DbQueries {
     }
   }
 
+  async getProjects() {
+    try {
+      const result = await this.pool.query(
+        `SELECT nombre_persona AS miembro, nombre_proyecto AS proyecto FROM proyecto AS p
+          INNER JOIN miembro AS m ON m.id_proyecto = p.id_proyecto
+          INNER JOIN persona AS per ON per.id_persona = m.id_persona
+          INNER JOIN usuario AS u ON u.id_persona = per.id_persona`
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   async updateProjectName(newName, idProject) {
     try {
       const result = await this.pool.query(
