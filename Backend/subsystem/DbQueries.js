@@ -259,6 +259,19 @@ class DbQueries {
       console.log(error);
     }
   }
+
+  async insertObjective(nameO, idProject, dateLimit) {
+    try {
+      const result = this.pool.query(
+        "INSERT INTO objetivo (desc_objetivo, id_proyecto, fecha_limite) VALUES ($1, $2, $3) RETURNING id_proyecto",
+        [nameO, idProject, dateLimit]
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
 }
 
 export default DbQueries;

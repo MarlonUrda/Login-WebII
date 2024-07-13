@@ -56,16 +56,17 @@ app.get("/reset/:token", ResetControler.resetPasswordGet);
 app.post("/reset/:token", ResetControler.resetPasswordPost);
 
 app.post("/toProcess", async (req, res) => {
-  const validate = await s.validPermissions(req);
-  if (validate) {
-    const obj = await import("./BO/" + req.body.clase + ".js");
-    const instance = new obj.default();
-    instance[req.body.metodo](req.body.params);
-    res.status(200).send({ message: "Metodo Ejecutado con exito!" });
-  } else {
-    res
-      .status(401)
-      .send({ error: "No tiene autorizacion para ejecutar el metodo!" });
+  if (req.session.loggedin) {
+    const validate = await s.validPermissions(req, req.session.perfil);
+    if (validate) {
+      const obj = await import("./BO/" + req.body.clase + ".js");
+      obj.default[req.body.metodo](req.body.params);
+      res.status(200).send({ message: "Metodo Ejecutado con exito!" });
+    } else {
+      res
+        .status(401)
+        .send({ error: "No tiene autorizacion para ejecutar el metodo!" });
+    }
   }
 });
 

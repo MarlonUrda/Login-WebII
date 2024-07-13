@@ -24,6 +24,8 @@ export const login = async (req, res) => {
     }
 
     console.log("You logged in succesfully!");
+    req.session.idUser = user.id_usuario;
+    req.session.idPersone = user.id_persona;
     req.session.user = user.name;
     req.session.email = req.body.email;
     req.session.loggedin = true;

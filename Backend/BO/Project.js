@@ -3,7 +3,7 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Project {
   constructor() {}
 
-  async createProject(params) {
+  static async createProject(params) {
     const [nameP, typeP, state, startDate, endDate] = params;
     try {
       const query = await dbQueries.insertProject(
@@ -27,7 +27,7 @@ class Project {
     }
   }
 
-  async updateProject(params) {
+  static async updateProject(params) {
     const [newValue, idProject] = params;
 
     try {
@@ -45,7 +45,7 @@ class Project {
     }
   }
 
-  async deleteProject(params) {
+  static async deleteProject(params) {
     const [idP] = params;
     try {
       const query = await dbQueries.eliminateProject(idP);

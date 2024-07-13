@@ -9,7 +9,7 @@ export const register = async (req, res) => {
   try {
     const personeQuery = await dbQueries.insertPerson(name, lastname, ident);
     if (personeQuery) {
-      res.status(200).send({ message: "Persona insertada con exito!" });
+      console.log("Persona insertada: " + name);
     } else {
       return res.status(400).json({ message: "Error al insertar la persona" });
     }
