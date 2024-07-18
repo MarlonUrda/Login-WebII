@@ -8,14 +8,15 @@ import { register } from "./controller/register.js";
 import { forgotPass } from "./controller/forgot.js";
 import { userData } from "./controller/home.js";
 import ResetControler from "./controller/ResetControler.js";
-import Security from "./subsystem/security.js";
+import { toProcess } from "./controller/toProcess.js";
 import "./instances/dbinstances.js";
+
 
 const app = express();
 const host = "localhost";
 const port = 3000;
 
-const s = new Security();
+
 
 app.use(cookieParser());
 
@@ -55,20 +56,10 @@ app.get("/reset/:token", ResetControler.resetPasswordGet);
 
 app.post("/reset/:token", ResetControler.resetPasswordPost);
 
-app.post("/toProcess", async (req, res) => {
-  // if (req.session.loggedin) {
-  // }
-  const validate = await s.validPermissions(req); //req.session.perfil
-  if (validate) {
-    const obj = await import("./BO/" + req.body.clase + ".js");
-    obj.default[req.body.metodo](req.body.params);
-    res.status(200).send({ message: "Metodo Ejecutado con exito!" });
-  } else {
-    res
-      .status(401)
-      .send({ error: "No tiene autorizacion para ejecutar el metodo!" });
-  }
-});
+app.post("/toProcess",toProcess );
+
+
+
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });
