@@ -365,7 +365,9 @@ class DbQueries {
         );
       }
       await this.pool.query('COMMIT');
-      return 'Todos los miembros han sido insertados exitosamente';
+      console.log('Todos los miembros han sido insertados exitosamente');
+      const message ='Todos los miembros han sido insertados exitosamente'
+      return message;
     } catch (error) {
       await this.pool.query('ROLLBACK');
       throw new Error( 'Error al agregar miembro');

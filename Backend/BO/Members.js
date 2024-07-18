@@ -13,6 +13,7 @@ class Members {
   static async newMember(membersData) {
     try {
       const result = await dbQueries.newMembers(membersData);
+      console.log('apunto del return', result);
       return {message: result};
     } catch (error) {
         console.log('Error agregar miembros');
@@ -47,7 +48,7 @@ class Members {
   static async deleteMembers(idProject,idMember) {
     try {
         const result = await dbQueries.deleteMember(idProject, idMember);
-        return  {message: result};
+        return  {message: result, success: true};
     } catch (error) {
         console.log('Error al eliminar miembro del proyecto');
         throw new Error(error);
