@@ -14,7 +14,7 @@ class Objectives {
       );
       if (query) {
         let idObjective = query.rows[0].id_objetivo;
-        console.log("Objetico creado con exito!");
+        console.log("Objetivo creado con exito!");
         return {
           status: "success",
           message: "Objetivo creado con exito",
@@ -29,6 +29,92 @@ class Objectives {
       }
     } catch (error) {
       console.error(error.message);
+      return {
+        success: false,
+        error: error,
+      };
+    }
+  }
+
+  static async getObjectives(params) {
+    [idProject] = params;
+
+    try {
+      const query = await dbQueries.getObjectivesFromProject(idProject);
+
+      if (query) {
+        console.log("Objetivos encontrados!");
+
+        let objectives = [];
+        query.rows.forEach((row) => {
+          objectives.push(row);
+        });
+
+        return {
+          success: true,
+          objectives: objectives,
+        };
+      } else {
+        return {
+          success: false,
+          message: "Error al obtener los proyectos.",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        message: error.message,
+      };
+    }
+  }
+
+  static async deleteObjective(params) {
+    [idOb] = params;
+
+    try {
+      const query = await dbQueries.deleteObjective(idOb);
+
+      if (query) {
+        console.log("Objetivo eliminado");
+        return {
+          success: true,
+          message: "Objetivo eliminado exitosamente!",
+        };
+      } else {
+        return {
+          success: false,
+          message: "Error al eliminar el objetivo",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error,
+      };
+    }
+  }
+
+  static async updateObjective(params) {
+    [] = params;
+    try {
+      const query = ""; //Preguntar mañana sobre los updates
+
+      if (query) {
+        return {
+          success: true,
+          message: "Objetivo actualizado!",
+        };
+      } else {
+        return {
+          success: false,
+          message: "No se puso actualizar el objetivo!",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error: error,
+      };
     }
   }
 }

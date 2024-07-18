@@ -13,7 +13,7 @@ class DbQueries {
    */
   async getUsersByEmail(email) {
     const result = await this.pool.query(
-      "SELECT * FROM usuario WHERE email = $1",
+      "SELECT * FROM users WHERE email = $1",
       [email]
     );
     return result;
@@ -26,7 +26,7 @@ class DbQueries {
    */
   async getUsersByPassword(password) {
     const result = await this.pool.query(
-      "SELECT * FROM usuario WHERE pass_usuario = $1",
+      "SELECT * FROM users WHERE password = $1",
       [password]
     );
     return result;
@@ -39,11 +39,11 @@ class DbQueries {
    * @param {string} name
    * @returns {Promise<boolean}
    */
-  async insertUser(email, password, name, id_persona) {
+  async insertUser(email, password, username, person_id) {
     try {
       const result = await this.pool.query(
-        "INSERT INTO usuario (pass_usuario, nombre_usuario, id_persona, email) VALUES ($1, $2, $3, $4)",
-        [password, name, id_persona, email]
+        "INSERT INTO users (password, username, person_id, email) VALUES ($1, $2, $3, $4)",
+        [password, username, person_id, email]
       );
       if (1 != result.rowCount) {
         console.log("Error insertando usuario");
@@ -58,7 +58,7 @@ class DbQueries {
   async insertPerson(name, lastname, ident) {
     try {
       const result = await this.pool.query(
-        `INSERT INTO persona (nombre_persona, apellido_persona, ident) VALUES ($1, $2, $3) 
+        `INSERT INTO person (name, lastname, ident) VALUES ($1, $2, $3) 
              RETURNING id_persona
             `,
         [name, lastname, ident]
@@ -85,7 +85,7 @@ class DbQueries {
   async updateResetPasswordToken(email, token, expires) {
     try {
       const result = await this.pool.query(
-        "UPDATE usuario SET resetPasswordToken = $1, resetPasswordExpires = $2 WHERE email = $3",
+        "UPDATE users SET resetPasswordToken = $1, resetPasswordExpires = $2 WHERE email = $3",
         [token, expires, email]
       );
       if (1 != result.rowCount) {
@@ -108,7 +108,7 @@ class DbQueries {
   async getUserwithValidToken(token) {
     try {
       const result = await this.pool.query(
-        "SELECT * FROM usuario WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
+        "SELECT * FROM users WHERE resetPasswordToken = $1 AND resetPasswordExpires > $2",
         [token, Date.now()]
       );
       return result;
@@ -130,7 +130,7 @@ class DbQueries {
   async UpdatePassword(email, Hashedpassword) {
     try {
       const result = await this.pool.query(
-        "UPDATE usuario SET pass_usuario = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
+        "UPDATE users SET password = $1, resetPasswordToken = NULL, resetPasswordExpires = NULL WHERE email = $2",
         [Hashedpassword, email]
       );
       if (1 != result.rowCount) {
@@ -146,13 +146,13 @@ class DbQueries {
   async getPermissions() {
     try {
       const result = await this.pool.query(
-        `SELECT DISTINCT desc_perfil AS perfil, nombre_metodo AS metodo, nombre_clase AS clase, desc_modulo AS modulo 
-          FROM perfil pf 
-          INNER JOIN metodo_perfil mp ON pf.id_perfil = mp.id_perfil
-          INNER JOIN metodo met ON mp.id_metodo = met.id_metodo
-          INNER JOIN clase c ON met.id_clase = c.id_clase
-          INNER JOIN modulo m ON c.id_modulo = m.id_modulo
-          INNER JOIN modulo_perfil mop ON m.id_modulo = mop.id_modulo;` //Arreglado
+        `SELECT DISTINCT profile_desc AS perfil, method_name AS metodo, classname AS clase, module_desc AS modulo 
+          FROM profile pf 
+          INNER JOIN profile_methods pm ON pf.profile_id = pm.profile_id
+          INNER JOIN methods met ON pm.method_id = met.method_id
+          INNER JOIN classes c ON met.class_id = c.class_id
+          INNER JOIN modules m ON c.module_id = m.module_id
+          INNER JOIN module_profile mop ON m.module_id = mop.module_id;` //Arreglado
       );
 
       return result;
@@ -161,11 +161,11 @@ class DbQueries {
     }
   }
 
-  async insertProject(nameP, typeP, state, start, end) {
+  async insertProject(nameP, typeP, start, end) {
     try {
       const result = await this.pool.query(
-        "INSERT INTO proyecto (nombre_proyecto, tipo_proyecto, id_estado, fecha_inicio, fecha_final) VALUES ($1, $2, $3, $4, $5)",
-        [nameP, typeP, state, start, end]
+        "INSERT INTO projects (project_name, type, state_id, start_date, end_date) VALUES ($1, $2, 1, $3, $4) RETURNING project_id",
+        [nameP, typeP, start, end]
       );
       return result;
     } catch (error) {
@@ -173,13 +173,15 @@ class DbQueries {
     }
   }
 
-  async getProjects() {
+  async getProjects(personId) {
     try {
       const result = await this.pool.query(
-        `SELECT nombre_persona AS miembro, nombre_proyecto AS proyecto FROM proyecto AS p
-          INNER JOIN miembro AS m ON m.id_proyecto = p.id_proyecto
-          INNER JOIN persona AS per ON per.id_persona = m.id_persona
-          INNER JOIN usuario AS u ON u.id_persona = per.id_persona`
+        `SELECT name AS miembro, project_name AS proyecto FROM projects AS p
+          INNER JOIN member AS m ON m.project_id = p.project_id
+          INNER JOIN person AS per ON per.person_id = m.person_id
+          INNER JOIN users AS u ON u.id_person = per.person_id
+          WHERE u.person_id = $1`,
+        [personId]
       );
 
       return result;
@@ -191,7 +193,7 @@ class DbQueries {
   async updateProjectName(newName, idProject) {
     try {
       const result = await this.pool.query(
-        "UPDATE proyecto SET nombre_proyecto = $1 WHERE id_proyecto = $2",
+        "UPDATE projects SET project_name = $1 WHERE project_id = $2",
         [newName, idProject]
       );
       return result;
@@ -251,7 +253,7 @@ class DbQueries {
   async eliminateProject(idProject) {
     try {
       const result = await this.pool.query(
-        "DELETE FROM proyecto WHERE id_proyecto = $1",
+        "DELETE FROM project WHERE project_id = $1",
         [idProject]
       );
       return result;
@@ -263,10 +265,86 @@ class DbQueries {
   async insertObjective(nameO, idProject, dateLimit) {
     try {
       const result = this.pool.query(
-        "INSERT INTO objetivo (desc_objetivo, id_proyecto, fecha_limite) VALUES ($1, $2, $3) RETURNING id_proyecto",
+        "INSERT INTO objective (desc, project_id, deadline) VALUES ($1, $2, $3) RETURNING objective_id",
         [nameO, idProject, dateLimit]
       );
 
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async getObjectivesFromProject(idProject) {
+    try {
+      const result = this.pool.query(
+        "SELECT * FROM objective WHERE project_id = $1",
+        [idProject]
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async deleteObjective(idOb) {
+    try {
+      const result = this.pool.query(
+        "DELETE FROM objective WHERE objective_id = $1",
+        [idOb]
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async insertTask(desc, idOb) {
+    try {
+      const result = this.pool.query(
+        "INSERT INTO tasks (desc, obj_id) VALUES ($1, $2) RETURNING task_id",
+        [desc, idOb]
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async getTasks(idObj) {
+    try {
+      const result = this.pool.query(
+        "SELECT * FROM tasks WHERE objective_id = $1",
+        [idObj]
+      );
+
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
+  async deleteTask(idObj) {
+    try {
+      const result = this.pool.query("DELETE FROM tasks WHERE task_id = $1", [
+        idObj,
+      ]);
+
+      return result;
+    } catch (error) {
+      console.log("Error: ");
+    }
+  }
+
+  async insertMember(idPerson, idProfile, idProject) {
+    try {
+      const result = await this.pool.query(
+        "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3) RETURNING member_id",
+        [idPerson, idProfile, idProject]
+      );
       return result;
     } catch (error) {
       console.log("Error: ", error);

@@ -4,7 +4,10 @@ import { dbQueries } from "../instances/dbinstances.js";
 export const login = async (req, res) => {
   try {
     if (req.body.email === undefined || req.body.password === undefined) {
-      return res.status(400).send({ message: "Email or Password is missing" });
+      return res.send({
+        success: false,
+        message: "Missing email or password",
+      });
     }
     console.log(req.body);
 
@@ -14,33 +17,43 @@ export const login = async (req, res) => {
 
     if (user === undefined) {
       console.log("Incorrect Email");
-      return res.status(401).send({ message: "Incorrect Email" });
+      return res.send({
+        success: false,
+        message: "Incorrect Email",
+      });
     }
 
     const isPasswordMatch = await compare(req.body.password, user.pass_usuario);
 
     if (!isPasswordMatch) {
-      return res.status(401).send({ message: "Incorrect Password" });
+      return res.send({
+        success: false,
+        message: "Incorrect Password",
+      });
     }
 
-    console.log("You logged in succesfully!");
     req.session.idUser = user.id_usuario;
     req.session.idPersone = user.id_persona;
     req.session.user = user.name;
     req.session.email = req.body.email;
     req.session.loggedin = true;
-    return (
-      res
-        .status(301)
-        //.redirect("/Home");
-        .send({ message: "You logged in succesfully!" })
-    );
+
+    return res.send({
+      message: "You logged in succesfully!",
+      success: true,
+    });
   } catch (error) {
-    console.log(error.message);
+    return res.send({
+      success: false,
+      message: error.message,
+    });
   }
 };
 
 export const logout = (req, res) => {
   req.session.destroy();
-  res.status(200).send({ message: "You logged out succesfully!" });
+  res.send({
+    message: "You logged out succesfully!",
+    success: true,
+  });
 };

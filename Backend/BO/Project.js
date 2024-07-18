@@ -4,7 +4,7 @@ class Project {
   constructor() {}
 
   static async createProject(params) {
-    const [nameP, typeP, state, startDate, endDate] = params;
+    const [nameP, typeP, state, startDate, endDate] = params; //modificar state a 1 por defecto en la query
     try {
       const query = await dbQueries.insertProject(
         nameP,
@@ -16,14 +16,25 @@ class Project {
 
       if (query) {
         console.log("Proyecto creado con exito!.");
-        return true;
+        let idProject = query.rows[0].id_proyecto;
+        return {
+          success: true,
+          message: `Proyecto: ${nameP} creado exitosamente!`,
+          idProject: idProject,
+        };
       } else {
         console.error("Error al crear el proyecto");
-        return false;
+        return {
+          success: false,
+          message: "Error al crear el proyecto",
+        };
       }
     } catch (error) {
       console.error("Error al conectar con la base de datos: ", error);
-      return false;
+      return {
+        success: false,
+        message: error.message,
+      };
     }
   }
 
@@ -42,6 +53,36 @@ class Project {
       }
     } catch (error) {
       console.log("Error: ", error);
+    }
+  }
+
+  static async getProjectsByPersone(params) {
+    let [idPersone] = params;
+
+    try {
+      let query = await dbQueries.getProjects(idPersone);
+      if (query.rows.length > 0) {
+        console.log("Proyectos encontrados:");
+        query.rows.forEach((row) => {
+          console.log(row);
+        });
+        return {
+          code: 200,
+          status: "succes",
+        };
+      } else {
+        return {
+          code: 404,
+          status: "not found",
+          message: "No se encontraron proyectos.",
+        };
+      }
+    } catch (error) {
+      return {
+        code: 500,
+        status: "internal server error",
+        message: "Error al conectar con la base de datos.",
+      };
     }
   }
 
