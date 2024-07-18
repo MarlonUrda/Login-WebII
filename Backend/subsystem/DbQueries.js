@@ -342,7 +342,25 @@ class DbQueries {
       );
       return result;
     } catch (error) {
-      console.log("Error: ", error);
+      throw new Error("Error al obtener miembros");
+    }
+  }
+
+  /**
+   * Devuelve los miembros de un proyecto
+   * @param {string} idProject
+   * @param {string} idMember
+   * @returns {Array} te devueve un "Eliminado miembro correctamente"
+   */
+  async deleteMember(idProject, idMember) {
+    try {
+      const result = await this.pool.query(
+        "DELETE FROM member  WHERE project_id = $1 AND person_id = $2",
+        [idProject, idMember]
+      );
+      return "Eliminado miembro correctamente";
+    } catch (error) {
+      throw new Error("Error al eliminar miembro");
     }
   }
 }
