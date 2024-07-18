@@ -20,13 +20,15 @@ class Task {
       } else {
         return {
           success: false,
+          code: 400,
           message: "No se pudo crear la actividad",
         };
       }
     } catch (error) {
       return {
         success: false,
-        error: error,
+        code: 500,
+        message: "Error interno del servidor",
       };
     }
   }
@@ -49,18 +51,50 @@ class Task {
       } else {
         return {
           success: false,
-          message: "No se pudieron cargar las actividades",
+          code: 404,
+          message: "No se encontraron actividades",
         };
       }
     } catch (error) {
       return {
         success: false,
-        error: error,
+        code: 500,
+        message: "Error interno del servidor",
       };
     }
   }
 
-  static async updateTask(params) {}
+  static async updateTask(params) {
+    const [newDesc, newStart, newDeadline, idTask] = params;
+
+    try {
+      const query = await dbQueries.updateTask(
+        newDesc,
+        newStart,
+        newDeadline,
+        idTask
+      );
+      if (query) {
+        console.log("Actividad actualizada con éxito");
+        return {
+          success: true,
+          message: "Actividad actualizada exitosamente!",
+        };
+      } else {
+        return {
+          success: false,
+          code: 400,
+          message: "No se pudo actualizar la actividad",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        code: 500,
+        message: "Error interno del servidor",
+      };
+    }
+  }
 
   static async deleteTask(params) {
     const [idObj] = params;
