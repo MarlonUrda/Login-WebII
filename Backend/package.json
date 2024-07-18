@@ -17,7 +17,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "ats": "node --watch index.js"
+    "ats": "node --watch app.js"
   },
   "author": "",
   "license": "ISC",
