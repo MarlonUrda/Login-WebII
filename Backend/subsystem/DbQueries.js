@@ -307,6 +307,21 @@ class DbQueries {
     }
   }
 
+  async updateTask(newDesc, newStart, newDeadline, idTask) {
+    try {
+      const result = await this.pool.query(
+        `UPDATE tasks SET task_desc = $1,
+              start_date = $2,
+              deadline = $3,
+              WHERE task_id = $4`,
+        [newDesc, newStart, newDeadline, idTask]
+      );
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
 
   /**
    * Devuelve los miembros de un proyecto
