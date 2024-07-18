@@ -53,10 +53,9 @@ class Security {
     }
   }
 
-  // {modulo: "Proyecto", objectName: "B", "metodo": "addObjetive", perfil: "recurso"}
   async validPermissions(req) {
     let { modulo, clase, metodo, perfil } = req.body;
-    // let { session } = req;
+    //let { session } = req;
     const k = modulo + "_" + clase + "_" + metodo + "_" + perfil; // agregar luego session.perfil
     console.log(k);
     if (this.permissions.get(k.toLowerCase())) {

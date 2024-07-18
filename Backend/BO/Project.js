@@ -4,7 +4,8 @@ class Project {
   constructor() {}
 
   static async createProject(params) {
-    const [nameP, typeP, startDate, endDate] = params; //modificar state a 1 por defecto en la query
+    const [nameP, typeP, startDate, endDate, membersDefault = [], idPerson] =
+      params; //modificar state a 1 por defecto en la query
     try {
       const query = await dbQueries.insertProject(
         nameP,
@@ -14,9 +15,44 @@ class Project {
       );
 
       if (query) {
-        console.log("Proyecto creado con exito!.");
         let idProject = query.rows[0].project_id;
-        console.log(idProject);
+
+        console.log(idPerson);
+
+        const projectManager = await dbQueries.insertProjectManager(
+          idPerson,
+          idProject
+        );
+
+        if (projectManager) {
+          console.log("ProjectManager insertado exitosamente");
+        } else {
+          return {
+            success: false,
+            code: 500,
+            message: "Error al registrar al creador del proyecto",
+          };
+        }
+
+        if (membersDefault.length > 0) {
+          for (const member of membersDefault) {
+            await dbQueries.insertMember(
+              member.person_id,
+              member.profile_id,
+              idProject
+            );
+          }
+
+          console.log("Miembros adicionados con exito!");
+
+          return {
+            success: true,
+            message: `Proyecto: ${nameP} creado y miembros añadidos!`,
+            idProject: idProject,
+          };
+        } else {
+          console.log("No se encontraron miembros");
+        }
         return {
           success: true,
           message: `Proyecto: ${nameP} creado exitosamente!`,
@@ -24,6 +60,7 @@ class Project {
         };
       } else {
         console.error("Error al crear el proyecto");
+
         return {
           success: false,
           message: "Error al crear el proyecto",

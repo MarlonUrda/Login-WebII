@@ -11,12 +11,9 @@ import ResetControler from "./controller/ResetControler.js";
 import { toProcess } from "./controller/toProcess.js";
 import "./instances/dbinstances.js";
 
-
 const app = express();
 const host = "localhost";
 const port = 3000;
-
-
 
 app.use(cookieParser());
 
@@ -56,10 +53,7 @@ app.get("/reset/:token", ResetControler.resetPasswordGet);
 
 app.post("/reset/:token", ResetControler.resetPasswordPost);
 
-app.post("/toProcess",toProcess );
-
-
-
+app.post("/toProcess", toProcess);
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });

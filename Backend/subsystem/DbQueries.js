@@ -322,6 +322,18 @@ class DbQueries {
     }
   }
 
+  async insertProjectManager(idPerson, idProject) {
+    try {
+      const result = await this.pool.query(
+        "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, 7, $2)",
+        [idPerson, idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   async insertMember(idPerson, idProfile, idProject) {
     try {
       const result = await this.pool.query(
