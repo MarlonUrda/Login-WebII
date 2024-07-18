@@ -1,18 +1,32 @@
 import { dbQueries } from "../instances/dbinstances";
 
 class Members {
-  constructor() {}
+  constructor() {
 
-  static async newMember(idProject, idProfile, idPerson) {
+  }
+
+/**
+ * Agrega los miembros de un proyecto.
+ * @param {Array<Array<number|string>>} membersData - Un array de arrays, donde cada sub-array contiene [idPerson, idProfile, idProject].
+ * @returns {Promise<{message: string}>} Te devuelve un objeto con el mensaje 'Todos los miembros han sido insertados exitosamente'.
+ */
+  static async newMember(membersData) {
     try {
-        const result = await dbQueries.getMembers(idProject, idProfile, idPerson);
-        return  {message: result};
+      const result = await dbQueries.newMembers(membersData);
+      return {message: result};
     } catch (error) {
-        console.log('Error agregar miembro');
+        console.log('Error agregar miembros');
         throw new Error(error);
     }
   }
 
+  /**
+   * obtiene los miembros de un proyecto
+   * @param {string} idProject 
+   * @param {string} idProfile 
+   * @param {string} idUser
+   * @returns {Array} te devuelve la informacion en esta forma {data:[{Member},{lastname},{email}]} si se agrego correctamente
+  */
   static async getMembers(idProject) {
     try {
         const result = await dbQueries.getMembers(idProject);
@@ -23,6 +37,13 @@ class Members {
     }
   }
 
+  /**
+   * obtiene los miembros de un proyecto
+   * @param {string} idProject 
+   * @param {string} idProfile 
+   * @param {string} idUser
+   * @returns {Array} te devuelve un {message: "Eliminado correctamente"} si se agrego correctamente
+  */
   static async deleteMembers(idProject,idMember) {
     try {
         const result = await dbQueries.deleteMember(idProject, idMember);

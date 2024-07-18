@@ -328,20 +328,27 @@ class DbQueries {
    * @param {string} idProject 
    * @param {string} idProfile 
    * @param {string} idUser
-   * @returns {Array} te devueve un ok si se inserto correctamente
-   */
-  async newMember(idPerson, idProfile, idPerson) {
+   * @returns {string} te devueve un 'Todos los miembros han sido insertados exitosamente' 
+  */
+  async newMembers(membersData) {
     try {
-      const result = await this.pool.query(
-        "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3) RETURNING member_id",
-        [idPerson, idProfile, idProject]
-      );
-
-      return 'Insertado';
+      await this.pool.query('BEGIN');
+      for (let i = 0; i < membersData.length; i++) {
+        const [idPerson, idProfile, idProject] = membersData[i];
+        await this.pool.query(
+          "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3)",
+          [idPerson, idProfile, idProject]
+        );
+      }
+      await this.pool.query('COMMIT');
+      return 'Todos los miembros han sido insertados exitosamente';
     } catch (error) {
+      await this.pool.query('ROLLBACK');
       throw new Error( 'Error al agregar miembro');
-    }
+    } 
   }
+
+
 
   
   /**
@@ -368,6 +375,12 @@ class DbQueries {
     }
   }
 
+    /**
+   * Devuelve los miembros de un proyecto
+   * @param {string} idProject
+   * @param {string} idMember 
+   * @returns {Array} te devueve un "Eliminado miembro correctamente"
+   */
   async deleteMember(idProject,idMember) {
     try {
       const result = await this.pool.query(
