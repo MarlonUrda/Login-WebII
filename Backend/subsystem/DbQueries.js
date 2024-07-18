@@ -346,23 +346,77 @@ class DbQueries {
     }
   }
 
+
+  /**
+   * Devuelve los miembros de un proyecto
+   * @param {string} idProject 
+   * @param {string} idProfile 
+   * @param {string} idUser
+   * @returns {string} te devueve un 'Todos los miembros han sido insertados exitosamente' 
+  */
+  async newMembers(membersData) {
+    try {
+      await this.pool.query('BEGIN');
+      for (let i = 0; i < membersData.length; i++) {
+        const [idPerson, idProfile, idProject] = membersData[i];
+        await this.pool.query(
+          "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3)",
+          [idPerson, idProfile, idProject]
+        );
+      }
+      await this.pool.query('COMMIT');
+      return 'Todos los miembros han sido insertados exitosamente';
+    } catch (error) {
+      await this.pool.query('ROLLBACK');
+      throw new Error( 'Error al agregar miembro');
+    } 
+  }
+
+
+
+  
   /**
    * Devuelve los miembros de un proyecto
    * @param {string} idProject
-   * @param {string} idMember
+   * @returns {Array} te devueve un array con los miembros del proyecto [{"Member": "","lastname":"" ,"email":""}]
+   */
+  async getMembers(idProject) {
+    try {
+      const result = await this.pool.query(
+          `
+            SELECT name member, lastname,email 
+            FROM projects p
+            JOIN member m ON m.project_id = p.project_id
+            JOIN person per ON per.person_id = m.person_id
+            JOIN users u ON u.person_id = per.person_id
+            WHERE p.project_id = $1 
+          `,
+        [idProject]
+      );
+      return result;
+    } catch (error) {
+      throw new Error( 'Error al obtener miembros');
+    }
+  }
+
+    /**
+   * Devuelve los miembros de un proyecto
+   * @param {string} idProject
+   * @param {string} idMember 
    * @returns {Array} te devueve un "Eliminado miembro correctamente"
    */
-  async deleteMember(idProject, idMember) {
+  async deleteMember(idProject,idMember) {
     try {
       const result = await this.pool.query(
         "DELETE FROM member  WHERE project_id = $1 AND person_id = $2",
-        [idProject, idMember]
+        [idProject,idMember]
       );
       return "Eliminado miembro correctamente";
     } catch (error) {
-      throw new Error("Error al eliminar miembro");
+      throw new Error( 'Error al eliminar miembro');
     }
   }
+
 }
 
 export default DbQueries;
