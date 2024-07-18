@@ -179,7 +179,7 @@ class DbQueries {
         `SELECT name AS miembro, project_name AS proyecto FROM projects AS p
           INNER JOIN member AS m ON m.project_id = p.project_id
           INNER JOIN person AS per ON per.person_id = m.person_id
-          INNER JOIN users AS u ON u.id_person = per.person_id
+          INNER JOIN users AS u ON u.person_id = per.person_id
           WHERE u.person_id = $1`,
         [personId]
       );
@@ -190,59 +190,15 @@ class DbQueries {
     }
   }
 
-  async updateProjectName(newName, idProject) {
+  async updateProject(newName, newType, newState, newStart, newEnd, idProject) {
     try {
       const result = await this.pool.query(
-        "UPDATE projects SET project_name = $1 WHERE project_id = $2",
-        [newName, idProject]
-      );
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async updateTypeProject(newType, idProject) {
-    try {
-      const result = await this.pool.query(
-        "UPDATE proyecto SET tipo_proyecto = $1 WHERE id_proyecto = $2",
-        [newType, idProject]
-      );
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async updateStateProject(newState, idProject) {
-    try {
-      const result = await this.pool.query(
-        "UPDATE proyecto SET id_estado = $1 WHERE id_proyecto = $2",
-        [newState, idProject]
-      );
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async updateStartDateProject(newDate, idProject) {
-    try {
-      const result = await this.pool.query(
-        "UPDATE proyecto SET fecha_inicio = $1 WHERE id_proyecto = $2",
-        [newDate, idProject]
-      );
-      return result;
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  async updateEndDateProject(newDate, idProject) {
-    try {
-      const result = await this.pool.query(
-        "UPDATE proyecto SET fecha_final = $1 WHERE id_proyecto = $2",
-        [newDate, idProject]
+        `UPDATE project SET project_name = $1,
+        type = $2,
+        state_id = $3,
+        start_date = $4,
+        end_date = $5 WHERE project_id = $6`,
+        [newName, newType, newState, newStart, newEnd, idProject]
       );
       return result;
     } catch (error) {
@@ -288,6 +244,18 @@ class DbQueries {
     }
   }
 
+  async updateObjective(newDesc, newDateLimit, idOb) {
+    try {
+      const result = this.pool.query(
+        "UPDATE objective SET desc = $1, deadline = $2 WHERE objective_id = $3",
+        [newDesc, newDateLimit, idOb]
+      );
+      return result;
+    } catch (error) {
+      console.log("Error: ", error);
+    }
+  }
+
   async deleteObjective(idOb) {
     try {
       const result = this.pool.query(
@@ -301,11 +269,11 @@ class DbQueries {
     }
   }
 
-  async insertTask(desc, idOb) {
+  async insertTask(desc, idOb, startDate, deadline) {
     try {
       const result = this.pool.query(
-        "INSERT INTO tasks (desc, obj_id) VALUES ($1, $2) RETURNING task_id",
-        [desc, idOb]
+        "INSERT INTO tasks (task_desc, obj_id, start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
+        [desc, idOb, startDate, deadline]
       );
 
       return result;

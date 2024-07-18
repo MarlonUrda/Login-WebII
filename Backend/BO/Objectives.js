@@ -95,25 +95,31 @@ class Objectives {
   }
 
   static async updateObjective(params) {
-    [] = params;
+    const [newDesc, newDateLimit, idOb] = params;
     try {
-      const query = ""; //Preguntar mañana sobre los updates
+      const query = await dbQueries.updateObjective(
+        newDesc,
+        newDateLimit,
+        idOb
+      ); //Preguntar mañana sobre los updates
 
       if (query) {
         return {
           success: true,
-          message: "Objetivo actualizado!",
+          message: "Objetivo actualizado",
         };
       } else {
         return {
           success: false,
-          message: "No se puso actualizar el objetivo!",
+          code: 400,
+          message: "No se puso actualizar el objetivo",
         };
       }
     } catch (error) {
       return {
         success: false,
-        error: error,
+        code: 500,
+        message: "Error interno del servidor",
       };
     }
   }
