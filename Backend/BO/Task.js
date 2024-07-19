@@ -4,10 +4,16 @@ class Task {
   constructor() {}
 
   static async createTask(params) {
-    const [descAct, idOb] = params;
+    const [taskName, taskDesc, idOb, startDate, deadline] = params;
 
     try {
-      const query = await dbQueries.insertTask(descAct, idOb);
+      const query = await dbQueries.insertTask(
+        taskName,
+        taskDesc,
+        idOb,
+        startDate,
+        deadline
+      );
 
       if (query) {
         console.log("Actividad creada con exito");
@@ -65,10 +71,11 @@ class Task {
   }
 
   static async updateTask(params) {
-    const [newDesc, newStart, newDeadline, idTask] = params;
+    const [newName, newDesc, newStart, newDeadline, idTask] = params;
 
     try {
       const query = await dbQueries.updateTask(
+        newName,
         newDesc,
         newStart,
         newDeadline,
@@ -97,9 +104,9 @@ class Task {
   }
 
   static async deleteTask(params) {
-    const [idObj] = params;
+    const [taskId] = params;
     try {
-      const query = await dbQueries.deleteTask(idObj);
+      const query = await dbQueries.deleteTask(taskId);
 
       if (query) {
         console.log("Actividad eliminada con exito");
@@ -111,32 +118,6 @@ class Task {
         return {
           success: false,
           message: "No se pudo eliminar la actividad",
-        };
-      }
-    } catch (error) {
-      return {
-        success: false,
-        error: error,
-      };
-    }
-  }
-
-  static async deleteTask(params) {
-    const [idTask] = params;
-
-    try {
-      const query = await dbQueries.deleteTask(idTask);
-
-      if (query) {
-        console.log("Tarea eliminada con éxito");
-        return {
-          success: true,
-          message: "Tarea eliminada exitosamente!",
-        };
-      } else {
-        return {
-          success: false,
-          message: "No se pudo eliminar la tarea",
         };
       }
     } catch (error) {

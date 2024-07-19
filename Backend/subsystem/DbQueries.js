@@ -279,11 +279,11 @@ class DbQueries {
     }
   }
 
-  async insertTask(desc, idOb, startDate, deadline) {
+  async insertTask(taskName, taskDesc, idOb, startDate, deadline) {
     try {
       const result = this.pool.query(
-        "INSERT INTO tasks (task_desc, obj_id, start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
-        [desc, idOb, startDate, deadline]
+        "INSERT INTO tasks (task_name, task_desc, obj_id, start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
+        [taskName, taskDesc, idOb, startDate, deadline]
       );
 
       return result;
@@ -305,10 +305,10 @@ class DbQueries {
     }
   }
 
-  async deleteTask(idObj) {
+  async deleteTask(idTask) {
     try {
       const result = this.pool.query("DELETE FROM tasks WHERE task_id = $1", [
-        idObj,
+        idTask,
       ]);
 
       return result;
@@ -317,14 +317,15 @@ class DbQueries {
     }
   }
 
-  async updateTask(newDesc, newStart, newDeadline, idTask) {
+  async updateTask(newName, newDesc, newStart, newDeadline, idTask) {
     try {
       const result = await this.pool.query(
-        `UPDATE tasks SET task_desc = $1,
-              start_date = $2,
-              deadline = $3,
-              WHERE task_id = $4`,
-        [newDesc, newStart, newDeadline, idTask]
+        `UPDATE tasks SET task_name = $1 ,
+              task_desc = $2,
+              start_date = $3,
+              deadline = $4,
+              WHERE task_id = $5`,
+        [newName, newDesc, newStart, newDeadline, idTask]
       );
       return result;
     } catch (error) {
