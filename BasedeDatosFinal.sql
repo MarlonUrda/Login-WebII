@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 16.0
--- Dumped by pg_dump version 16.0
+-- Dumped from database version 16.3
+-- Dumped by pg_dump version 16.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -21,17 +21,19 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- Name: actividad; Type: TABLE; Schema: public; Owner: postgres
+-- Name: tasks; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.actividad (
-    id_actividad integer NOT NULL,
-    desc_actividad text NOT NULL,
-    id_objetivo integer NOT NULL
+CREATE TABLE public.tasks (
+    task_id integer NOT NULL,
+    task_desc text NOT NULL,
+    obj_id integer NOT NULL,
+    start_date date,
+    deadline date
 );
 
 
-ALTER TABLE public.actividad OWNER TO postgres;
+ALTER TABLE public.tasks OWNER TO postgres;
 
 --
 -- Name: actividad_id_actividad_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -52,7 +54,7 @@ ALTER SEQUENCE public.actividad_id_actividad_seq OWNER TO postgres;
 -- Name: actividad_id_actividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.actividad_id_actividad_seq OWNED BY public.actividad.id_actividad;
+ALTER SEQUENCE public.actividad_id_actividad_seq OWNED BY public.tasks.task_id;
 
 
 --
@@ -74,22 +76,21 @@ ALTER SEQUENCE public.actividad_id_objetivo_seq OWNER TO postgres;
 -- Name: actividad_id_objetivo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.actividad_id_objetivo_seq OWNED BY public.actividad.id_objetivo;
+ALTER SEQUENCE public.actividad_id_objetivo_seq OWNED BY public.tasks.obj_id;
 
 
 --
--- Name: asignacion; Type: TABLE; Schema: public; Owner: postgres
+-- Name: assignments; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.asignacion (
-    id_asignacion integer NOT NULL,
-    desc_asignacion text NOT NULL,
-    id_actividad integer NOT NULL,
-    id_miembro integer NOT NULL
+CREATE TABLE public.assignments (
+    assignment_id integer NOT NULL,
+    task_id integer NOT NULL,
+    member_id integer NOT NULL
 );
 
 
-ALTER TABLE public.asignacion OWNER TO postgres;
+ALTER TABLE public.assignments OWNER TO postgres;
 
 --
 -- Name: asignacion_id_actividad_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -110,7 +111,7 @@ ALTER SEQUENCE public.asignacion_id_actividad_seq OWNER TO postgres;
 -- Name: asignacion_id_actividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.asignacion_id_actividad_seq OWNED BY public.asignacion.id_actividad;
+ALTER SEQUENCE public.asignacion_id_actividad_seq OWNED BY public.assignments.task_id;
 
 
 --
@@ -132,7 +133,7 @@ ALTER SEQUENCE public.asignacion_id_asignacion_seq OWNER TO postgres;
 -- Name: asignacion_id_asignacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.asignacion_id_asignacion_seq OWNED BY public.asignacion.id_asignacion;
+ALTER SEQUENCE public.asignacion_id_asignacion_seq OWNED BY public.assignments.assignment_id;
 
 
 --
@@ -154,21 +155,21 @@ ALTER SEQUENCE public.asignacion_id_miembro_seq OWNER TO postgres;
 -- Name: asignacion_id_miembro_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.asignacion_id_miembro_seq OWNED BY public.asignacion.id_miembro;
+ALTER SEQUENCE public.asignacion_id_miembro_seq OWNED BY public.assignments.member_id;
 
 
 --
--- Name: avance; Type: TABLE; Schema: public; Owner: postgres
+-- Name: progress; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.avance (
-    id_avance integer NOT NULL,
-    cantidad character varying(5) NOT NULL,
-    id_asignacion integer NOT NULL
+CREATE TABLE public.progress (
+    progress_id integer NOT NULL,
+    assignment_id integer NOT NULL,
+    quantity integer NOT NULL
 );
 
 
-ALTER TABLE public.avance OWNER TO postgres;
+ALTER TABLE public.progress OWNER TO postgres;
 
 --
 -- Name: avance_id_asignacion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -189,7 +190,7 @@ ALTER SEQUENCE public.avance_id_asignacion_seq OWNER TO postgres;
 -- Name: avance_id_asignacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.avance_id_asignacion_seq OWNED BY public.avance.id_asignacion;
+ALTER SEQUENCE public.avance_id_asignacion_seq OWNED BY public.progress.assignment_id;
 
 
 --
@@ -211,21 +212,21 @@ ALTER SEQUENCE public.avance_id_avance_seq OWNER TO postgres;
 -- Name: avance_id_avance_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.avance_id_avance_seq OWNED BY public.avance.id_avance;
+ALTER SEQUENCE public.avance_id_avance_seq OWNED BY public.progress.progress_id;
 
 
 --
--- Name: clase; Type: TABLE; Schema: public; Owner: postgres
+-- Name: classes; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.clase (
-    id_clase integer NOT NULL,
-    nombre_clase character varying(20) NOT NULL,
-    id_modulo integer NOT NULL
+CREATE TABLE public.classes (
+    class_id integer NOT NULL,
+    classname character varying(20) NOT NULL,
+    module_id integer NOT NULL
 );
 
 
-ALTER TABLE public.clase OWNER TO postgres;
+ALTER TABLE public.classes OWNER TO postgres;
 
 --
 -- Name: clase_id_clase_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -246,7 +247,7 @@ ALTER SEQUENCE public.clase_id_clase_seq OWNER TO postgres;
 -- Name: clase_id_clase_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.clase_id_clase_seq OWNED BY public.clase.id_clase;
+ALTER SEQUENCE public.clase_id_clase_seq OWNED BY public.classes.class_id;
 
 
 --
@@ -268,22 +269,22 @@ ALTER SEQUENCE public.clase_id_modulo_seq OWNER TO postgres;
 -- Name: clase_id_modulo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.clase_id_modulo_seq OWNED BY public.clase.id_modulo;
+ALTER SEQUENCE public.clase_id_modulo_seq OWNED BY public.classes.module_id;
 
 
 --
--- Name: entregable; Type: TABLE; Schema: public; Owner: postgres
+-- Name: submit; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.entregable (
-    id_entregable integer NOT NULL,
-    fecha_entrega date NOT NULL,
-    id_actividad integer NOT NULL,
-    id_tipo_entregable integer NOT NULL
+CREATE TABLE public.submit (
+    submit_id integer NOT NULL,
+    deadline date NOT NULL,
+    task_id integer NOT NULL,
+    submit_type_id integer NOT NULL
 );
 
 
-ALTER TABLE public.entregable OWNER TO postgres;
+ALTER TABLE public.submit OWNER TO postgres;
 
 --
 -- Name: entregable_id_actividad_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -304,7 +305,7 @@ ALTER SEQUENCE public.entregable_id_actividad_seq OWNER TO postgres;
 -- Name: entregable_id_actividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.entregable_id_actividad_seq OWNED BY public.entregable.id_actividad;
+ALTER SEQUENCE public.entregable_id_actividad_seq OWNED BY public.submit.task_id;
 
 
 --
@@ -326,7 +327,7 @@ ALTER SEQUENCE public.entregable_id_entregable_seq OWNER TO postgres;
 -- Name: entregable_id_entregable_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.entregable_id_entregable_seq OWNED BY public.entregable.id_entregable;
+ALTER SEQUENCE public.entregable_id_entregable_seq OWNED BY public.submit.submit_id;
 
 
 --
@@ -348,20 +349,20 @@ ALTER SEQUENCE public.entregable_id_tipo_entregable_seq OWNER TO postgres;
 -- Name: entregable_id_tipo_entregable_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.entregable_id_tipo_entregable_seq OWNED BY public.entregable.id_tipo_entregable;
+ALTER SEQUENCE public.entregable_id_tipo_entregable_seq OWNED BY public.submit.submit_type_id;
 
 
 --
--- Name: estado; Type: TABLE; Schema: public; Owner: postgres
+-- Name: states; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.estado (
-    id_estado integer NOT NULL,
-    desc_estado character varying(20) NOT NULL
+CREATE TABLE public.states (
+    state_id integer NOT NULL,
+    state_desc character varying(20) NOT NULL
 );
 
 
-ALTER TABLE public.estado OWNER TO postgres;
+ALTER TABLE public.states OWNER TO postgres;
 
 --
 -- Name: estado_id_estado_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -382,16 +383,30 @@ ALTER SEQUENCE public.estado_id_estado_seq OWNER TO postgres;
 -- Name: estado_id_estado_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.estado_id_estado_seq OWNED BY public.estado.id_estado;
+ALTER SEQUENCE public.estado_id_estado_seq OWNED BY public.states.state_id;
 
+
+--
+-- Name: member; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.member (
+    member_id integer NOT NULL,
+    person_id integer NOT NULL,
+    profile_id integer NOT NULL,
+    project_id integer NOT NULL
+);
+
+
+ALTER TABLE public.member OWNER TO postgres;
 
 --
 -- Name: menu; Type: TABLE; Schema: public; Owner: postgres
 --
 
 CREATE TABLE public.menu (
-    id_menu integer NOT NULL,
-    id_modulo integer NOT NULL
+    menu_id integer NOT NULL,
+    module_id integer NOT NULL
 );
 
 
@@ -416,7 +431,7 @@ ALTER SEQUENCE public.menu_id_menu_seq OWNER TO postgres;
 -- Name: menu_id_menu_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.menu_id_menu_seq OWNED BY public.menu.id_menu;
+ALTER SEQUENCE public.menu_id_menu_seq OWNED BY public.menu.menu_id;
 
 
 --
@@ -438,56 +453,34 @@ ALTER SEQUENCE public.menu_id_modulo_seq OWNER TO postgres;
 -- Name: menu_id_modulo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.menu_id_modulo_seq OWNED BY public.menu.id_modulo;
+ALTER SEQUENCE public.menu_id_modulo_seq OWNED BY public.menu.module_id;
 
 
 --
--- Name: metodo; Type: TABLE; Schema: public; Owner: postgres
+-- Name: methods; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.metodo (
-    id_metodo integer NOT NULL,
-    nombre_metodo integer,
-    id_clase integer NOT NULL
+CREATE TABLE public.methods (
+    method_id integer NOT NULL,
+    method_name character varying(50) NOT NULL,
+    class_id integer NOT NULL
 );
 
 
-ALTER TABLE public.metodo OWNER TO postgres;
+ALTER TABLE public.methods OWNER TO postgres;
 
 --
--- Name: metodo-perfil; Type: TABLE; Schema: public; Owner: postgres
+-- Name: profile_methods; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."metodo-perfil" (
-    "id_metodo-perfil" integer NOT NULL,
-    id_metodo integer NOT NULL,
-    id_perfil integer NOT NULL
+CREATE TABLE public.profile_methods (
+    method_id integer NOT NULL,
+    profile_id integer NOT NULL,
+    profile_methods_id integer NOT NULL
 );
 
 
-ALTER TABLE public."metodo-perfil" OWNER TO postgres;
-
---
--- Name: metodo-perfil_id_metodo-perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."metodo-perfil_id_metodo-perfil_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."metodo-perfil_id_metodo-perfil_seq" OWNER TO postgres;
-
---
--- Name: metodo-perfil_id_metodo-perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."metodo-perfil_id_metodo-perfil_seq" OWNED BY public."metodo-perfil"."id_metodo-perfil";
-
+ALTER TABLE public.profile_methods OWNER TO postgres;
 
 --
 -- Name: metodo-perfil_id_metodo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -508,7 +501,7 @@ ALTER SEQUENCE public."metodo-perfil_id_metodo_seq" OWNER TO postgres;
 -- Name: metodo-perfil_id_metodo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."metodo-perfil_id_metodo_seq" OWNED BY public."metodo-perfil".id_metodo;
+ALTER SEQUENCE public."metodo-perfil_id_metodo_seq" OWNED BY public.profile_methods.method_id;
 
 
 --
@@ -530,7 +523,7 @@ ALTER SEQUENCE public."metodo-perfil_id_perfil_seq" OWNER TO postgres;
 -- Name: metodo-perfil_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."metodo-perfil_id_perfil_seq" OWNED BY public."metodo-perfil".id_perfil;
+ALTER SEQUENCE public."metodo-perfil_id_perfil_seq" OWNED BY public.profile_methods.profile_id;
 
 
 --
@@ -552,7 +545,7 @@ ALTER SEQUENCE public.metodo_id_clase_seq OWNER TO postgres;
 -- Name: metodo_id_clase_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.metodo_id_clase_seq OWNED BY public.metodo.id_clase;
+ALTER SEQUENCE public.metodo_id_clase_seq OWNED BY public.methods.class_id;
 
 
 --
@@ -574,22 +567,30 @@ ALTER SEQUENCE public.metodo_id_metodo_seq OWNER TO postgres;
 -- Name: metodo_id_metodo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.metodo_id_metodo_seq OWNED BY public.metodo.id_metodo;
+ALTER SEQUENCE public.metodo_id_metodo_seq OWNED BY public.methods.method_id;
 
 
 --
--- Name: miembro; Type: TABLE; Schema: public; Owner: postgres
+-- Name: metodo_perfil_profile_methods_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.miembro (
-    id_miembro integer NOT NULL,
-    id_persona integer NOT NULL,
-    id_perfil integer NOT NULL,
-    id_proyecto integer NOT NULL
-);
+CREATE SEQUENCE public.metodo_perfil_profile_methods_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
-ALTER TABLE public.miembro OWNER TO postgres;
+ALTER SEQUENCE public.metodo_perfil_profile_methods_id_seq OWNER TO postgres;
+
+--
+-- Name: metodo_perfil_profile_methods_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.metodo_perfil_profile_methods_id_seq OWNED BY public.profile_methods.profile_methods_id;
+
 
 --
 -- Name: miembro_id_miembro_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -610,7 +611,7 @@ ALTER SEQUENCE public.miembro_id_miembro_seq OWNER TO postgres;
 -- Name: miembro_id_miembro_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.miembro_id_miembro_seq OWNED BY public.miembro.id_miembro;
+ALTER SEQUENCE public.miembro_id_miembro_seq OWNED BY public.member.member_id;
 
 
 --
@@ -632,7 +633,7 @@ ALTER SEQUENCE public.miembro_id_perfil_seq OWNER TO postgres;
 -- Name: miembro_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.miembro_id_perfil_seq OWNED BY public.miembro.id_perfil;
+ALTER SEQUENCE public.miembro_id_perfil_seq OWNED BY public.member.profile_id;
 
 
 --
@@ -654,7 +655,7 @@ ALTER SEQUENCE public.miembro_id_persona_seq OWNER TO postgres;
 -- Name: miembro_id_persona_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.miembro_id_persona_seq OWNED BY public.miembro.id_persona;
+ALTER SEQUENCE public.miembro_id_persona_seq OWNED BY public.member.person_id;
 
 
 --
@@ -676,20 +677,33 @@ ALTER SEQUENCE public.miembro_id_proyecto_seq OWNER TO postgres;
 -- Name: miembro_id_proyecto_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.miembro_id_proyecto_seq OWNED BY public.miembro.id_proyecto;
+ALTER SEQUENCE public.miembro_id_proyecto_seq OWNED BY public.member.project_id;
 
 
 --
--- Name: modulo; Type: TABLE; Schema: public; Owner: postgres
+-- Name: module_profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.modulo (
-    id_modulo integer NOT NULL,
-    desc_modulo character varying(70) NOT NULL
+CREATE TABLE public.module_profile (
+    module_profile_id integer NOT NULL,
+    module_id integer NOT NULL,
+    profile_id integer NOT NULL
 );
 
 
-ALTER TABLE public.modulo OWNER TO postgres;
+ALTER TABLE public.module_profile OWNER TO postgres;
+
+--
+-- Name: modules; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.modules (
+    module_id integer NOT NULL,
+    module_desc character varying(70) NOT NULL
+);
+
+
+ALTER TABLE public.modules OWNER TO postgres;
 
 --
 -- Name: modulo_id_modulo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -710,21 +724,8 @@ ALTER SEQUENCE public.modulo_id_modulo_seq OWNER TO postgres;
 -- Name: modulo_id_modulo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.modulo_id_modulo_seq OWNED BY public.modulo.id_modulo;
+ALTER SEQUENCE public.modulo_id_modulo_seq OWNED BY public.modules.module_id;
 
-
---
--- Name: modulo_perfil; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.modulo_perfil (
-    id_modulo_perfil integer NOT NULL,
-    id_modulo integer NOT NULL,
-    id_perfil integer NOT NULL
-);
-
-
-ALTER TABLE public.modulo_perfil OWNER TO postgres;
 
 --
 -- Name: modulo_perfil_id_modulo_perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -745,7 +746,7 @@ ALTER SEQUENCE public.modulo_perfil_id_modulo_perfil_seq OWNER TO postgres;
 -- Name: modulo_perfil_id_modulo_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.modulo_perfil_id_modulo_perfil_seq OWNED BY public.modulo_perfil.id_modulo_perfil;
+ALTER SEQUENCE public.modulo_perfil_id_modulo_perfil_seq OWNED BY public.module_profile.module_profile_id;
 
 
 --
@@ -767,7 +768,7 @@ ALTER SEQUENCE public.modulo_perfil_id_modulo_seq OWNER TO postgres;
 -- Name: modulo_perfil_id_modulo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.modulo_perfil_id_modulo_seq OWNED BY public.modulo_perfil.id_modulo;
+ALTER SEQUENCE public.modulo_perfil_id_modulo_seq OWNED BY public.module_profile.module_id;
 
 
 --
@@ -789,21 +790,22 @@ ALTER SEQUENCE public.modulo_perfil_id_perfil_seq OWNER TO postgres;
 -- Name: modulo_perfil_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.modulo_perfil_id_perfil_seq OWNED BY public.modulo_perfil.id_perfil;
+ALTER SEQUENCE public.modulo_perfil_id_perfil_seq OWNED BY public.module_profile.profile_id;
 
 
 --
--- Name: objetivo; Type: TABLE; Schema: public; Owner: postgres
+-- Name: objective; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.objetivo (
-    id_objetivo integer NOT NULL,
-    desc_objetivo character varying(40) NOT NULL,
-    id_proyecto integer NOT NULL
+CREATE TABLE public.objective (
+    objective_id integer NOT NULL,
+    "desc" character varying(40) NOT NULL,
+    project_id integer NOT NULL,
+    deadline date
 );
 
 
-ALTER TABLE public.objetivo OWNER TO postgres;
+ALTER TABLE public.objective OWNER TO postgres;
 
 --
 -- Name: objetivo_id_objetivo_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -824,7 +826,7 @@ ALTER SEQUENCE public.objetivo_id_objetivo_seq OWNER TO postgres;
 -- Name: objetivo_id_objetivo_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.objetivo_id_objetivo_seq OWNED BY public.objetivo.id_objetivo;
+ALTER SEQUENCE public.objetivo_id_objetivo_seq OWNED BY public.objective.objective_id;
 
 
 --
@@ -846,55 +848,21 @@ ALTER SEQUENCE public.objetivo_id_proyecto_seq OWNER TO postgres;
 -- Name: objetivo_id_proyecto_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.objetivo_id_proyecto_seq OWNED BY public.objetivo.id_proyecto;
+ALTER SEQUENCE public.objetivo_id_proyecto_seq OWNED BY public.objective.project_id;
 
 
 --
--- Name: opcion; Type: TABLE; Schema: public; Owner: postgres
+-- Name: option_profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.opcion (
-    id_opcion integer NOT NULL,
-    desc_opcion character varying(30) NOT NULL
+CREATE TABLE public.option_profile (
+    option_id integer NOT NULL,
+    profile_id integer NOT NULL,
+    option_profile_id integer NOT NULL
 );
 
 
-ALTER TABLE public.opcion OWNER TO postgres;
-
---
--- Name: opcion-perfil; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public."opcion-perfil" (
-    "id_opcion-perfil" integer NOT NULL,
-    id_opcion integer NOT NULL,
-    id_perfil integer NOT NULL
-);
-
-
-ALTER TABLE public."opcion-perfil" OWNER TO postgres;
-
---
--- Name: opcion-perfil_id_opcion-perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."opcion-perfil_id_opcion-perfil_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."opcion-perfil_id_opcion-perfil_seq" OWNER TO postgres;
-
---
--- Name: opcion-perfil_id_opcion-perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."opcion-perfil_id_opcion-perfil_seq" OWNED BY public."opcion-perfil"."id_opcion-perfil";
-
+ALTER TABLE public.option_profile OWNER TO postgres;
 
 --
 -- Name: opcion-perfil_id_opcion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -915,7 +883,7 @@ ALTER SEQUENCE public."opcion-perfil_id_opcion_seq" OWNER TO postgres;
 -- Name: opcion-perfil_id_opcion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."opcion-perfil_id_opcion_seq" OWNED BY public."opcion-perfil".id_opcion;
+ALTER SEQUENCE public."opcion-perfil_id_opcion_seq" OWNED BY public.option_profile.option_id;
 
 
 --
@@ -937,8 +905,42 @@ ALTER SEQUENCE public."opcion-perfil_id_perfil_seq" OWNER TO postgres;
 -- Name: opcion-perfil_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."opcion-perfil_id_perfil_seq" OWNED BY public."opcion-perfil".id_perfil;
+ALTER SEQUENCE public."opcion-perfil_id_perfil_seq" OWNED BY public.option_profile.profile_id;
 
+
+--
+-- Name: opcion-perfil_option_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE public."opcion-perfil_option_profile_id_seq"
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER SEQUENCE public."opcion-perfil_option_profile_id_seq" OWNER TO postgres;
+
+--
+-- Name: opcion-perfil_option_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public."opcion-perfil_option_profile_id_seq" OWNED BY public.option_profile.option_profile_id;
+
+
+--
+-- Name: options; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.options (
+    option_id integer NOT NULL,
+    "desc" character varying(30) NOT NULL
+);
+
+
+ALTER TABLE public.options OWNER TO postgres;
 
 --
 -- Name: opcion_id_opcion_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -959,21 +961,21 @@ ALTER SEQUENCE public.opcion_id_opcion_seq OWNER TO postgres;
 -- Name: opcion_id_opcion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.opcion_id_opcion_seq OWNED BY public.opcion.id_opcion;
+ALTER SEQUENCE public.opcion_id_opcion_seq OWNED BY public.options.option_id;
 
 
 --
--- Name: perfil; Type: TABLE; Schema: public; Owner: postgres
+-- Name: profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.perfil (
-    id_perfil integer NOT NULL,
-    desc_perfil character varying(70) NOT NULL,
-    id_tipo_perfil integer NOT NULL
+CREATE TABLE public.profile (
+    profile_id integer NOT NULL,
+    profile_desc character varying(70) NOT NULL,
+    profile_type_id integer NOT NULL
 );
 
 
-ALTER TABLE public.perfil OWNER TO postgres;
+ALTER TABLE public.profile OWNER TO postgres;
 
 --
 -- Name: perfil_id_perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -994,7 +996,7 @@ ALTER SEQUENCE public.perfil_id_perfil_seq OWNER TO postgres;
 -- Name: perfil_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.perfil_id_perfil_seq OWNED BY public.perfil.id_perfil;
+ALTER SEQUENCE public.perfil_id_perfil_seq OWNED BY public.profile.profile_id;
 
 
 --
@@ -1016,23 +1018,22 @@ ALTER SEQUENCE public.perfil_id_tipo_perfil_seq OWNER TO postgres;
 -- Name: perfil_id_tipo_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.perfil_id_tipo_perfil_seq OWNED BY public.perfil.id_tipo_perfil;
+ALTER SEQUENCE public.perfil_id_tipo_perfil_seq OWNED BY public.profile.profile_type_id;
 
 
 --
--- Name: persona; Type: TABLE; Schema: public; Owner: postgres
+-- Name: person; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.persona (
-    id_persona integer NOT NULL,
-    nombre_persona character varying(40) NOT NULL,
-    email_persona character varying(50) NOT NULL,
-    telefono character varying(16) NOT NULL,
-    apellido_persona character varying(50) NOT NULL
+CREATE TABLE public.person (
+    person_id integer NOT NULL,
+    name character varying(40) NOT NULL,
+    lastname character varying(50) NOT NULL,
+    ident character varying(19) NOT NULL
 );
 
 
-ALTER TABLE public.persona OWNER TO postgres;
+ALTER TABLE public.person OWNER TO postgres;
 
 --
 -- Name: persona_id_persona_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1053,20 +1054,20 @@ ALTER SEQUENCE public.persona_id_persona_seq OWNER TO postgres;
 -- Name: persona_id_persona_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.persona_id_persona_seq OWNED BY public.persona.id_persona;
+ALTER SEQUENCE public.persona_id_persona_seq OWNED BY public.person.person_id;
 
 
 --
--- Name: prelacion-actividad; Type: TABLE; Schema: public; Owner: postgres
+-- Name: task-predecessor; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."prelacion-actividad" (
-    id_prelacion integer NOT NULL,
-    id_actividad integer NOT NULL
+CREATE TABLE public."task-predecessor" (
+    predecessor_id integer NOT NULL,
+    task_id integer NOT NULL
 );
 
 
-ALTER TABLE public."prelacion-actividad" OWNER TO postgres;
+ALTER TABLE public."task-predecessor" OWNER TO postgres;
 
 --
 -- Name: prelacion-actividad_id_actividad_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1087,7 +1088,7 @@ ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNER TO postgres;
 -- Name: prelacion-actividad_id_actividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNED BY public."prelacion-actividad".id_actividad;
+ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNED BY public."task-predecessor".task_id;
 
 
 --
@@ -1109,22 +1110,36 @@ ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNER TO postgres;
 -- Name: prelacion-actividad_id_prelacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNED BY public."prelacion-actividad".id_prelacion;
+ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNED BY public."task-predecessor".predecessor_id;
 
 
 --
--- Name: proyecto; Type: TABLE; Schema: public; Owner: postgres
+-- Name: profile_type; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.proyecto (
-    id_proyecto integer NOT NULL,
-    nombre_proyecto character varying(60) NOT NULL,
-    desc_proyecto text NOT NULL,
-    id_estado integer NOT NULL
+CREATE TABLE public.profile_type (
+    profile_type_id integer NOT NULL,
+    type_desc character varying(50) NOT NULL
 );
 
 
-ALTER TABLE public.proyecto OWNER TO postgres;
+ALTER TABLE public.profile_type OWNER TO postgres;
+
+--
+-- Name: projects; Type: TABLE; Schema: public; Owner: postgres
+--
+
+CREATE TABLE public.projects (
+    project_id integer NOT NULL,
+    project_name character varying(60) NOT NULL,
+    type text NOT NULL,
+    state_id integer NOT NULL,
+    start_date date,
+    end_date date
+);
+
+
+ALTER TABLE public.projects OWNER TO postgres;
 
 --
 -- Name: proyecto_id_estado_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1145,7 +1160,7 @@ ALTER SEQUENCE public.proyecto_id_estado_seq OWNER TO postgres;
 -- Name: proyecto_id_estado_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.proyecto_id_estado_seq OWNED BY public.proyecto.id_estado;
+ALTER SEQUENCE public.proyecto_id_estado_seq OWNED BY public.projects.state_id;
 
 
 --
@@ -1167,20 +1182,20 @@ ALTER SEQUENCE public.proyecto_id_proyecto_seq OWNER TO postgres;
 -- Name: proyecto_id_proyecto_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.proyecto_id_proyecto_seq OWNED BY public.proyecto.id_proyecto;
+ALTER SEQUENCE public.proyecto_id_proyecto_seq OWNED BY public.projects.project_id;
 
 
 --
--- Name: tipo_entregable; Type: TABLE; Schema: public; Owner: postgres
+-- Name: submit_type; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.tipo_entregable (
-    id_tipo_entregable integer NOT NULL,
-    desc_tipo_entregable character varying(40)
+CREATE TABLE public.submit_type (
+    submit_type_id integer NOT NULL,
+    submit_type_desc character varying(40)
 );
 
 
-ALTER TABLE public.tipo_entregable OWNER TO postgres;
+ALTER TABLE public.submit_type OWNER TO postgres;
 
 --
 -- Name: tipo_entregable_id_tipo_entregable_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1201,20 +1216,8 @@ ALTER SEQUENCE public.tipo_entregable_id_tipo_entregable_seq OWNER TO postgres;
 -- Name: tipo_entregable_id_tipo_entregable_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.tipo_entregable_id_tipo_entregable_seq OWNED BY public.tipo_entregable.id_tipo_entregable;
+ALTER SEQUENCE public.tipo_entregable_id_tipo_entregable_seq OWNED BY public.submit_type.submit_type_id;
 
-
---
--- Name: tipo_perfil; Type: TABLE; Schema: public; Owner: postgres
---
-
-CREATE TABLE public.tipo_perfil (
-    id_tipo_perfil integer NOT NULL,
-    desc_tipo_perfil character varying(50) NOT NULL
-);
-
-
-ALTER TABLE public.tipo_perfil OWNER TO postgres;
 
 --
 -- Name: tipo_perfil_id_tipo_perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1235,35 +1238,38 @@ ALTER SEQUENCE public.tipo_perfil_id_tipo_perfil_seq OWNER TO postgres;
 -- Name: tipo_perfil_id_tipo_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.tipo_perfil_id_tipo_perfil_seq OWNED BY public.tipo_perfil.id_tipo_perfil;
+ALTER SEQUENCE public.tipo_perfil_id_tipo_perfil_seq OWNED BY public.profile_type.profile_type_id;
 
 
 --
--- Name: usuario; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public.usuario (
-    id_usuario integer NOT NULL,
-    "contrase├â┬▒a_usuario" character varying(150) NOT NULL,
-    nombre_usuario character varying(30) NOT NULL,
-    id_persona integer NOT NULL
+CREATE TABLE public.users (
+    users_id integer NOT NULL,
+    password character varying(150) NOT NULL,
+    username character varying(30) NOT NULL,
+    person_id integer NOT NULL,
+    resetpasswordtoken character varying(150),
+    resetpasswordexpires bigint,
+    email character varying(50) NOT NULL
 );
 
 
-ALTER TABLE public.usuario OWNER TO postgres;
+ALTER TABLE public.users OWNER TO postgres;
 
 --
--- Name: usuario-perfil; Type: TABLE; Schema: public; Owner: postgres
+-- Name: users_profile; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."usuario-perfil" (
-    id_usuario_perfil integer NOT NULL,
-    id_usuario integer NOT NULL,
-    id_perfil integer NOT NULL
+CREATE TABLE public.users_profile (
+    user_id integer NOT NULL,
+    profile_id integer NOT NULL,
+    users_profile_id integer NOT NULL
 );
 
 
-ALTER TABLE public."usuario-perfil" OWNER TO postgres;
+ALTER TABLE public.users_profile OWNER TO postgres;
 
 --
 -- Name: usuario-perfil_id_perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1284,29 +1290,7 @@ ALTER SEQUENCE public."usuario-perfil_id_perfil_seq" OWNER TO postgres;
 -- Name: usuario-perfil_id_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."usuario-perfil_id_perfil_seq" OWNED BY public."usuario-perfil".id_perfil;
-
-
---
--- Name: usuario-perfil_id_usuario_perfil_seq; Type: SEQUENCE; Schema: public; Owner: postgres
---
-
-CREATE SEQUENCE public."usuario-perfil_id_usuario_perfil_seq"
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER SEQUENCE public."usuario-perfil_id_usuario_perfil_seq" OWNER TO postgres;
-
---
--- Name: usuario-perfil_id_usuario_perfil_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
---
-
-ALTER SEQUENCE public."usuario-perfil_id_usuario_perfil_seq" OWNED BY public."usuario-perfil".id_usuario_perfil;
+ALTER SEQUENCE public."usuario-perfil_id_perfil_seq" OWNED BY public.users_profile.profile_id;
 
 
 --
@@ -1328,7 +1312,7 @@ ALTER SEQUENCE public."usuario-perfil_id_usuario_seq" OWNER TO postgres;
 -- Name: usuario-perfil_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."usuario-perfil_id_usuario_seq" OWNED BY public."usuario-perfil".id_usuario;
+ALTER SEQUENCE public."usuario-perfil_id_usuario_seq" OWNED BY public.users_profile.user_id;
 
 
 --
@@ -1350,7 +1334,7 @@ ALTER SEQUENCE public.usuario_id_persona_seq OWNER TO postgres;
 -- Name: usuario_id_persona_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.usuario_id_persona_seq OWNED BY public.usuario.id_persona;
+ALTER SEQUENCE public.usuario_id_persona_seq OWNED BY public.users.person_id;
 
 
 --
@@ -1372,390 +1356,415 @@ ALTER SEQUENCE public.usuario_id_usuario_seq OWNER TO postgres;
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public.usuario_id_usuario_seq OWNED BY public.usuario.id_usuario;
+ALTER SEQUENCE public.usuario_id_usuario_seq OWNED BY public.users.users_id;
 
 
 --
--- Name: actividad id_actividad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: usuario_perfil_users_profile_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.actividad ALTER COLUMN id_actividad SET DEFAULT nextval('public.actividad_id_actividad_seq'::regclass);
+CREATE SEQUENCE public.usuario_perfil_users_profile_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 
+ALTER SEQUENCE public.usuario_perfil_users_profile_id_seq OWNER TO postgres;
+
+--
+-- Name: usuario_perfil_users_profile_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE public.usuario_perfil_users_profile_id_seq OWNED BY public.users_profile.users_profile_id;
+
+
+--
+-- Name: assignments assignment_id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assignments ALTER COLUMN assignment_id SET DEFAULT nextval('public.asignacion_id_asignacion_seq'::regclass);
+
+
 --
--- Name: actividad id_objetivo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: assignments task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.actividad ALTER COLUMN id_objetivo SET DEFAULT nextval('public.actividad_id_objetivo_seq'::regclass);
+ALTER TABLE ONLY public.assignments ALTER COLUMN task_id SET DEFAULT nextval('public.asignacion_id_actividad_seq'::regclass);
 
 
 --
--- Name: asignacion id_asignacion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: assignments member_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.asignacion ALTER COLUMN id_asignacion SET DEFAULT nextval('public.asignacion_id_asignacion_seq'::regclass);
+ALTER TABLE ONLY public.assignments ALTER COLUMN member_id SET DEFAULT nextval('public.asignacion_id_miembro_seq'::regclass);
 
 
 --
--- Name: asignacion id_actividad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: classes class_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.asignacion ALTER COLUMN id_actividad SET DEFAULT nextval('public.asignacion_id_actividad_seq'::regclass);
+ALTER TABLE ONLY public.classes ALTER COLUMN class_id SET DEFAULT nextval('public.clase_id_clase_seq'::regclass);
 
 
 --
--- Name: asignacion id_miembro; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: classes module_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.asignacion ALTER COLUMN id_miembro SET DEFAULT nextval('public.asignacion_id_miembro_seq'::regclass);
+ALTER TABLE ONLY public.classes ALTER COLUMN module_id SET DEFAULT nextval('public.clase_id_modulo_seq'::regclass);
 
 
 --
--- Name: avance id_avance; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: member member_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.avance ALTER COLUMN id_avance SET DEFAULT nextval('public.avance_id_avance_seq'::regclass);
+ALTER TABLE ONLY public.member ALTER COLUMN member_id SET DEFAULT nextval('public.miembro_id_miembro_seq'::regclass);
 
 
 --
--- Name: avance id_asignacion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: member person_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.avance ALTER COLUMN id_asignacion SET DEFAULT nextval('public.avance_id_asignacion_seq'::regclass);
+ALTER TABLE ONLY public.member ALTER COLUMN person_id SET DEFAULT nextval('public.miembro_id_persona_seq'::regclass);
 
 
 --
--- Name: clase id_clase; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: member profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.clase ALTER COLUMN id_clase SET DEFAULT nextval('public.clase_id_clase_seq'::regclass);
+ALTER TABLE ONLY public.member ALTER COLUMN profile_id SET DEFAULT nextval('public.miembro_id_perfil_seq'::regclass);
 
 
 --
--- Name: clase id_modulo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: member project_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.clase ALTER COLUMN id_modulo SET DEFAULT nextval('public.clase_id_modulo_seq'::regclass);
+ALTER TABLE ONLY public.member ALTER COLUMN project_id SET DEFAULT nextval('public.miembro_id_proyecto_seq'::regclass);
 
 
 --
--- Name: entregable id_entregable; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: menu menu_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable ALTER COLUMN id_entregable SET DEFAULT nextval('public.entregable_id_entregable_seq'::regclass);
+ALTER TABLE ONLY public.menu ALTER COLUMN menu_id SET DEFAULT nextval('public.menu_id_menu_seq'::regclass);
 
 
 --
--- Name: entregable id_actividad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: menu module_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable ALTER COLUMN id_actividad SET DEFAULT nextval('public.entregable_id_actividad_seq'::regclass);
+ALTER TABLE ONLY public.menu ALTER COLUMN module_id SET DEFAULT nextval('public.menu_id_modulo_seq'::regclass);
 
 
 --
--- Name: entregable id_tipo_entregable; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: methods method_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable ALTER COLUMN id_tipo_entregable SET DEFAULT nextval('public.entregable_id_tipo_entregable_seq'::regclass);
+ALTER TABLE ONLY public.methods ALTER COLUMN method_id SET DEFAULT nextval('public.metodo_id_metodo_seq'::regclass);
 
 
 --
--- Name: estado id_estado; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: methods class_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.estado ALTER COLUMN id_estado SET DEFAULT nextval('public.estado_id_estado_seq'::regclass);
+ALTER TABLE ONLY public.methods ALTER COLUMN class_id SET DEFAULT nextval('public.metodo_id_clase_seq'::regclass);
 
 
 --
--- Name: menu id_menu; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: module_profile module_profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.menu ALTER COLUMN id_menu SET DEFAULT nextval('public.menu_id_menu_seq'::regclass);
+ALTER TABLE ONLY public.module_profile ALTER COLUMN module_profile_id SET DEFAULT nextval('public.modulo_perfil_id_modulo_perfil_seq'::regclass);
 
 
 --
--- Name: menu id_modulo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: module_profile module_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.menu ALTER COLUMN id_modulo SET DEFAULT nextval('public.menu_id_modulo_seq'::regclass);
+ALTER TABLE ONLY public.module_profile ALTER COLUMN module_id SET DEFAULT nextval('public.modulo_perfil_id_modulo_seq'::regclass);
 
 
 --
--- Name: metodo id_metodo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: module_profile profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.metodo ALTER COLUMN id_metodo SET DEFAULT nextval('public.metodo_id_metodo_seq'::regclass);
+ALTER TABLE ONLY public.module_profile ALTER COLUMN profile_id SET DEFAULT nextval('public.modulo_perfil_id_perfil_seq'::regclass);
 
 
 --
--- Name: metodo id_clase; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: modules module_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.metodo ALTER COLUMN id_clase SET DEFAULT nextval('public.metodo_id_clase_seq'::regclass);
+ALTER TABLE ONLY public.modules ALTER COLUMN module_id SET DEFAULT nextval('public.modulo_id_modulo_seq'::regclass);
 
 
 --
--- Name: metodo-perfil id_metodo-perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: objective objective_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."metodo-perfil" ALTER COLUMN "id_metodo-perfil" SET DEFAULT nextval('public."metodo-perfil_id_metodo-perfil_seq"'::regclass);
+ALTER TABLE ONLY public.objective ALTER COLUMN objective_id SET DEFAULT nextval('public.objetivo_id_objetivo_seq'::regclass);
 
 
 --
--- Name: metodo-perfil id_metodo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: objective project_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."metodo-perfil" ALTER COLUMN id_metodo SET DEFAULT nextval('public."metodo-perfil_id_metodo_seq"'::regclass);
+ALTER TABLE ONLY public.objective ALTER COLUMN project_id SET DEFAULT nextval('public.objetivo_id_proyecto_seq'::regclass);
 
 
 --
--- Name: metodo-perfil id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: option_profile option_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."metodo-perfil" ALTER COLUMN id_perfil SET DEFAULT nextval('public."metodo-perfil_id_perfil_seq"'::regclass);
+ALTER TABLE ONLY public.option_profile ALTER COLUMN option_id SET DEFAULT nextval('public."opcion-perfil_id_opcion_seq"'::regclass);
 
 
 --
--- Name: miembro id_miembro; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: option_profile profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro ALTER COLUMN id_miembro SET DEFAULT nextval('public.miembro_id_miembro_seq'::regclass);
+ALTER TABLE ONLY public.option_profile ALTER COLUMN profile_id SET DEFAULT nextval('public."opcion-perfil_id_perfil_seq"'::regclass);
 
 
 --
--- Name: miembro id_persona; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: option_profile option_profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro ALTER COLUMN id_persona SET DEFAULT nextval('public.miembro_id_persona_seq'::regclass);
+ALTER TABLE ONLY public.option_profile ALTER COLUMN option_profile_id SET DEFAULT nextval('public."opcion-perfil_option_profile_id_seq"'::regclass);
 
 
 --
--- Name: miembro id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: options option_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro ALTER COLUMN id_perfil SET DEFAULT nextval('public.miembro_id_perfil_seq'::regclass);
+ALTER TABLE ONLY public.options ALTER COLUMN option_id SET DEFAULT nextval('public.opcion_id_opcion_seq'::regclass);
 
 
 --
--- Name: miembro id_proyecto; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: person person_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro ALTER COLUMN id_proyecto SET DEFAULT nextval('public.miembro_id_proyecto_seq'::regclass);
+ALTER TABLE ONLY public.person ALTER COLUMN person_id SET DEFAULT nextval('public.persona_id_persona_seq'::regclass);
 
 
 --
--- Name: modulo id_modulo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo ALTER COLUMN id_modulo SET DEFAULT nextval('public.modulo_id_modulo_seq'::regclass);
+ALTER TABLE ONLY public.profile ALTER COLUMN profile_id SET DEFAULT nextval('public.perfil_id_perfil_seq'::regclass);
 
 
 --
--- Name: modulo_perfil id_modulo_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile profile_type_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo_perfil ALTER COLUMN id_modulo_perfil SET DEFAULT nextval('public.modulo_perfil_id_modulo_perfil_seq'::regclass);
+ALTER TABLE ONLY public.profile ALTER COLUMN profile_type_id SET DEFAULT nextval('public.perfil_id_tipo_perfil_seq'::regclass);
 
 
 --
--- Name: modulo_perfil id_modulo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile_methods method_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo_perfil ALTER COLUMN id_modulo SET DEFAULT nextval('public.modulo_perfil_id_modulo_seq'::regclass);
+ALTER TABLE ONLY public.profile_methods ALTER COLUMN method_id SET DEFAULT nextval('public."metodo-perfil_id_metodo_seq"'::regclass);
 
 
 --
--- Name: modulo_perfil id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile_methods profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo_perfil ALTER COLUMN id_perfil SET DEFAULT nextval('public.modulo_perfil_id_perfil_seq'::regclass);
+ALTER TABLE ONLY public.profile_methods ALTER COLUMN profile_id SET DEFAULT nextval('public."metodo-perfil_id_perfil_seq"'::regclass);
 
 
 --
--- Name: objetivo id_objetivo; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile_methods profile_methods_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.objetivo ALTER COLUMN id_objetivo SET DEFAULT nextval('public.objetivo_id_objetivo_seq'::regclass);
+ALTER TABLE ONLY public.profile_methods ALTER COLUMN profile_methods_id SET DEFAULT nextval('public.metodo_perfil_profile_methods_id_seq'::regclass);
 
 
 --
--- Name: objetivo id_proyecto; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: profile_type profile_type_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.objetivo ALTER COLUMN id_proyecto SET DEFAULT nextval('public.objetivo_id_proyecto_seq'::regclass);
+ALTER TABLE ONLY public.profile_type ALTER COLUMN profile_type_id SET DEFAULT nextval('public.tipo_perfil_id_tipo_perfil_seq'::regclass);
 
 
 --
--- Name: opcion id_opcion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: progress progress_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.opcion ALTER COLUMN id_opcion SET DEFAULT nextval('public.opcion_id_opcion_seq'::regclass);
+ALTER TABLE ONLY public.progress ALTER COLUMN progress_id SET DEFAULT nextval('public.avance_id_avance_seq'::regclass);
 
 
 --
--- Name: opcion-perfil id_opcion-perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: progress assignment_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."opcion-perfil" ALTER COLUMN "id_opcion-perfil" SET DEFAULT nextval('public."opcion-perfil_id_opcion-perfil_seq"'::regclass);
+ALTER TABLE ONLY public.progress ALTER COLUMN assignment_id SET DEFAULT nextval('public.avance_id_asignacion_seq'::regclass);
 
 
 --
--- Name: opcion-perfil id_opcion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: projects project_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."opcion-perfil" ALTER COLUMN id_opcion SET DEFAULT nextval('public."opcion-perfil_id_opcion_seq"'::regclass);
+ALTER TABLE ONLY public.projects ALTER COLUMN project_id SET DEFAULT nextval('public.proyecto_id_proyecto_seq'::regclass);
 
 
 --
--- Name: opcion-perfil id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: projects state_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."opcion-perfil" ALTER COLUMN id_perfil SET DEFAULT nextval('public."opcion-perfil_id_perfil_seq"'::regclass);
+ALTER TABLE ONLY public.projects ALTER COLUMN state_id SET DEFAULT nextval('public.proyecto_id_estado_seq'::regclass);
 
 
 --
--- Name: perfil id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: states state_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.perfil ALTER COLUMN id_perfil SET DEFAULT nextval('public.perfil_id_perfil_seq'::regclass);
+ALTER TABLE ONLY public.states ALTER COLUMN state_id SET DEFAULT nextval('public.estado_id_estado_seq'::regclass);
 
 
 --
--- Name: perfil id_tipo_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: submit submit_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.perfil ALTER COLUMN id_tipo_perfil SET DEFAULT nextval('public.perfil_id_tipo_perfil_seq'::regclass);
+ALTER TABLE ONLY public.submit ALTER COLUMN submit_id SET DEFAULT nextval('public.entregable_id_entregable_seq'::regclass);
 
 
 --
--- Name: persona id_persona; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: submit task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.persona ALTER COLUMN id_persona SET DEFAULT nextval('public.persona_id_persona_seq'::regclass);
+ALTER TABLE ONLY public.submit ALTER COLUMN task_id SET DEFAULT nextval('public.entregable_id_actividad_seq'::regclass);
 
 
 --
--- Name: prelacion-actividad id_prelacion; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: submit submit_type_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."prelacion-actividad" ALTER COLUMN id_prelacion SET DEFAULT nextval('public."prelacion-actividad_id_prelacion_seq"'::regclass);
+ALTER TABLE ONLY public.submit ALTER COLUMN submit_type_id SET DEFAULT nextval('public.entregable_id_tipo_entregable_seq'::regclass);
 
 
 --
--- Name: prelacion-actividad id_actividad; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: submit_type submit_type_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."prelacion-actividad" ALTER COLUMN id_actividad SET DEFAULT nextval('public."prelacion-actividad_id_actividad_seq"'::regclass);
+ALTER TABLE ONLY public.submit_type ALTER COLUMN submit_type_id SET DEFAULT nextval('public.tipo_entregable_id_tipo_entregable_seq'::regclass);
 
 
 --
--- Name: proyecto id_proyecto; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: task-predecessor predecessor_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.proyecto ALTER COLUMN id_proyecto SET DEFAULT nextval('public.proyecto_id_proyecto_seq'::regclass);
+ALTER TABLE ONLY public."task-predecessor" ALTER COLUMN predecessor_id SET DEFAULT nextval('public."prelacion-actividad_id_prelacion_seq"'::regclass);
 
 
 --
--- Name: proyecto id_estado; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: task-predecessor task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.proyecto ALTER COLUMN id_estado SET DEFAULT nextval('public.proyecto_id_estado_seq'::regclass);
+ALTER TABLE ONLY public."task-predecessor" ALTER COLUMN task_id SET DEFAULT nextval('public."prelacion-actividad_id_actividad_seq"'::regclass);
 
 
 --
--- Name: tipo_entregable id_tipo_entregable; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tasks task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.tipo_entregable ALTER COLUMN id_tipo_entregable SET DEFAULT nextval('public.tipo_entregable_id_tipo_entregable_seq'::regclass);
+ALTER TABLE ONLY public.tasks ALTER COLUMN task_id SET DEFAULT nextval('public.actividad_id_actividad_seq'::regclass);
 
 
 --
--- Name: tipo_perfil id_tipo_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: tasks obj_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.tipo_perfil ALTER COLUMN id_tipo_perfil SET DEFAULT nextval('public.tipo_perfil_id_tipo_perfil_seq'::regclass);
+ALTER TABLE ONLY public.tasks ALTER COLUMN obj_id SET DEFAULT nextval('public.actividad_id_objetivo_seq'::regclass);
 
 
 --
--- Name: usuario id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users users_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.usuario ALTER COLUMN id_usuario SET DEFAULT nextval('public.usuario_id_usuario_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN users_id SET DEFAULT nextval('public.usuario_id_usuario_seq'::regclass);
 
 
 --
--- Name: usuario id_persona; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users person_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.usuario ALTER COLUMN id_persona SET DEFAULT nextval('public.usuario_id_persona_seq'::regclass);
+ALTER TABLE ONLY public.users ALTER COLUMN person_id SET DEFAULT nextval('public.usuario_id_persona_seq'::regclass);
 
 
 --
--- Name: usuario-perfil id_usuario_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users_profile user_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."usuario-perfil" ALTER COLUMN id_usuario_perfil SET DEFAULT nextval('public."usuario-perfil_id_usuario_perfil_seq"'::regclass);
+ALTER TABLE ONLY public.users_profile ALTER COLUMN user_id SET DEFAULT nextval('public."usuario-perfil_id_usuario_seq"'::regclass);
 
 
 --
--- Name: usuario-perfil id_usuario; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users_profile profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."usuario-perfil" ALTER COLUMN id_usuario SET DEFAULT nextval('public."usuario-perfil_id_usuario_seq"'::regclass);
+ALTER TABLE ONLY public.users_profile ALTER COLUMN profile_id SET DEFAULT nextval('public."usuario-perfil_id_perfil_seq"'::regclass);
 
 
 --
--- Name: usuario-perfil id_perfil; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: users_profile users_profile_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."usuario-perfil" ALTER COLUMN id_perfil SET DEFAULT nextval('public."usuario-perfil_id_perfil_seq"'::regclass);
+ALTER TABLE ONLY public.users_profile ALTER COLUMN users_profile_id SET DEFAULT nextval('public.usuario_perfil_users_profile_id_seq'::regclass);
 
 
 --
--- Data for Name: actividad; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: assignments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.actividad (id_actividad, desc_actividad, id_objetivo) FROM stdin;
+COPY public.assignments (assignment_id, task_id, member_id) FROM stdin;
 \.
 
 
 --
--- Data for Name: asignacion; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: classes; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.asignacion (id_asignacion, desc_asignacion, id_actividad, id_miembro) FROM stdin;
+COPY public.classes (class_id, classname, module_id) FROM stdin;
+1	Project	1
+2	Objectives	1
+3	Members	1
+4	Task	1
+5	Objectives	1
+6	Members	1
+7	Task	1
+8	Objectives	1
+9	Members	1
+10	Task	1
+11	Objectives	1
+12	Members	1
+13	Task	1
+14	Objectives	1
+15	Members	1
+16	Task	1
+17	Objectives	1
+18	Members	1
+19	Task	1
 \.
 
 
 --
--- Data for Name: avance; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: member; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.avance (id_avance, cantidad, id_asignacion) FROM stdin;
-\.
-
-
---
--- Data for Name: clase; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.clase (id_clase, nombre_clase, id_modulo) FROM stdin;
-\.
-
-
---
--- Data for Name: entregable; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.entregable (id_entregable, fecha_entrega, id_actividad, id_tipo_entregable) FROM stdin;
-\.
-
-
---
--- Data for Name: estado; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public.estado (id_estado, desc_estado) FROM stdin;
+COPY public.member (member_id, person_id, profile_id, project_id) FROM stdin;
+4	5	9	10
+5	6	11	10
+7	7	7	12
+8	5	9	12
+9	6	11	12
+12	5	7	15
+13	6	11	15
+14	7	12	15
 \.
 
 
@@ -1763,135 +1772,271 @@ COPY public.estado (id_estado, desc_estado) FROM stdin;
 -- Data for Name: menu; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.menu (id_menu, id_modulo) FROM stdin;
+COPY public.menu (menu_id, module_id) FROM stdin;
 \.
 
 
 --
--- Data for Name: metodo; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: methods; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.metodo (id_metodo, nombre_metodo, id_clase) FROM stdin;
+COPY public.methods (method_id, method_name, class_id) FROM stdin;
+1	createProject	1
+2	updateProject	1
+3	deleteProject	1
+4	getProjectsbyPersone	1
+5	createObjective	2
+6	getObjectives	2
+7	deleteObjective	2
+8	updateObjective	2
+9	newMember	3
+10	getMembers	3
+11	deleteMembers	3
+12	createTask	4
+13	getTask	4
+14	deleteTask	4
+15	updateTask	4
+16	sendAdvance	4
 \.
 
 
 --
--- Data for Name: metodo-perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: module_profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."metodo-perfil" ("id_metodo-perfil", id_metodo, id_perfil) FROM stdin;
+COPY public.module_profile (module_profile_id, module_id, profile_id) FROM stdin;
+6	1	7
+7	1	8
+8	1	9
+9	1	10
+10	1	11
+11	1	12
+12	1	13
 \.
 
 
 --
--- Data for Name: miembro; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: modules; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.miembro (id_miembro, id_persona, id_perfil, id_proyecto) FROM stdin;
+COPY public.modules (module_id, module_desc) FROM stdin;
+1	Proyecto
+2	Administracion
 \.
 
 
 --
--- Data for Name: modulo; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: objective; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.modulo (id_modulo, desc_modulo) FROM stdin;
+COPY public.objective (objective_id, "desc", project_id, deadline) FROM stdin;
 \.
 
 
 --
--- Data for Name: modulo_perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: option_profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.modulo_perfil (id_modulo_perfil, id_modulo, id_perfil) FROM stdin;
+COPY public.option_profile (option_id, profile_id, option_profile_id) FROM stdin;
 \.
 
 
 --
--- Data for Name: objetivo; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: options; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.objetivo (id_objetivo, desc_objetivo, id_proyecto) FROM stdin;
+COPY public.options (option_id, "desc") FROM stdin;
 \.
 
 
 --
--- Data for Name: opcion; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: person; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.opcion (id_opcion, desc_opcion) FROM stdin;
+COPY public.person (person_id, name, lastname, ident) FROM stdin;
+5	Marlon	Urdaneta	30763460
+6	Merlon	Perez	12345567
+7	Alberto	Rodriguez	23456987
 \.
 
 
 --
--- Data for Name: opcion-perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: profile; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."opcion-perfil" ("id_opcion-perfil", id_opcion, id_perfil) FROM stdin;
+COPY public.profile (profile_id, profile_desc, profile_type_id) FROM stdin;
+7	Project Manager	6
+8	Desarrollador	6
+9	Arquitecto Software	6
+10	Programador	6
+11	Documentista	6
+12	Analista	6
+13	Recurso	6
 \.
 
 
 --
--- Data for Name: perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: profile_methods; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.perfil (id_perfil, desc_perfil, id_tipo_perfil) FROM stdin;
+COPY public.profile_methods (method_id, profile_id, profile_methods_id) FROM stdin;
+1	7	10
+2	7	11
+3	7	12
+4	7	13
+5	7	14
+6	7	15
+7	7	16
+8	7	17
+9	7	18
+10	7	19
+11	7	20
+12	7	21
+13	7	22
+14	7	23
+15	7	24
+16	7	25
+1	8	26
+2	8	27
+6	8	28
+10	8	29
+12	8	30
+13	8	31
+14	8	32
+15	8	33
+16	8	34
+1	9	35
+2	9	36
+5	9	37
+6	9	38
+7	9	39
+8	9	40
+10	9	41
+12	9	42
+13	9	43
+14	9	44
+15	9	45
+16	9	46
+1	10	47
+2	10	48
+6	10	49
+10	10	50
+14	10	51
+16	10	52
+1	11	53
+2	11	54
+6	11	55
+10	11	56
+14	11	57
+16	11	58
+1	12	59
+2	12	60
+6	12	61
+7	12	62
+10	12	63
+12	12	64
+13	12	65
+14	12	66
+15	12	67
+16	12	68
 \.
 
 
 --
--- Data for Name: persona; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: profile_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.persona (id_persona, nombre_persona, email_persona, telefono, apellido_persona) FROM stdin;
+COPY public.profile_type (profile_type_id, type_desc) FROM stdin;
+5	Sistema
+6	Proyecto
 \.
 
 
 --
--- Data for Name: prelacion-actividad; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: progress; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."prelacion-actividad" (id_prelacion, id_actividad) FROM stdin;
+COPY public.progress (progress_id, assignment_id, quantity) FROM stdin;
 \.
 
 
 --
--- Data for Name: proyecto; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: projects; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.proyecto (id_proyecto, nombre_proyecto, desc_proyecto, id_estado) FROM stdin;
+COPY public.projects (project_id, project_name, type, state_id, start_date, end_date) FROM stdin;
+7	Ing. Software	Planeacion	1	2024-04-28	2024-09-28
+8	Paralelepipedo	Geometria	1	2024-01-01	2024-02-01
+9	Pastorales	Ganaderia	1	2024-01-01	2024-02-01
+6	Cachapas	Tecnologia	2	2024-06-20	2024-08-20
+10	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+11	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+12	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+13	Bienestar	Psicologia	1	2024-01-01	2024-02-01
+14	Bienestar	Psicologia	1	2024-01-01	2024-02-01
+15	Bienestar	Psicologia	1	2024-01-01	2024-02-01
 \.
 
 
 --
--- Data for Name: tipo_entregable; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: states; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tipo_entregable (id_tipo_entregable, desc_tipo_entregable) FROM stdin;
+COPY public.states (state_id, state_desc) FROM stdin;
+1	Por empezar
+2	En Progreso
+3	Finalizado
 \.
 
 
 --
--- Data for Name: tipo_perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: submit; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tipo_perfil (id_tipo_perfil, desc_tipo_perfil) FROM stdin;
+COPY public.submit (submit_id, deadline, task_id, submit_type_id) FROM stdin;
 \.
 
 
 --
--- Data for Name: usuario; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: submit_type; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.usuario (id_usuario, "contrase├â┬▒a_usuario", nombre_usuario, id_persona) FROM stdin;
+COPY public.submit_type (submit_type_id, submit_type_desc) FROM stdin;
 \.
 
 
 --
--- Data for Name: usuario-perfil; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: task-predecessor; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."usuario-perfil" (id_usuario_perfil, id_usuario, id_perfil) FROM stdin;
+COPY public."task-predecessor" (predecessor_id, task_id) FROM stdin;
+\.
+
+
+--
+-- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.tasks (task_id, task_desc, obj_id, start_date, deadline) FROM stdin;
+\.
+
+
+--
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users (users_id, password, username, person_id, resetpasswordtoken, resetpasswordexpires, email) FROM stdin;
+1	$2a$10$HnddOe9n0nZWH0y/O/8dx.18JwnhWKmLmA0pxA5q5bsg4LYXLoSgG	ILevizzz	5	eee2888e42befe2e03e7b290c1acaacb5ca58039	1720400746730	MGUR2025pro@gmail.com
+2	$2a$10$qQNqBJqZx4BJQqeTDLNEieZKGnUflpxht5.o8DwnUBw1r6UvmI1iK	Merlon	6	\N	\N	Mgabrielur@gmail.com
+3	$2a$10$uYVpy4Qaf7.gvkF4m/UrGuKf5IPinontt.mXUmc6MswjmxABqh4AS	Albert	7	\N	\N	AlbertoJ@gmail.com
+\.
+
+
+--
+-- Data for Name: users_profile; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY public.users_profile (user_id, profile_id, users_profile_id) FROM stdin;
 \.
 
 
@@ -1948,7 +2093,7 @@ SELECT pg_catalog.setval('public.avance_id_avance_seq', 1, false);
 -- Name: clase_id_clase_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.clase_id_clase_seq', 1, false);
+SELECT pg_catalog.setval('public.clase_id_clase_seq', 19, true);
 
 
 --
@@ -1983,7 +2128,7 @@ SELECT pg_catalog.setval('public.entregable_id_tipo_entregable_seq', 1, false);
 -- Name: estado_id_estado_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.estado_id_estado_seq', 1, false);
+SELECT pg_catalog.setval('public.estado_id_estado_seq', 3, true);
 
 
 --
@@ -1998,13 +2143,6 @@ SELECT pg_catalog.setval('public.menu_id_menu_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.menu_id_modulo_seq', 1, false);
-
-
---
--- Name: metodo-perfil_id_metodo-perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."metodo-perfil_id_metodo-perfil_seq"', 1, false);
 
 
 --
@@ -2032,14 +2170,21 @@ SELECT pg_catalog.setval('public.metodo_id_clase_seq', 1, false);
 -- Name: metodo_id_metodo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.metodo_id_metodo_seq', 1, false);
+SELECT pg_catalog.setval('public.metodo_id_metodo_seq', 16, true);
+
+
+--
+-- Name: metodo_perfil_profile_methods_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public.metodo_perfil_profile_methods_id_seq', 68, true);
 
 
 --
 -- Name: miembro_id_miembro_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.miembro_id_miembro_seq', 1, false);
+SELECT pg_catalog.setval('public.miembro_id_miembro_seq', 14, true);
 
 
 --
@@ -2067,14 +2212,14 @@ SELECT pg_catalog.setval('public.miembro_id_proyecto_seq', 1, false);
 -- Name: modulo_id_modulo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.modulo_id_modulo_seq', 1, false);
+SELECT pg_catalog.setval('public.modulo_id_modulo_seq', 2, true);
 
 
 --
 -- Name: modulo_perfil_id_modulo_perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.modulo_perfil_id_modulo_perfil_seq', 1, false);
+SELECT pg_catalog.setval('public.modulo_perfil_id_modulo_perfil_seq', 12, true);
 
 
 --
@@ -2106,13 +2251,6 @@ SELECT pg_catalog.setval('public.objetivo_id_proyecto_seq', 1, false);
 
 
 --
--- Name: opcion-perfil_id_opcion-perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."opcion-perfil_id_opcion-perfil_seq"', 1, false);
-
-
---
 -- Name: opcion-perfil_id_opcion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2127,6 +2265,13 @@ SELECT pg_catalog.setval('public."opcion-perfil_id_perfil_seq"', 1, false);
 
 
 --
+-- Name: opcion-perfil_option_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('public."opcion-perfil_option_profile_id_seq"', 1, false);
+
+
+--
 -- Name: opcion_id_opcion_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
@@ -2137,7 +2282,7 @@ SELECT pg_catalog.setval('public.opcion_id_opcion_seq', 1, false);
 -- Name: perfil_id_perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.perfil_id_perfil_seq', 1, false);
+SELECT pg_catalog.setval('public.perfil_id_perfil_seq', 13, true);
 
 
 --
@@ -2151,7 +2296,7 @@ SELECT pg_catalog.setval('public.perfil_id_tipo_perfil_seq', 1, false);
 -- Name: persona_id_persona_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.persona_id_persona_seq', 1, false);
+SELECT pg_catalog.setval('public.persona_id_persona_seq', 7, true);
 
 
 --
@@ -2179,7 +2324,7 @@ SELECT pg_catalog.setval('public.proyecto_id_estado_seq', 1, false);
 -- Name: proyecto_id_proyecto_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.proyecto_id_proyecto_seq', 1, false);
+SELECT pg_catalog.setval('public.proyecto_id_proyecto_seq', 15, true);
 
 
 --
@@ -2193,7 +2338,7 @@ SELECT pg_catalog.setval('public.tipo_entregable_id_tipo_entregable_seq', 1, fal
 -- Name: tipo_perfil_id_tipo_perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.tipo_perfil_id_tipo_perfil_seq', 1, false);
+SELECT pg_catalog.setval('public.tipo_perfil_id_tipo_perfil_seq', 6, true);
 
 
 --
@@ -2201,13 +2346,6 @@ SELECT pg_catalog.setval('public.tipo_perfil_id_tipo_perfil_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public."usuario-perfil_id_perfil_seq"', 1, false);
-
-
---
--- Name: usuario-perfil_id_usuario_perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
---
-
-SELECT pg_catalog.setval('public."usuario-perfil_id_usuario_perfil_seq"', 1, false);
 
 
 --
@@ -2228,55 +2366,70 @@ SELECT pg_catalog.setval('public.usuario_id_persona_seq', 1, false);
 -- Name: usuario_id_usuario_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.usuario_id_usuario_seq', 1, false);
+SELECT pg_catalog.setval('public.usuario_id_usuario_seq', 3, true);
 
 
 --
--- Name: actividad pk_actividad; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: usuario_perfil_users_profile_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.actividad
-    ADD CONSTRAINT pk_actividad PRIMARY KEY (id_actividad);
-
-
---
--- Name: asignacion pk_asignacion; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.asignacion
-    ADD CONSTRAINT pk_asignacion PRIMARY KEY (id_asignacion);
+SELECT pg_catalog.setval('public.usuario_perfil_users_profile_id_seq', 2, true);
 
 
 --
--- Name: avance pk_avance; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: person persona_ident_key; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.avance
-    ADD CONSTRAINT pk_avance PRIMARY KEY (id_avance);
-
-
---
--- Name: clase pk_clase; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.clase
-    ADD CONSTRAINT pk_clase PRIMARY KEY (id_clase);
+ALTER TABLE ONLY public.person
+    ADD CONSTRAINT persona_ident_key UNIQUE (ident);
 
 
 --
--- Name: entregable pk_entregable; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: tasks pk_actividad; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable
-    ADD CONSTRAINT pk_entregable PRIMARY KEY (id_entregable);
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT pk_actividad PRIMARY KEY (task_id);
 
 
 --
--- Name: estado pk_estado; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: assignments pk_asignacion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.estado
-    ADD CONSTRAINT pk_estado PRIMARY KEY (id_estado);
+ALTER TABLE ONLY public.assignments
+    ADD CONSTRAINT pk_asignacion PRIMARY KEY (assignment_id);
+
+
+--
+-- Name: progress pk_avance; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.progress
+    ADD CONSTRAINT pk_avance PRIMARY KEY (progress_id);
+
+
+--
+-- Name: classes pk_clase; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classes
+    ADD CONSTRAINT pk_clase PRIMARY KEY (class_id);
+
+
+--
+-- Name: submit pk_entregable; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.submit
+    ADD CONSTRAINT pk_entregable PRIMARY KEY (submit_id);
+
+
+--
+-- Name: states pk_estado; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.states
+    ADD CONSTRAINT pk_estado PRIMARY KEY (state_id);
 
 
 --
@@ -2284,183 +2437,183 @@ ALTER TABLE ONLY public.estado
 --
 
 ALTER TABLE ONLY public.menu
-    ADD CONSTRAINT pk_menu PRIMARY KEY (id_menu);
+    ADD CONSTRAINT pk_menu PRIMARY KEY (menu_id);
 
 
 --
--- Name: metodo pk_metodo; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: methods pk_metodo; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.metodo
-    ADD CONSTRAINT pk_metodo PRIMARY KEY (id_metodo);
-
-
---
--- Name: metodo-perfil pk_metodo-perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."metodo-perfil"
-    ADD CONSTRAINT "pk_metodo-perfil" PRIMARY KEY ("id_metodo-perfil");
+ALTER TABLE ONLY public.methods
+    ADD CONSTRAINT pk_metodo PRIMARY KEY (method_id);
 
 
 --
--- Name: miembro pk_miembro; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile_methods pk_metodo_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro
-    ADD CONSTRAINT pk_miembro PRIMARY KEY (id_miembro);
-
-
---
--- Name: modulo pk_modulo; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.modulo
-    ADD CONSTRAINT pk_modulo PRIMARY KEY (id_modulo);
+ALTER TABLE ONLY public.profile_methods
+    ADD CONSTRAINT pk_metodo_perfil PRIMARY KEY (profile_methods_id);
 
 
 --
--- Name: modulo_perfil pk_modulo_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: member pk_miembro; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo_perfil
-    ADD CONSTRAINT pk_modulo_perfil PRIMARY KEY (id_modulo_perfil);
-
-
---
--- Name: objetivo pk_objetivo; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.objetivo
-    ADD CONSTRAINT pk_objetivo PRIMARY KEY (id_objetivo);
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT pk_miembro PRIMARY KEY (member_id);
 
 
 --
--- Name: opcion pk_opcion; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: modules pk_modulo; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.opcion
-    ADD CONSTRAINT pk_opcion PRIMARY KEY (id_opcion);
-
-
---
--- Name: opcion-perfil pk_opcion-perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."opcion-perfil"
-    ADD CONSTRAINT "pk_opcion-perfil" PRIMARY KEY ("id_opcion-perfil");
+ALTER TABLE ONLY public.modules
+    ADD CONSTRAINT pk_modulo PRIMARY KEY (module_id);
 
 
 --
--- Name: perfil pk_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: module_profile pk_modulo_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.perfil
-    ADD CONSTRAINT pk_perfil PRIMARY KEY (id_perfil);
-
-
---
--- Name: persona pk_persona; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.persona
-    ADD CONSTRAINT pk_persona PRIMARY KEY (id_persona);
+ALTER TABLE ONLY public.module_profile
+    ADD CONSTRAINT pk_modulo_perfil PRIMARY KEY (module_profile_id);
 
 
 --
--- Name: proyecto pk_proyecto; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: objective pk_objetivo; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.proyecto
-    ADD CONSTRAINT pk_proyecto PRIMARY KEY (id_proyecto);
-
-
---
--- Name: tipo_entregable pk_tipo_entregable; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.tipo_entregable
-    ADD CONSTRAINT pk_tipo_entregable PRIMARY KEY (id_tipo_entregable);
+ALTER TABLE ONLY public.objective
+    ADD CONSTRAINT pk_objetivo PRIMARY KEY (objective_id);
 
 
 --
--- Name: tipo_perfil pk_tipo_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: options pk_opcion; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.tipo_perfil
-    ADD CONSTRAINT pk_tipo_perfil PRIMARY KEY (id_tipo_perfil);
-
-
---
--- Name: usuario pk_usuario; Type: CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT pk_usuario PRIMARY KEY (id_usuario);
+ALTER TABLE ONLY public.options
+    ADD CONSTRAINT pk_opcion PRIMARY KEY (option_id);
 
 
 --
--- Name: usuario-perfil pk_usuario-perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+-- Name: option_profile pk_opcion-perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."usuario-perfil"
-    ADD CONSTRAINT "pk_usuario-perfil" PRIMARY KEY (id_usuario_perfil);
-
-
---
--- Name: actividad fk_actividad_objetivo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.actividad
-    ADD CONSTRAINT fk_actividad_objetivo FOREIGN KEY (id_objetivo) REFERENCES public.objetivo(id_objetivo);
+ALTER TABLE ONLY public.option_profile
+    ADD CONSTRAINT "pk_opcion-perfil" PRIMARY KEY (option_profile_id);
 
 
 --
--- Name: asignacion fk_asignacion_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile pk_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.asignacion
-    ADD CONSTRAINT fk_asignacion_actividad FOREIGN KEY (id_actividad) REFERENCES public.actividad(id_actividad);
-
-
---
--- Name: asignacion fk_asignacion_miembro; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.asignacion
-    ADD CONSTRAINT fk_asignacion_miembro FOREIGN KEY (id_miembro) REFERENCES public.miembro(id_miembro);
+ALTER TABLE ONLY public.profile
+    ADD CONSTRAINT pk_perfil PRIMARY KEY (profile_id);
 
 
 --
--- Name: avance fk_avance_asignacion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: person pk_persona; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.avance
-    ADD CONSTRAINT fk_avance_asignacion FOREIGN KEY (id_asignacion) REFERENCES public.asignacion(id_asignacion);
-
-
---
--- Name: clase fk_clase_modulo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.clase
-    ADD CONSTRAINT fk_clase_modulo FOREIGN KEY (id_modulo) REFERENCES public.modulo(id_modulo);
+ALTER TABLE ONLY public.person
+    ADD CONSTRAINT pk_persona PRIMARY KEY (person_id);
 
 
 --
--- Name: entregable fk_entregable_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: projects pk_proyecto; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable
-    ADD CONSTRAINT fk_entregable_actividad FOREIGN KEY (id_actividad) REFERENCES public.actividad(id_actividad);
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT pk_proyecto PRIMARY KEY (project_id);
 
 
 --
--- Name: entregable fk_entregable_tipo_entregable; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: submit_type pk_tipo_entregable; Type: CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.entregable
-    ADD CONSTRAINT fk_entregable_tipo_entregable FOREIGN KEY (id_tipo_entregable) REFERENCES public.tipo_entregable(id_tipo_entregable);
+ALTER TABLE ONLY public.submit_type
+    ADD CONSTRAINT pk_tipo_entregable PRIMARY KEY (submit_type_id);
+
+
+--
+-- Name: profile_type pk_tipo_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile_type
+    ADD CONSTRAINT pk_tipo_perfil PRIMARY KEY (profile_type_id);
+
+
+--
+-- Name: users pk_usuario; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT pk_usuario PRIMARY KEY (users_id);
+
+
+--
+-- Name: users_profile pk_usuario_perfil; Type: CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_profile
+    ADD CONSTRAINT pk_usuario_perfil PRIMARY KEY (users_profile_id);
+
+
+--
+-- Name: tasks fk_actividad_objetivo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.tasks
+    ADD CONSTRAINT fk_actividad_objetivo FOREIGN KEY (obj_id) REFERENCES public.objective(objective_id);
+
+
+--
+-- Name: assignments fk_asignacion_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assignments
+    ADD CONSTRAINT fk_asignacion_actividad FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
+
+
+--
+-- Name: assignments fk_asignacion_miembro; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.assignments
+    ADD CONSTRAINT fk_asignacion_miembro FOREIGN KEY (member_id) REFERENCES public.member(member_id);
+
+
+--
+-- Name: progress fk_avance_asignacion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.progress
+    ADD CONSTRAINT fk_avance_asignacion FOREIGN KEY (assignment_id) REFERENCES public.assignments(assignment_id);
+
+
+--
+-- Name: classes fk_clase_modulo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.classes
+    ADD CONSTRAINT fk_clase_modulo FOREIGN KEY (module_id) REFERENCES public.modules(module_id);
+
+
+--
+-- Name: submit fk_entregable_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.submit
+    ADD CONSTRAINT fk_entregable_actividad FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
+
+
+--
+-- Name: submit fk_entregable_tipo_entregable; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.submit
+    ADD CONSTRAINT fk_entregable_tipo_entregable FOREIGN KEY (submit_type_id) REFERENCES public.submit_type(submit_type_id);
 
 
 --
@@ -2468,151 +2621,151 @@ ALTER TABLE ONLY public.entregable
 --
 
 ALTER TABLE ONLY public.menu
-    ADD CONSTRAINT fk_menu_modulo FOREIGN KEY (id_modulo) REFERENCES public.modulo(id_modulo);
+    ADD CONSTRAINT fk_menu_modulo FOREIGN KEY (module_id) REFERENCES public.modules(module_id);
 
 
 --
--- Name: metodo-perfil fk_metodo-perfil_metodo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile_methods fk_metodo-perfil_metodo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."metodo-perfil"
-    ADD CONSTRAINT "fk_metodo-perfil_metodo" FOREIGN KEY (id_metodo) REFERENCES public.metodo(id_metodo);
-
-
---
--- Name: metodo-perfil fk_metodo-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."metodo-perfil"
-    ADD CONSTRAINT "fk_metodo-perfil_perfil" FOREIGN KEY (id_perfil) REFERENCES public.perfil(id_perfil);
+ALTER TABLE ONLY public.profile_methods
+    ADD CONSTRAINT "fk_metodo-perfil_metodo" FOREIGN KEY (method_id) REFERENCES public.methods(method_id);
 
 
 --
--- Name: metodo fk_metodo_clase; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: profile_methods fk_metodo-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.metodo
-    ADD CONSTRAINT fk_metodo_clase FOREIGN KEY (id_clase) REFERENCES public.clase(id_clase);
-
-
---
--- Name: miembro fk_miembro_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.miembro
-    ADD CONSTRAINT fk_miembro_perfil FOREIGN KEY (id_perfil) REFERENCES public.perfil(id_perfil);
+ALTER TABLE ONLY public.profile_methods
+    ADD CONSTRAINT "fk_metodo-perfil_perfil" FOREIGN KEY (profile_id) REFERENCES public.profile(profile_id);
 
 
 --
--- Name: miembro fk_miembro_persona; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: methods fk_metodo_clase; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.miembro
-    ADD CONSTRAINT fk_miembro_persona FOREIGN KEY (id_persona) REFERENCES public.persona(id_persona);
-
-
---
--- Name: miembro fk_miembro_proyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.miembro
-    ADD CONSTRAINT fk_miembro_proyecto FOREIGN KEY (id_proyecto) REFERENCES public.proyecto(id_proyecto);
+ALTER TABLE ONLY public.methods
+    ADD CONSTRAINT fk_metodo_clase FOREIGN KEY (class_id) REFERENCES public.classes(class_id);
 
 
 --
--- Name: modulo_perfil fk_modulo_perfil_modulo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: member fk_miembro_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.modulo_perfil
-    ADD CONSTRAINT fk_modulo_perfil_modulo FOREIGN KEY (id_modulo) REFERENCES public.modulo(id_modulo);
-
-
---
--- Name: modulo_perfil fk_modulo_perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.modulo_perfil
-    ADD CONSTRAINT fk_modulo_perfil_perfil FOREIGN KEY (id_perfil) REFERENCES public.perfil(id_perfil);
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT fk_miembro_perfil FOREIGN KEY (profile_id) REFERENCES public.profile(profile_id);
 
 
 --
--- Name: objetivo fk_objetivo_proyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: member fk_miembro_persona; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.objetivo
-    ADD CONSTRAINT fk_objetivo_proyecto FOREIGN KEY (id_proyecto) REFERENCES public.proyecto(id_proyecto);
-
-
---
--- Name: opcion-perfil fk_opcion-perfil_opcion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."opcion-perfil"
-    ADD CONSTRAINT "fk_opcion-perfil_opcion" FOREIGN KEY (id_opcion) REFERENCES public.opcion(id_opcion);
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT fk_miembro_persona FOREIGN KEY (person_id) REFERENCES public.person(person_id);
 
 
 --
--- Name: opcion-perfil fk_opcion-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: member fk_miembro_proyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."opcion-perfil"
-    ADD CONSTRAINT "fk_opcion-perfil_perfil" FOREIGN KEY (id_perfil) REFERENCES public.perfil(id_perfil);
-
-
---
--- Name: perfil fk_perfil_tipo_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public.perfil
-    ADD CONSTRAINT fk_perfil_tipo_perfil FOREIGN KEY (id_tipo_perfil) REFERENCES public.tipo_perfil(id_tipo_perfil);
+ALTER TABLE ONLY public.member
+    ADD CONSTRAINT fk_miembro_proyecto FOREIGN KEY (project_id) REFERENCES public.projects(project_id);
 
 
 --
--- Name: prelacion-actividad fk_prelacion-actividad_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: module_profile fk_modulo_perfil_modulo; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."prelacion-actividad"
-    ADD CONSTRAINT "fk_prelacion-actividad_actividad" FOREIGN KEY (id_prelacion) REFERENCES public.actividad(id_actividad);
-
-
---
--- Name: prelacion-actividad fk_prelacion-actividad_actividad_0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."prelacion-actividad"
-    ADD CONSTRAINT "fk_prelacion-actividad_actividad_0" FOREIGN KEY (id_actividad) REFERENCES public.actividad(id_actividad);
+ALTER TABLE ONLY public.module_profile
+    ADD CONSTRAINT fk_modulo_perfil_modulo FOREIGN KEY (module_id) REFERENCES public.modules(module_id);
 
 
 --
--- Name: proyecto fk_proyecto_estado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: module_profile fk_modulo_perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.proyecto
-    ADD CONSTRAINT fk_proyecto_estado FOREIGN KEY (id_estado) REFERENCES public.estado(id_estado);
-
-
---
--- Name: usuario-perfil fk_usuario-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
---
-
-ALTER TABLE ONLY public."usuario-perfil"
-    ADD CONSTRAINT "fk_usuario-perfil_perfil" FOREIGN KEY (id_perfil) REFERENCES public.perfil(id_perfil);
+ALTER TABLE ONLY public.module_profile
+    ADD CONSTRAINT fk_modulo_perfil_perfil FOREIGN KEY (profile_id) REFERENCES public.profile(profile_id);
 
 
 --
--- Name: usuario-perfil fk_usuario-perfil_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: objective fk_objetivo_proyecto; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."usuario-perfil"
-    ADD CONSTRAINT "fk_usuario-perfil_usuario" FOREIGN KEY (id_usuario) REFERENCES public.usuario(id_usuario);
+ALTER TABLE ONLY public.objective
+    ADD CONSTRAINT fk_objetivo_proyecto FOREIGN KEY (project_id) REFERENCES public.projects(project_id);
 
 
 --
--- Name: usuario fk_usuario_persona; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: option_profile fk_opcion-perfil_opcion; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public.usuario
-    ADD CONSTRAINT fk_usuario_persona FOREIGN KEY (id_persona) REFERENCES public.persona(id_persona);
+ALTER TABLE ONLY public.option_profile
+    ADD CONSTRAINT "fk_opcion-perfil_opcion" FOREIGN KEY (option_id) REFERENCES public.options(option_id);
+
+
+--
+-- Name: option_profile fk_opcion-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.option_profile
+    ADD CONSTRAINT "fk_opcion-perfil_perfil" FOREIGN KEY (profile_id) REFERENCES public.profile(profile_id);
+
+
+--
+-- Name: profile fk_perfil_tipo_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.profile
+    ADD CONSTRAINT fk_perfil_tipo_perfil FOREIGN KEY (profile_type_id) REFERENCES public.profile_type(profile_type_id);
+
+
+--
+-- Name: task-predecessor fk_prelacion-actividad_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."task-predecessor"
+    ADD CONSTRAINT "fk_prelacion-actividad_actividad" FOREIGN KEY (predecessor_id) REFERENCES public.tasks(task_id);
+
+
+--
+-- Name: task-predecessor fk_prelacion-actividad_actividad_0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public."task-predecessor"
+    ADD CONSTRAINT "fk_prelacion-actividad_actividad_0" FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
+
+
+--
+-- Name: projects fk_proyecto_estado; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT fk_proyecto_estado FOREIGN KEY (state_id) REFERENCES public.states(state_id);
+
+
+--
+-- Name: users_profile fk_usuario-perfil_perfil; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_profile
+    ADD CONSTRAINT "fk_usuario-perfil_perfil" FOREIGN KEY (profile_id) REFERENCES public.profile(profile_id);
+
+
+--
+-- Name: users_profile fk_usuario-perfil_usuario; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users_profile
+    ADD CONSTRAINT "fk_usuario-perfil_usuario" FOREIGN KEY (user_id) REFERENCES public.users(users_id);
+
+
+--
+-- Name: users fk_usuario_persona; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT fk_usuario_persona FOREIGN KEY (person_id) REFERENCES public.person(person_id);
 
 
 --

@@ -15,10 +15,12 @@ import { useRouter } from "vue-router";
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
+const successMessage = ref("");
 const router = useRouter();
 
 const sendData = async () => {
-  console.log("hola");
+  console.log("no");
+
   try {
     const response = await fetch("http://localhost:3000/login", {
       credentials: "include",
@@ -33,7 +35,12 @@ const sendData = async () => {
     });
 
     const data = await response.json();
-    if (response.status == 301) {
+    console.log(data);
+    // console.log(data.success);
+
+    if (data.success) {
+      successMessage.value = data.message;
+      console.log(successMessage.value);
       router.push({ path: "/Home" });
     }
 
