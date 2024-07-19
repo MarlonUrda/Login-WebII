@@ -1,4 +1,4 @@
-import { dbQueries } from "../instances/dbinstances";
+import { dbQueries } from "../instances/dbinstances.js";
 
 class Task {
   constructor() {}

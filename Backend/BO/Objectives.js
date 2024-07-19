@@ -1,16 +1,17 @@
-import { dbQueries } from "../instances/dbinstances";
+import { dbQueries } from "../instances/dbinstances.js";
 
 class Objectives {
   constructor() {}
 
   static async createObjective(params) {
-    const [nameO, dateLimit, idProject] = params;
+    const [nameO, objdesc, idProject, dateLimit] = params;
 
     try {
       const query = await dbQueries.insertObjective(
         nameO,
-        dateLimit,
-        idProject
+        objdesc,
+        idProject,
+        dateLimit
       );
       if (query) {
         let idObjective = query.rows[0].id_objetivo;
@@ -31,13 +32,14 @@ class Objectives {
       console.error(error.message);
       return {
         success: false,
-        error: error,
+        code: 500,
+        message: error.message,
       };
     }
   }
 
   static async getObjectives(params) {
-    [idProject] = params;
+    const [idProject] = params;
 
     try {
       const query = await dbQueries.getObjectivesFromProject(idProject);
@@ -63,22 +65,23 @@ class Objectives {
     } catch (error) {
       return {
         success: false,
+        code: 500,
         message: error.message,
       };
     }
   }
 
   static async deleteObjective(params) {
-    [idOb] = params;
+    const [idOb] = params;
 
     try {
       const query = await dbQueries.deleteObjective(idOb);
 
       if (query) {
-        console.log("Objetivo eliminado");
+        let nameObj = query.rows[0].objective_name;
         return {
           success: true,
-          message: "Objetivo eliminado exitosamente!",
+          message: `Objetivo: ${nameObj} eliminado`,
         };
       } else {
         return {
@@ -89,19 +92,21 @@ class Objectives {
     } catch (error) {
       return {
         success: false,
-        error: error,
+        code: 500,
+        message: error.message,
       };
     }
   }
 
   static async updateObjective(params) {
-    const [newDesc, newDateLimit, idOb] = params;
+    const [newName, newDesc, newDateLimit, idOb] = params;
     try {
       const query = await dbQueries.updateObjective(
+        newName,
         newDesc,
         newDateLimit,
         idOb
-      ); //Preguntar mañana sobre los updates
+      );
 
       if (query) {
         return {
@@ -119,7 +124,7 @@ class Objectives {
       return {
         success: false,
         code: 500,
-        message: "Error interno del servidor",
+        message: error.message,
       };
     }
   }

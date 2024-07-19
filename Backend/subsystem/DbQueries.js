@@ -218,11 +218,11 @@ class DbQueries {
     }
   }
 
-  async insertObjective(nameO, idProject, dateLimit) {
+  async insertObjective(nameO, objdesc, idProject, dateLimit) {
     try {
       const result = this.pool.query(
-        "INSERT INTO objective (desc, project_id, deadline) VALUES ($1, $2, $3) RETURNING objective_id",
-        [nameO, idProject, dateLimit]
+        "INSERT INTO objective (objective_name, objective_desc, project_id, deadline) VALUES ($1, $2, $3, $4) RETURNING objective_id",
+        [nameO, objdesc, idProject, dateLimit]
       );
 
       return result;
@@ -244,11 +244,11 @@ class DbQueries {
     }
   }
 
-  async updateObjective(newDesc, newDateLimit, idOb) {
+  async updateObjective(newName, newDesc, newDateLimit, idOb) {
     try {
       const result = this.pool.query(
-        "UPDATE objective SET desc = $1, deadline = $2 WHERE objective_id = $3",
-        [newDesc, newDateLimit, idOb]
+        "UPDATE objective SET objective_name = $1, objective_desc = $2, deadline = $3 WHERE objective_id = $4",
+        [newName, newDesc, newDateLimit, idOb]
       );
       return result;
     } catch (error) {
@@ -259,7 +259,7 @@ class DbQueries {
   async deleteObjective(idOb) {
     try {
       const result = this.pool.query(
-        "DELETE FROM objective WHERE objective_id = $1",
+        "DELETE FROM objective WHERE objective_id = $1 RETURNING objective_name",
         [idOb]
       );
 
