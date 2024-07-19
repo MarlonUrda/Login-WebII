@@ -85,7 +85,6 @@ ALTER SEQUENCE public.actividad_id_objetivo_seq OWNED BY public.tasks.obj_id;
 
 CREATE TABLE public.assignments (
     assignment_id integer NOT NULL,
-    assignment_desc text NOT NULL,
     task_id integer NOT NULL,
     member_id integer NOT NULL
 );
@@ -165,8 +164,8 @@ ALTER SEQUENCE public.asignacion_id_miembro_seq OWNED BY public.assignments.memb
 
 CREATE TABLE public.progress (
     progress_id integer NOT NULL,
-    quantity character varying(5) NOT NULL,
-    assignment_id integer NOT NULL
+    assignment_id integer NOT NULL,
+    quantity integer NOT NULL
 );
 
 
@@ -1059,16 +1058,16 @@ ALTER SEQUENCE public.persona_id_persona_seq OWNED BY public.person.person_id;
 
 
 --
--- Name: task-priority; Type: TABLE; Schema: public; Owner: postgres
+-- Name: task-predecessor; Type: TABLE; Schema: public; Owner: postgres
 --
 
-CREATE TABLE public."task-priority" (
-    priority_id integer NOT NULL,
+CREATE TABLE public."task-predecessor" (
+    predecessor_id integer NOT NULL,
     task_id integer NOT NULL
 );
 
 
-ALTER TABLE public."task-priority" OWNER TO postgres;
+ALTER TABLE public."task-predecessor" OWNER TO postgres;
 
 --
 -- Name: prelacion-actividad_id_actividad_seq; Type: SEQUENCE; Schema: public; Owner: postgres
@@ -1089,7 +1088,7 @@ ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNER TO postgres;
 -- Name: prelacion-actividad_id_actividad_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNED BY public."task-priority".task_id;
+ALTER SEQUENCE public."prelacion-actividad_id_actividad_seq" OWNED BY public."task-predecessor".task_id;
 
 
 --
@@ -1111,7 +1110,7 @@ ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNER TO postgres;
 -- Name: prelacion-actividad_id_prelacion_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
 --
 
-ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNED BY public."task-priority".priority_id;
+ALTER SEQUENCE public."prelacion-actividad_id_prelacion_seq" OWNED BY public."task-predecessor".predecessor_id;
 
 
 --
@@ -1656,17 +1655,17 @@ ALTER TABLE ONLY public.submit_type ALTER COLUMN submit_type_id SET DEFAULT next
 
 
 --
--- Name: task-priority priority_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: task-predecessor predecessor_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."task-priority" ALTER COLUMN priority_id SET DEFAULT nextval('public."prelacion-actividad_id_prelacion_seq"'::regclass);
+ALTER TABLE ONLY public."task-predecessor" ALTER COLUMN predecessor_id SET DEFAULT nextval('public."prelacion-actividad_id_prelacion_seq"'::regclass);
 
 
 --
--- Name: task-priority task_id; Type: DEFAULT; Schema: public; Owner: postgres
+-- Name: task-predecessor task_id; Type: DEFAULT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."task-priority" ALTER COLUMN task_id SET DEFAULT nextval('public."prelacion-actividad_id_actividad_seq"'::regclass);
+ALTER TABLE ONLY public."task-predecessor" ALTER COLUMN task_id SET DEFAULT nextval('public."prelacion-actividad_id_actividad_seq"'::regclass);
 
 
 --
@@ -1722,7 +1721,7 @@ ALTER TABLE ONLY public.users_profile ALTER COLUMN users_profile_id SET DEFAULT 
 -- Data for Name: assignments; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.assignments (assignment_id, assignment_desc, task_id, member_id) FROM stdin;
+COPY public.assignments (assignment_id, task_id, member_id) FROM stdin;
 \.
 
 
@@ -1758,6 +1757,14 @@ COPY public.classes (class_id, classname, module_id) FROM stdin;
 --
 
 COPY public.member (member_id, person_id, profile_id, project_id) FROM stdin;
+4	5	9	10
+5	6	11	10
+7	7	7	12
+8	5	9	12
+9	6	11	12
+12	5	7	15
+13	6	11	15
+14	7	12	15
 \.
 
 
@@ -1949,7 +1956,7 @@ COPY public.profile_type (profile_type_id, type_desc) FROM stdin;
 -- Data for Name: progress; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.progress (progress_id, quantity, assignment_id) FROM stdin;
+COPY public.progress (progress_id, assignment_id, quantity) FROM stdin;
 \.
 
 
@@ -1959,7 +1966,15 @@ COPY public.progress (progress_id, quantity, assignment_id) FROM stdin;
 
 COPY public.projects (project_id, project_name, type, state_id, start_date, end_date) FROM stdin;
 7	Ing. Software	Planeacion	1	2024-04-28	2024-09-28
-6	Toy cansado	Tecnologia	1	2024-06-20	2024-08-20
+8	Paralelepipedo	Geometria	1	2024-01-01	2024-02-01
+9	Pastorales	Ganaderia	1	2024-01-01	2024-02-01
+6	Cachapas	Tecnologia	2	2024-06-20	2024-08-20
+10	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+11	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+12	Vacas II	Ganaderia	1	2024-01-01	2024-02-01
+13	Bienestar	Psicologia	1	2024-01-01	2024-02-01
+14	Bienestar	Psicologia	1	2024-01-01	2024-02-01
+15	Bienestar	Psicologia	1	2024-01-01	2024-02-01
 \.
 
 
@@ -1991,10 +2006,10 @@ COPY public.submit_type (submit_type_id, submit_type_desc) FROM stdin;
 
 
 --
--- Data for Name: task-priority; Type: TABLE DATA; Schema: public; Owner: postgres
+-- Data for Name: task-predecessor; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public."task-priority" (priority_id, task_id) FROM stdin;
+COPY public."task-predecessor" (predecessor_id, task_id) FROM stdin;
 \.
 
 
@@ -2169,7 +2184,7 @@ SELECT pg_catalog.setval('public.metodo_perfil_profile_methods_id_seq', 68, true
 -- Name: miembro_id_miembro_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.miembro_id_miembro_seq', 3, true);
+SELECT pg_catalog.setval('public.miembro_id_miembro_seq', 14, true);
 
 
 --
@@ -2309,7 +2324,7 @@ SELECT pg_catalog.setval('public.proyecto_id_estado_seq', 1, false);
 -- Name: proyecto_id_proyecto_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.proyecto_id_proyecto_seq', 7, true);
+SELECT pg_catalog.setval('public.proyecto_id_proyecto_seq', 15, true);
 
 
 --
@@ -2706,18 +2721,18 @@ ALTER TABLE ONLY public.profile
 
 
 --
--- Name: task-priority fk_prelacion-actividad_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task-predecessor fk_prelacion-actividad_actividad; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."task-priority"
-    ADD CONSTRAINT "fk_prelacion-actividad_actividad" FOREIGN KEY (priority_id) REFERENCES public.tasks(task_id);
+ALTER TABLE ONLY public."task-predecessor"
+    ADD CONSTRAINT "fk_prelacion-actividad_actividad" FOREIGN KEY (predecessor_id) REFERENCES public.tasks(task_id);
 
 
 --
--- Name: task-priority fk_prelacion-actividad_actividad_0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+-- Name: task-predecessor fk_prelacion-actividad_actividad_0; Type: FK CONSTRAINT; Schema: public; Owner: postgres
 --
 
-ALTER TABLE ONLY public."task-priority"
+ALTER TABLE ONLY public."task-predecessor"
     ADD CONSTRAINT "fk_prelacion-actividad_actividad_0" FOREIGN KEY (task_id) REFERENCES public.tasks(task_id);
 
 

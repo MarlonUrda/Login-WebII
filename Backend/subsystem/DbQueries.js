@@ -346,17 +346,16 @@ class DbQueries {
     }
   }
 
-
   /**
    * Devuelve los miembros de un proyecto
-   * @param {string} idProject 
-   * @param {string} idProfile 
+   * @param {string} idProject
+   * @param {string} idProfile
    * @param {string} idUser
-   * @returns {string} te devueve un 'Todos los miembros han sido insertados exitosamente' 
-  */
+   * @returns {string} te devueve un 'Todos los miembros han sido insertados exitosamente'
+   */
   async newMembers(membersData) {
     try {
-      await this.pool.query('BEGIN');
+      await this.pool.query("BEGIN");
       for (let i = 0; i < membersData.length; i++) {
         const [idPerson, idProfile, idProject] = membersData[i];
         await this.pool.query(
@@ -364,19 +363,16 @@ class DbQueries {
           [idPerson, idProfile, idProject]
         );
       }
-      await this.pool.query('COMMIT');
-      console.log('Todos los miembros han sido insertados exitosamente');
-      const message ='Todos los miembros han sido insertados exitosamente'
+      await this.pool.query("COMMIT");
+      console.log("Todos los miembros han sido insertados exitosamente");
+      const message = "Todos los miembros han sido insertados exitosamente";
       return message;
     } catch (error) {
-      await this.pool.query('ROLLBACK');
-      throw new Error( 'Error al agregar miembro');
-    } 
+      await this.pool.query("ROLLBACK");
+      throw new Error("Error al agregar miembro");
+    }
   }
 
-
-
-  
   /**
    * Devuelve los miembros de un proyecto
    * @param {string} idProject
@@ -385,7 +381,7 @@ class DbQueries {
   async getMembers(idProject) {
     try {
       const result = await this.pool.query(
-          `
+        `
             SELECT name member, lastname,email 
             FROM projects p
             JOIN member m ON m.project_id = p.project_id
@@ -397,28 +393,27 @@ class DbQueries {
       );
       return result;
     } catch (error) {
-      throw new Error( 'Error al obtener miembros');
+      throw new Error("Error al obtener miembros");
     }
   }
 
-    /**
+  /**
    * Devuelve los miembros de un proyecto
    * @param {string} idProject
-   * @param {string} idMember 
+   * @param {string} idMember
    * @returns {Array} te devueve un "Eliminado miembro correctamente"
    */
-  async deleteMember(idProject,idMember) {
+  async deleteMember(idProject, idMember) {
     try {
       const result = await this.pool.query(
         "DELETE FROM member  WHERE project_id = $1 AND person_id = $2",
-        [idProject,idMember]
+        [idProject, idMember]
       );
       return "Eliminado miembro correctamente";
     } catch (error) {
-      throw new Error( 'Error al eliminar miembro');
+      throw new Error("Error al eliminar miembro");
     }
   }
-
 }
 
 export default DbQueries;
