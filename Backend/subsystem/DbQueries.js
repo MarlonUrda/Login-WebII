@@ -176,11 +176,21 @@ class DbQueries {
   async getProjects(personId) {
     try {
       const result = await this.pool.query(
-        `SELECT name AS miembro, project_name AS proyecto FROM projects AS p
-          INNER JOIN member AS m ON m.project_id = p.project_id
-          INNER JOIN person AS per ON per.person_id = m.person_id
-          INNER JOIN users AS u ON u.person_id = per.person_id
-          WHERE u.person_id = $1`,
+        `SELECT 
+          pj.project_id, 
+          pj.project_name,
+          pr.profile_desc,
+          pj.start_date,
+          pj.end_date, 
+            (SELECT ps2.name ||' '|| ps2.lastname
+              FROM "public".member m2
+              INNER JOIN "public".person ps2 ON m2.person_id = ps2.person_id
+              WHERE m2.project_id = pj.project_id AND m2.profile_id = 7
+              LIMIT 1) AS creator
+          FROM "public".projects pj
+          INNER JOIN "public".member m ON pj.project_id = m.project_id
+          INNER JOIN "public".profile pr ON m.profile_id = pr.profile_id
+          WHERE m.person_id = $1`,
         [personId]
       );
 
