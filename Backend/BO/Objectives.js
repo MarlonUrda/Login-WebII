@@ -14,17 +14,18 @@ class Objectives {
         dateLimit
       );
       if (query) {
-        let idObjective = query.rows[0].id_objetivo;
+        let idObjective = query.rows[0].objective_id;
         console.log("Objetivo creado con exito!");
         return {
-          status: "success",
-          message: "Objetivo creado con exito",
+          success: true,
+          message: `Objetivo: ${nameO} creado con exito!`,
           idO: idObjective,
         };
       } else {
         console.log("No se pudo crear el objetivo");
         return {
-          status: "error",
+          success: false,
+          code: 400,
           message: "No se pudo crear el objetivo",
         };
       }
@@ -33,7 +34,7 @@ class Objectives {
       return {
         success: false,
         code: 500,
-        message: error.message,
+        message: "Error interno del servidor",
       };
     }
   }
@@ -48,9 +49,12 @@ class Objectives {
         console.log("Objetivos encontrados!");
 
         let objectives = [];
-        query.rows.forEach((row) => {
-          objectives.push(row);
-        });
+
+        if (query.rows.length > 0) {
+          query.rows.forEach((row) => {
+            objectives.push(row);
+          });
+        }
 
         return {
           success: true,
@@ -59,14 +63,14 @@ class Objectives {
       } else {
         return {
           success: false,
-          message: "Error al obtener los proyectos.",
+          message: "Hubo un error al cargar los objetivos!",
         };
       }
     } catch (error) {
       return {
         success: false,
         code: 500,
-        message: error.message,
+        message: "Error interno del servidor",
       };
     }
   }
@@ -93,7 +97,7 @@ class Objectives {
       return {
         success: false,
         code: 500,
-        message: error.message,
+        message: "Error interno del servidor",
       };
     }
   }
@@ -117,14 +121,14 @@ class Objectives {
         return {
           success: false,
           code: 400,
-          message: "No se puso actualizar el objetivo",
+          message: "No se pudo actualizar el objetivo",
         };
       }
     } catch (error) {
       return {
         success: false,
         code: 500,
-        message: error.message,
+        message: "Error interno del servidor",
       };
     }
   }

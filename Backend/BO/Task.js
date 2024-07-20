@@ -17,11 +17,11 @@ class Task {
 
       if (query) {
         console.log("Actividad creada con exito");
-        let idAct = query.rows[0].id_actividad;
+        let taskId = query.rows[0].task_id;
         return {
           success: true,
-          message: "Actividad creada exitosamente!",
-          idAct: idAct,
+          message: `Actividad: ${taskName} creada exitosamente!`,
+          taskId: taskId,
         };
       } else {
         return {

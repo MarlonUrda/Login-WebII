@@ -70,7 +70,8 @@ class Project {
       console.error("Error al conectar con la base de datos: ", error);
       return {
         success: false,
-        message: error.message,
+        code: 500,
+        message: "Error interno del servidor",
       };
     }
   }
@@ -106,7 +107,7 @@ class Project {
       return {
         success: false,
         code: 500,
-        message: "Error al conectar con la base de datos.",
+        message: "Error interno del servidor.",
       };
     }
   }
@@ -137,7 +138,7 @@ class Project {
       return {
         code: 500,
         success: false,
-        message: "Error al conectar con la base de datos.",
+        message: "Error interno del servidor.",
       };
     }
   }
