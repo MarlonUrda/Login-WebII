@@ -4,6 +4,7 @@ export const updateProfile = async (req, res) => {
     // console.log(req.session.perfil);
     if (req.session.perfil === req.body.newProfile)
       return res.send({ message: "Mismo perfil" });
+    
     const p = req.body.newProfile;
     req.session.perfil = p;
     //console.log(req.session.perfil);

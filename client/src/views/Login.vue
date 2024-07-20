@@ -19,8 +19,6 @@ const successMessage = ref("");
 const router = useRouter();
 
 const sendData = async () => {
-  console.log("no");
-
   try {
     const response = await fetch("http://localhost:3000/login", {
       credentials: "include",
@@ -35,8 +33,7 @@ const sendData = async () => {
     });
 
     const data = await response.json();
-    console.log(data);
-    // console.log(data.success);
+
 
     if (data.success) {
       successMessage.value = data.message;

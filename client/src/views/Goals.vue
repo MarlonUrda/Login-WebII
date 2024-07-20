@@ -22,40 +22,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toProcess } from "../utils/toProcess";
 
 const goals = ref([]);
 const router = useRouter();
 const route = useRoute();
 
-const project = route.params.nameP;
-const role = route.params.role;
-const idP = route.params.idP;
 
-console.log(project, role, idP);
+
+const { nameProject, role, idProject } = route.params;
+
+console.log(nameProject, role, idProject);
 
 const getGoals = async (idProject) => {
-  console.log(idProject);
-  const res = await fetch("http://localhost:3000/toProcess", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      modulo: "Proyecto",
-      clase: "Objectives",
-      metodo: "getObjectives",
-      params: {
-        idProject: idProject,
-      },
-    }),
-  });
-
-  if (res.ok) {
-    const data = await res.json();
-    console.log(data);
-    return data.objectives;
-  }
+  const data = await toProcess("Proyecto", "Objectives", "getObjectives", { idProject: idProject });
+  return data.objectives;
 };
 
 const setProfileandExecute = async (newProfile) => {
@@ -80,8 +61,9 @@ onMounted(async () => {
   try {
     const profileloaded = await setProfileandExecute(role);
     if (profileloaded) {
-      console.log(idP);
-      const g = await getGoals(idP);
+      console.log(idProject);
+      const g = await getGoals(idProject);
+      console.log(g);
       goals.value = [...goals.value, ...g];
       console.log(goals.value);
     }
@@ -130,7 +112,7 @@ const goBack = () => {
         <CardTitle class="text-4xl text-white">¡Hola, {{ role }}!</CardTitle>
         <div>
           <CardDescription class="text-lg text-white italic">
-            Proyecto: {{ project }}
+            Proyecto: {{ nameProject }}
           </CardDescription>
           <CardDescription class="text-lg text-white font-bold">
             Elige el objetivo en el que deseas entrar:

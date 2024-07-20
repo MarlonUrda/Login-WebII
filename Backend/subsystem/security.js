@@ -13,7 +13,7 @@ class Security {
       const result = await dbQueries.getPermissions();
       const value = true;
 
-      console.log(result.rows.length);
+      //console.log(result.rows.length);
 
       if (!(result.rows.length > 0)) {
         return "No se encontraron permisos.";
@@ -45,7 +45,7 @@ class Security {
       });
       console.log("Permisos cargados");
       this.permissions.forEach((value, key) => {
-        console.log(`${key}: ${value}`);
+        // console.log(`${key}: ${value}`);
       });
       this.permissionsLoaded = true;
     } catch (error) {
@@ -56,9 +56,9 @@ class Security {
   async validPermissions(req) {
     let { modulo, clase, metodo } = req.body;
     let { session } = req;
-    const k = modulo + "_" + clase + "_" + metodo + "_" + session.perfil; // agregar luego session.perfil
-    console.log(k);
-    if (this.permissions.get(k.toLowerCase())) {
+    const permissionKey = modulo + "_" + clase + "_" + metodo + "_" + session.perfil; // agregar luego session.perfil
+    console.log(permissionKey);
+    if (this.permissions.get(permissionKey.toLowerCase())) {
       return true;
     } else {
       return false;

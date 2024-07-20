@@ -21,9 +21,6 @@ class Project {
 
       if (query) {
         let idProject = query.rows[0].project_id;
-
-        console.log(idPerson);
-
         const projectManager = await dbQueries.insertProjectManager(
           idPerson,
           idProject

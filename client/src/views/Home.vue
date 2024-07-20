@@ -21,11 +21,14 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { toProcess } from "../utils/toProcess.js";
 
 const router = useRouter();
 const userdata = ref({});
 
+
 const getSession = async () => {
+
   const res = await fetch("http://localhost:3000/user-data", {
     method: "GET",
     credentials: "include",
@@ -43,43 +46,41 @@ const getSession = async () => {
 const projects = ref([]);
 
 const getProjects = async (idPerson) => {
-  const res = await fetch("http://localhost:3000/toProcess", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      modulo: "Proyecto",
-      clase: "Project",
-      metodo: "getProjectsByPersone",
-      params: {
-        idPerson: idPerson,
-      },
-    }),
-  });
+  const data = await toProcess(
+    "Proyecto", 
+    "Project", 
+    "getProjectsByPersone", 
+    {
+      idPerson: idPerson,
+    }
+  );
 
-  if (res.ok) {
-    const data = await res.json();
-    return data.projects;
-  }
+  return data.projects;
 };
 
 onMounted(async () => {
+  
   userdata.value = await getSession();
-  console.log(userdata.value);
-  const p = await getProjects(userdata.value.idPerson);
-  projects.value = [...projects.value, ...p];
-  console.log(projects.value);
+  console.log("userdata", userdata.value);
+
+
+
+  const projectData = await getProjects(userdata.value.idPerson);
+
+
+  projects.value = [...projectData];
+
+
+
 });
 
-const viewProject = (idP, nameP, role) => {
-  console.log("Viewing project:", idP, nameP, role);
+const viewProject = (projectId, nameProject, role) => {
+  console.log("Viewing project:", projectId, nameProject, role);
   router.push({
     name: "Goals",
     params: {
-      idP: idP,
-      nameP: nameP,
+      idProject: projectId,
+      nameProject: nameProject,
       role: role,
     },
   });
