@@ -45,7 +45,7 @@ class Security {
       });
       console.log("Permisos cargados");
       this.permissions.forEach((value, key) => {
-        // console.log(`${key}: ${value}`);
+        console.log(`${key}: ${value}`);
       });
       this.permissionsLoaded = true;
     } catch (error) {
