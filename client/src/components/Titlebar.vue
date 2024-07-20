@@ -6,9 +6,11 @@ import { CirclePlus } from 'lucide-vue-next';
 import { LogOut } from 'lucide-vue-next';
 import { CircleUserRound } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import ProyectSheet from './ProyectSheet.vue';
 
 const userdata = ref({})
 const router = useRouter()
+const showSheet = ref(false)
 
 const closeSession = async () => {
   try {
@@ -44,6 +46,10 @@ const getSession = async () => {
     return data;
   }
 };
+
+const handleClick = () => {
+  showSheet.value = true;
+}
 
 onMounted(async () => {
   userdata.value = await getSession();
