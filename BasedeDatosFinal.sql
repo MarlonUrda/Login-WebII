@@ -29,7 +29,8 @@ CREATE TABLE public.tasks (
     task_desc text NOT NULL,
     obj_id integer NOT NULL,
     start_date date,
-    deadline date
+    deadline date,
+    task_name character varying(100) NOT NULL
 );
 
 
@@ -799,9 +800,10 @@ ALTER SEQUENCE public.modulo_perfil_id_perfil_seq OWNED BY public.module_profile
 
 CREATE TABLE public.objective (
     objective_id integer NOT NULL,
-    "desc" character varying(40) NOT NULL,
+    objective_desc text NOT NULL,
     project_id integer NOT NULL,
-    deadline date
+    deadline date,
+    objective_name character varying(100) NOT NULL
 );
 
 
@@ -1829,7 +1831,9 @@ COPY public.modules (module_id, module_desc) FROM stdin;
 -- Data for Name: objective; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.objective (objective_id, "desc", project_id, deadline) FROM stdin;
+COPY public.objective (objective_id, objective_desc, project_id, deadline, objective_name) FROM stdin;
+3	Descripcion de parametros necesarios	12	2024-07-23	Parametrizacion
+4	Realizacion de la leche deslactosada... si	12	2024-08-10	Produccion del producto
 \.
 
 
@@ -1872,6 +1876,7 @@ COPY public.profile (profile_id, profile_desc, profile_type_id) FROM stdin;
 11	Documentista	6
 12	Analista	6
 13	Recurso	6
+16	Basico	6
 \.
 
 
@@ -1939,6 +1944,7 @@ COPY public.profile_methods (method_id, profile_id, profile_methods_id) FROM std
 14	12	66
 15	12	67
 16	12	68
+4	16	70
 \.
 
 
@@ -2017,7 +2023,7 @@ COPY public."task-predecessor" (predecessor_id, task_id) FROM stdin;
 -- Data for Name: tasks; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-COPY public.tasks (task_id, task_desc, obj_id, start_date, deadline) FROM stdin;
+COPY public.tasks (task_id, task_desc, obj_id, start_date, deadline, task_name) FROM stdin;
 \.
 
 
@@ -2026,9 +2032,9 @@ COPY public.tasks (task_id, task_desc, obj_id, start_date, deadline) FROM stdin;
 --
 
 COPY public.users (users_id, password, username, person_id, resetpasswordtoken, resetpasswordexpires, email) FROM stdin;
-1	$2a$10$HnddOe9n0nZWH0y/O/8dx.18JwnhWKmLmA0pxA5q5bsg4LYXLoSgG	ILevizzz	5	eee2888e42befe2e03e7b290c1acaacb5ca58039	1720400746730	MGUR2025pro@gmail.com
 2	$2a$10$qQNqBJqZx4BJQqeTDLNEieZKGnUflpxht5.o8DwnUBw1r6UvmI1iK	Merlon	6	\N	\N	Mgabrielur@gmail.com
 3	$2a$10$uYVpy4Qaf7.gvkF4m/UrGuKf5IPinontt.mXUmc6MswjmxABqh4AS	Albert	7	\N	\N	AlbertoJ@gmail.com
+1	$2a$10$BtxtgRPR2fUiXlPEGjhihePqC/8wVwp1iU6368SUvA0uW1WcXwRcS	ILevizzz	5	\N	\N	MGUR2025pro@gmail.com
 \.
 
 
@@ -2177,7 +2183,7 @@ SELECT pg_catalog.setval('public.metodo_id_metodo_seq', 16, true);
 -- Name: metodo_perfil_profile_methods_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.metodo_perfil_profile_methods_id_seq', 68, true);
+SELECT pg_catalog.setval('public.metodo_perfil_profile_methods_id_seq', 70, true);
 
 
 --
@@ -2240,7 +2246,7 @@ SELECT pg_catalog.setval('public.modulo_perfil_id_perfil_seq', 1, false);
 -- Name: objetivo_id_objetivo_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.objetivo_id_objetivo_seq', 1, false);
+SELECT pg_catalog.setval('public.objetivo_id_objetivo_seq', 4, true);
 
 
 --
@@ -2282,7 +2288,7 @@ SELECT pg_catalog.setval('public.opcion_id_opcion_seq', 1, false);
 -- Name: perfil_id_perfil_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
 --
 
-SELECT pg_catalog.setval('public.perfil_id_perfil_seq', 13, true);
+SELECT pg_catalog.setval('public.perfil_id_perfil_seq', 16, true);
 
 
 --
