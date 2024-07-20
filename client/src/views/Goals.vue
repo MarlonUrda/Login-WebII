@@ -77,7 +77,7 @@ const goBack = () => {
 <template>
   <div
     id="welcome"
-    class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[28%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
+    class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[32%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
   />
   <h1
     id="pos"
@@ -85,21 +85,13 @@ const goBack = () => {
   >
     Lista de Objetivos
   </h1>
-
+  
   <Button
     type="submit"
     variant="default"
     @click="goBack"
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
-    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
-  >
-  <Button
-    type="submit"
-    variant="default"
-    class="text-white bg-blue-400 w-[11.5%] h-[5%] top-[11%] left-[98%] -translate-x-full absolute hover:bg-white hover:text-black"
-    ><UserRoundPlus class="mt-[2%] mr-2 h-4 w-4 inline" />Añadir
-    Integrantes</Button
-  >
+    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button>
 
   <div id="nomorepos">
     <Card
@@ -109,7 +101,7 @@ const goBack = () => {
         <CardTitle class="text-4xl text-white">¡Hola, {{ role }}!</CardTitle>
         <div>
           <CardDescription class="text-lg text-white italic">
-            Proyecto: {{ nameProject }}
+            Proyecto actual: {{ nameProject }}
           </CardDescription>
           <CardDescription class="text-lg text-white font-bold">
             Elige el objetivo en el que deseas entrar:

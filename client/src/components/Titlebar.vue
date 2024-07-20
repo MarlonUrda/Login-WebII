@@ -59,7 +59,7 @@ onMounted(async () => {
         
         <div>
             <Button type="submit" variant="default" class="bg-blue-500 w-[10.3%] top-[1.5%] left-[13%] absolute"> <CirclePlus class=" mt-[2%] mr-2 h-4 w-4"/>Nuevo Proyecto</Button>
-            <h1 class=" text-gray-500 text-lg underline-offset-4 -translate-x-full tracking-tight italic font-semibold top-[2%] left-[86.3%] absolute"><CircleUserRound class=" mt-[-2%] mr-2 h-6 w-6 inline"/>{{ userdata.name + " " + userdata.lastname }} - @{{ userdata.user }}</h1>
+            <h1 class="whitespace-nowrap overflow-hidden text-ellipsis text-gray-500 text-lg underline-offset-4 -translate-x-full tracking-tight italic font-semibold top-[2%] left-[86.3%] absolute"><CircleUserRound class=" mt-[-2%] mr-2 h-6 w-6 inline"/>{{ userdata.name + " " + userdata.lastname }} - @{{ userdata.user }}</h1>
             <Button type="submit" variant="link" class="bg-slate-800 text-white w-[9.5%] h-[5%] top-[1.5%] left-[98%] -translate-x-full absolute" @click="closeSession"> <LogOut class=" mt-[2%] mr-2 h-4 w-4"/>Cerrar Sesión</Button>
         </div>
     </body>
