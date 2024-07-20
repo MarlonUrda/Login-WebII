@@ -17,6 +17,8 @@ const port = 3000;
 
 app.use(cookieParser());
 
+app.use(express.static("public"));
+
 app.use(
   cors({
     origin: "http://localhost:5173",

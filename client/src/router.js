@@ -9,6 +9,7 @@ import NewPass from "./views/NewPass.vue";
 import NotFound from "./views/NotFound.vue";
 import InvalidAcces from "./views/InvalidAcces.vue";
 import NewPerson from "./views/NewPerson.vue";
+import Goals from "./views/Goals.vue";
 
 const routes = [
   { path: "/", redirect: "/Login" },
@@ -21,6 +22,7 @@ const routes = [
   { path: "/:pathMatch(.*)*", name: "not-found", component: NotFound },
   { path: "/InvalidAccess", name: "InvalidAccess", component: InvalidAcces },
   { path: "/NewPerson", name: "NewPerson", component: NewPerson },
+  { path: "/Goals", name: "Goals", component: Goals },
 ];
 
 const router = createRouter({

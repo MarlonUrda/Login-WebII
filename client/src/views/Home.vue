@@ -1,133 +1,122 @@
-<script setup >
+<script setup>
 
 import {
   Card,
-  CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { ref, onMounted } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Edit } from "lucide-vue-next";
+import { Trash2 } from "lucide-vue-next";
+import { LogOut } from "lucide-vue-next";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
+
+const projects = ref([
+  {
+    Project: '1',
+    Name: 'Web II',
+    Role: 'Diseñador',
+    Creator: 'Marlon Urdaneta',
+    StartDate: '14-05-24',
+    EndDate: '22-07-24',
+    toggleVar: 1,
+  },
+  {
+    Project: '2',
+    Name: 'Distribuidos',
+    Role: 'Documentista',
+    Creator: 'Andrés García',
+    StartDate: '21-06-24',
+    EndDate: '19-07-24',
+    toggleVar: 0,
+  },
+  {
+    Project: '3',
+    Name: 'Ing. de Software',
+    Role: 'Líder de Equipo',
+    Creator: 'José Carrillo',
+    StartDate: '10-07-24',
+    EndDate: '21-07-24',
+    toggleVar: 1,
+  },
+]);
 
 const router = useRouter();
-const email = ref('');
-const username = ref('');
-
-
-const userData =async () => {
-  try {
-    let headersList = {
-      'Content-Type': 'application/json',
-    }
-
-    let response = await fetch("http://localhost:3000/user-data", { 
-      method: "GET",
-      credentials: 'include',
-      headers: headersList
-    });
-
-    let data = await response.json();
-    console.log(data);
-
-
-    if (data && data.user) {
-        email.value = data.email;
-        username.value = data.user;
-    } else {
-      router.push({path: '/InvalidAccess'});
-    }
-
-
-  } catch (error) {
-
-    console.error('Error:', error);
-  }
-
-}
-
-const cerrarSesion = async () => {
-  try {
-    let headersList = {
-      'Content-Type': 'application/json',
-    }
-
-    let response = await fetch("http://localhost:3000/logout", { 
-      method: "GET",
-      credentials: 'include',
-      headers: headersList
-    });
-
-    let data = await response.json();
-    console.log(data);
-    router.push({path: '/Login'});
-  } catch (error) {  
-    console.error('Error:', error);
-  }
-}
-
-onMounted(() => {
-  userData();
-
-});
 
 </script>
 
 <template>
+  <div id="welcome" class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[28%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"/>
+  <h1 id="pos" class="absolute text-4xl font-bold italic top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4">Lista de Proyectos</h1>
 
-<div id="titlebar" class="absolute bg-white top-0 left-0 w-full h-[8%] rounded-b-3xl"/>
-
-  <div id="welcome" class="absolute bg-gradient-to-r from-blue-500 to-cyan-500 top-[12%] left-[50%] -translate-x-[50%] w-[28%] h-[18%] rounded-[35px] border-4 border-white shadow-xl">
-    <div class="rounded-full bg-white w-[82px] h-[82px] top-[17.5%] left-[5%] absolute"></div>
-  </div>
-  <h1 class="absolute text-4xl font-bold top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline">Lista de Proyectos</h1>
-  
-  <div id="welcome" class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[60%] rounded-[70px] shadow-xl">
-    <h1 class="absolute text-4xl font-bold top-[20%] left-[50%] -translate-x-[50%] tracking-tight">¡Bienvenido, !</h1>
-  </div>
-
-
-
-  <div id="pos">
-    <Card class="shadow-none border-none">
-      <CardHeader>
-        <CardTitle class="text-3xl"> ¡Ya estás en el sistema! </CardTitle>
-        <CardDescription>
-            Iniciaste sesión en tu cuenta exitosamente.
+  <div id="nomorepos">
+    <Card class=" top-[10.7%] left-[10%] -translate-x-[50%] shadow-none border-none absolute">
+      <CardHeader class="w-full">
+        <CardTitle class="text-4xl text-white">¡Bienvenido, Andrés!</CardTitle>
+    <div>
+            <CardDescription class="text-lg text-white italic">
+              (acá va el correo)
         </CardDescription>
-        <CardTitle class="text-2xl mt-16 italic"> Los datos de tu cuenta: </CardTitle>
-        <CardTitle class=" text-base font-normal italic"> (La información de tu sesión actual): </CardTitle>
-    <div class="font-bold mt-3">
-            <CardDescription class="text-xl italic">
-            Tu correo electrónico: {{ email }}
-        </CardDescription>
-        <CardDescription class="text-xl italic">
-            Tu nombre de usuario: {{ username }}
+        <CardDescription class="text-lg text-white font-bold">
+            Elige el proyecto que deseas visualizar:
         </CardDescription>
         </div>
       </CardHeader>
-      <!-- <button @click="userData" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full mt-4">Actualizar</button> -->
-      <CardContent>
-
-        <div class="mt-12 text-center text-sm font-semibold" id="link">
-          <a  @click="cerrarSesion"  class="underline text-base"> Cerrar la Sesión </a>
-        </div>
-      </CardContent>
     </Card>
+  </div>
+
+  <div id="projectlist" class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl">
+    <ScrollArea  class="h-[93%] w-[93%] mt-[0.75%] ml-[3.5%]">
+      <Table>
+        <TableHeader class="text-lg italic">
+          <TableRow>
+            <TableHead class="text-center font-bold">N°.</TableHead>
+            <TableHead class="text-center font-bold">Proyecto</TableHead>
+            <TableHead class="text-center font-bold">Tu Rol</TableHead>
+            <TableHead class="text-center font-bold">Creador</TableHead>
+            <TableHead class="text-center font-bold">Fecha de Inicio</TableHead>
+            <TableHead class="text-center font-bold">Fecha Objetivo</TableHead>
+            <TableHead class="text-center font-bold">Opciones</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody class="text-base">
+          <TableRow class="font-medium" v-for="Project in projects" :key="Project.Project">
+            <TableCell class="text-center">{{ Project.Project }}</TableCell>
+            <TableCell class="text-center text-blue-500"><button class="hover:underline">{{ Project.Name }}</button></TableCell>
+            <TableCell class="text-center">{{ Project.Role }}</TableCell>
+            <TableCell class="text-center">{{ Project.Creator }}</TableCell>
+            <TableCell class="text-center">{{ Project.StartDate }}</TableCell>
+            <TableCell class="text-center">{{ Project.EndDate }}</TableCell>
+            <TableCell class="text-center">
+              <button type="submit"><LogOut class="h-6 w-6 inline hover:text-red-500"/></button>
+
+              <button type="submit" v-if="Project.toggleVar === 1"><Edit v-if="Project.toggleVar === 1" class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600"/></button>
+              <button type="submit" v-if="Project.toggleVar === 0" disabled><Edit v-if="Project.toggleVar === 0" class="ml-4 mr-5 h-6 w-6 inline text-gray-400"/></button>
+
+              <button type="submit" v-if="Project.toggleVar === 1"><Trash2 v-if="Project.toggleVar === 1" class="h-6 w-6 inline hover:text-amber-900"/></button>
+              <button type="submit" v-if="Project.toggleVar === 0" disabled><Trash2 v-if="Project.toggleVar === 0" class="h-6 w-6 inline text-gray-400"/></button>
+            </TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </ScrollArea>
   </div>
 </template>
 
 <style scoped>
-#pos {
-  position: absolute;
-  width: 50%;
-  top: 20.5%;
-  max-height: 100%;
-  right: 4.8%;
-  z-index: 50;
-}
-#link {
-  z-index: 10;
-}
+ #pos {
+ text-shadow: 0px 0px 10px #000000;
+  }
 </style>
