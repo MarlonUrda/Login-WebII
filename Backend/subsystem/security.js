@@ -54,18 +54,27 @@ class Security {
   }
 
   async validPermissions(req) {
-    let { modulo, clase, metodo, perfil } = req.body;
-    //let { session } = req;
-    const k = modulo + "_" + clase + "_" + metodo + "_" + perfil; // agregar luego session.perfil
+    let { modulo, clase, metodo } = req.body;
+    let { session } = req;
+    const k = modulo + "_" + clase + "_" + metodo + "_" + session.perfil; // agregar luego session.perfil
     console.log(k);
     if (this.permissions.get(k.toLowerCase())) {
-      console.log("Permisos Validos!");
       return true;
     } else {
-      console.log("Permisos Inválidos!");
       return false;
     }
   }
 }
 
 export default Security;
+
+// const test = new Security();
+
+// test.validPermissions({
+//   body: {
+//     modulo: "Proyecto",
+//     clase: "Project",
+//     metodo: "getProjectsByPersone",
+//     perfil: "Documentista",
+//   },
+// });

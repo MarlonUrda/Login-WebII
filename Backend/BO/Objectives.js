@@ -3,9 +3,7 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Objectives {
   constructor() {}
 
-  static async createObjective(params) {
-    const [nameO, objdesc, idProject, dateLimit] = params;
-
+  static async createObjective(nameO, objdesc, idProject, dateLimit) {
     try {
       const query = await dbQueries.insertObjective(
         nameO,
@@ -39,22 +37,24 @@ class Objectives {
     }
   }
 
-  static async getObjectives(params) {
-    const [idProject] = params;
-
+  static async getObjectives(idProject) {
+    console.log(idProject);
     try {
       const query = await dbQueries.getObjectivesFromProject(idProject);
 
       if (query) {
-        console.log("Objetivos encontrados!");
-
         let objectives = [];
 
-        if (query.rows.length > 0) {
-          query.rows.forEach((row) => {
-            objectives.push(row);
-          });
+        if (query.rows.length === 0) {
+          return {
+            success: true,
+            message: "No hay objetivos para este proyecto!",
+            objectives: [],
+          };
         }
+        query.rows.forEach((row) => {
+          objectives.push(row);
+        });
 
         return {
           success: true,
@@ -75,11 +75,9 @@ class Objectives {
     }
   }
 
-  static async deleteObjective(params) {
-    const [idOb] = params;
-
+  static async deleteObjective(idObjective) {
     try {
-      const query = await dbQueries.deleteObjective(idOb);
+      const query = await dbQueries.deleteObjective(idObjective);
 
       if (query) {
         let nameObj = query.rows[0].objective_name;
@@ -102,8 +100,7 @@ class Objectives {
     }
   }
 
-  static async updateObjective(params) {
-    const [newName, newDesc, newDateLimit, idOb] = params;
+  static async updateObjective(newName, newDesc, newDateLimit, idOb) {
     try {
       const query = await dbQueries.updateObjective(
         newName,

@@ -75,6 +75,18 @@ class DbQueries {
     }
   }
 
+  async getPerson(personId) {
+    try {
+      const result = await this.pool.query(
+        "SELECT * FROM person WHERE person_id = $1",
+        [personId]
+      );
+      return result;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   /**
    * Actualizar el token de restablecimiento de contraseña
    * @param {string} email

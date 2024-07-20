@@ -3,9 +3,7 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Task {
   constructor() {}
 
-  static async createTask(params) {
-    const [taskName, taskDesc, idOb, startDate, deadline] = params;
-
+  static async createTask(taskName, taskDesc, idOb, startDate, deadline) {
     try {
       const query = await dbQueries.insertTask(
         taskName,
@@ -39,11 +37,9 @@ class Task {
     }
   }
 
-  static async getTask(params) {
-    const [idOb] = params;
-
+  static async getTask(idObjective) {
     try {
-      const query = await dbQueries.getTasks(idOb);
+      const query = await dbQueries.getTasks(idObjective);
 
       if (query) {
         let activities = [];
@@ -70,9 +66,7 @@ class Task {
     }
   }
 
-  static async updateTask(params) {
-    const [newName, newDesc, newStart, newDeadline, idTask] = params;
-
+  static async updateTask(newName, newDesc, newStart, newDeadline, idTask) {
     try {
       const query = await dbQueries.updateTask(
         newName,
@@ -103,8 +97,7 @@ class Task {
     }
   }
 
-  static async deleteTask(params) {
-    const [taskId] = params;
+  static async deleteTask(taskId) {
     try {
       const query = await dbQueries.deleteTask(taskId);
 

@@ -10,6 +10,7 @@ import { userData } from "./controller/home.js";
 import ResetControler from "./controller/ResetControler.js";
 import { toProcess } from "./controller/toProcess.js";
 import "./instances/dbinstances.js";
+import { updateProfile } from "./controller/updateProfile.js";
 
 const app = express();
 const host = "localhost";
@@ -54,6 +55,8 @@ app.post("/register", register);
 app.get("/reset/:token", ResetControler.resetPasswordGet);
 
 app.post("/reset/:token", ResetControler.resetPasswordPost);
+
+app.post("/update-profile", updateProfile);
 
 app.post("/toProcess", toProcess);
 

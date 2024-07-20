@@ -23,7 +23,7 @@ export const login = async (req, res) => {
       });
     }
 
-    const isPasswordMatch = await compare(req.body.password, user.pass_usuario);
+    const isPasswordMatch = await compare(req.body.password, user.password);
 
     if (!isPasswordMatch) {
       return res.send({
@@ -32,11 +32,18 @@ export const login = async (req, res) => {
       });
     }
 
-    req.session.idUser = user.id_usuario;
-    req.session.idPersone = user.id_persona;
-    req.session.user = user.name;
+    const getUser = await dbQueries.getPerson(user.person_id);
+
+    let person = getUser.rows[0];
+
+    req.session.idUser = user.users_id;
+    req.session.idPerson = user.person_id;
+    req.session.user = user.username;
     req.session.email = req.body.email;
     req.session.loggedin = true;
+    req.session.name = person.name;
+    req.session.lastname = person.lastname;
+    req.session.perfil = "Basico";
 
     return res.send({
       message: "You logged in succesfully!",

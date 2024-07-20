@@ -3,9 +3,14 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Project {
   constructor() {}
 
-  static async createProject(params) {
-    const [nameP, typeP, startDate, endDate, membersDefault = [], idPerson] =
-      params; //modificar state a 1 por defecto en la query
+  static async createProject(
+    nameP,
+    typeP,
+    startDate,
+    endDate,
+    idPerson,
+    membersDefault = []
+  ) {
     try {
       const query = await dbQueries.insertProject(
         nameP,
@@ -76,9 +81,14 @@ class Project {
     }
   }
 
-  static async updateProject(params) {
-    const [newName, newType, newState, newStart, newEnd, idProject] = params;
-
+  static async updateProject(
+    newName,
+    newType,
+    newState,
+    newStart,
+    newEnd,
+    idProject
+  ) {
     try {
       const query = await dbQueries.updateProject(
         newName,
@@ -112,9 +122,8 @@ class Project {
     }
   }
 
-  static async getProjectsByPersone(params) {
-    let [idPerson] = params;
-
+  static async getProjectsByPersone(idPerson) {
+    console.log(idPerson);
     try {
       let query = await dbQueries.getProjects(idPerson);
       if (query.rows.length > 0) {
@@ -143,10 +152,9 @@ class Project {
     }
   }
 
-  static async deleteProject(params) {
-    const [idP] = params;
+  static async deleteProject(idProject) {
     try {
-      const query = await dbQueries.eliminateProject(idP);
+      const query = await dbQueries.eliminateProject(idProject);
       if (query) {
         console.log("Proyecto eliminado con éxito!");
         return {
