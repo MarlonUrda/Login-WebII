@@ -231,12 +231,24 @@ class DbQueries {
   async eliminateProject(idProject) {
     try {
       const result = await this.pool.query(
-        "DELETE FROM project WHERE project_id = $1",
+        "DELETE FROM projects WHERE project_id = $1 RETURNING project_name",
         [idProject]
       );
       return result;
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async deleteProjectFromMembers(idProject) {
+    try {
+      const result = await this.pool.query(
+        "DELETE FROM member WHERE project_id = $1",
+        [idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log("Error: ", error.message);
     }
   }
 

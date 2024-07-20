@@ -28,27 +28,27 @@ const goals = ref([]);
 const router = useRouter();
 const route = useRoute();
 
-
-
 const { nameProject, role, idProject } = route.params;
 
 console.log(nameProject, role, idProject);
 
 const getGoals = async (idProject) => {
-  const data = await toProcess("Proyecto", "Objectives", "getObjectives", { idProject: idProject });
+  const data = await toProcess("Proyecto", "Objectives", "getObjectives", {
+    idProject: idProject,
+  });
   return data.objectives;
 };
 
-const setProfileandExecute = async (newProfile) => {
-  console.log(newProfile);
-  const response = await fetch("http://localhost:3000/update-profile", {
+const setProfileandExecute = async (newRole) => {
+  console.log(newRole);
+  const response = await fetch("http://localhost:3000/update-role", {
     method: "POST",
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      newProfile: newProfile,
+      newRole: newRole,
     }),
   });
 
@@ -61,11 +61,8 @@ onMounted(async () => {
   try {
     const profileloaded = await setProfileandExecute(role);
     if (profileloaded) {
-      console.log(idProject);
-      const g = await getGoals(idProject);
-      console.log(g);
-      goals.value = [...goals.value, ...g];
-      console.log(goals.value);
+      const goalsData = await getGoals(idProject);
+      goals.value = [...goalsData];
     }
   } catch (error) {
     console.log(error.message);

@@ -151,12 +151,21 @@ class Project {
 
   static async deleteProject(idProject) {
     try {
+      const deleteMembers = await dbQueries.deleteProjectFromMembers(idProject);
+      if (!deleteMembers) {
+        return {
+          success: false,
+          code: 500,
+          message: "Error al eliminar miembros del proyecto.",
+        };
+      }
       const query = await dbQueries.eliminateProject(idProject);
       if (query) {
         console.log("Proyecto eliminado con éxito!");
+        let project = query.rows[0].project_name;
         return {
           success: true,
-          message: "Proyecto eliminado!",
+          message: `Proyecto: ${project} eliminado!`,
         };
       } else {
         console.error("Error al eliminar el proyecto");

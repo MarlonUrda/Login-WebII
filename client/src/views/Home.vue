@@ -25,10 +25,9 @@ import { toProcess } from "../utils/toProcess.js";
 
 const router = useRouter();
 const userdata = ref({});
-
+const tableChanged = ref(false);
 
 const getSession = async () => {
-
   const res = await fetch("http://localhost:3000/user-data", {
     method: "GET",
     credentials: "include",
@@ -46,32 +45,29 @@ const getSession = async () => {
 const projects = ref([]);
 
 const getProjects = async (idPerson) => {
-  const data = await toProcess(
-    "Proyecto", 
-    "Project", 
-    "getProjectsByPersone", 
-    {
-      idPerson: idPerson,
-    }
-  );
+  const data = await toProcess("Proyecto", "Project", "getProjectsByPersone", {
+    idPerson: idPerson,
+  });
 
   return data.projects;
 };
 
+const deleteProject = async (idProject) => {
+  const data = await toProcess("Proyecto", "Project", "deleteProject", {
+    idProject: idProject,
+  });
+
+  projects.value = projects.value.filter((project) => project.id !== idProject);
+  return data;
+};
+
 onMounted(async () => {
-  
   userdata.value = await getSession();
   console.log("userdata", userdata.value);
 
-
-
   const projectData = await getProjects(userdata.value.idPerson);
 
-
   projects.value = [...projectData];
-
-
-
 });
 
 const viewProject = (projectId, nameProject, role) => {
@@ -204,6 +200,7 @@ const viewProject = (projectId, nameProject, role) => {
                   project.profile_desc == 'Project Manager' ||
                   project.profile_desc == 'Arquitecto Software'
                 "
+                @click="deleteProject(project.project_id)"
               >
                 <Trash2 class="h-6 w-6 inline hover:text-amber-900" />
               </button>

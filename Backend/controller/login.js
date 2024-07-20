@@ -44,6 +44,7 @@ export const login = async (req, res) => {
     req.session.name = person.name;
     req.session.lastname = person.lastname;
     req.session.perfil = "Basico";
+    req.session.role = "";
 
     return res.send({
       message: "You logged in succesfully!",
