@@ -1,4 +1,5 @@
 // router.js
+import { isAuthenticated } from "./utils/isAuthenticated.js";
 import { createRouter, createWebHistory } from "vue-router";
 import Login from "./views/Login.vue";
 import ForgotPass from "./views/ForgotPass.vue";
@@ -13,7 +14,6 @@ import Goals from "./views/Goals.vue";
 
 const routes = [
   { path: "/", redirect: "/Login" },
-  { path: "/Home", component: Home },
   { path: "/Login", component: Login },
   { path: "/ForgotPass", component: ForgotPass },
   { path: "/Register", name: "Register", component: Register },
@@ -22,7 +22,8 @@ const routes = [
   { path: "/:pathMatch(.*)*", name: "not-found", component: NotFound },
   { path: "/InvalidAccess", name: "InvalidAccess", component: InvalidAcces },
   { path: "/NewPerson", name: "NewPerson", component: NewPerson },
-  { path: "/Goals", name: "Goals", component: Goals },
+  { path: "/Home", component: Home, meta: { requiresAuth: true } },
+  { path: "/Goals", name: "Goals", component: Goals, meta: { requiresAuth: true } },
 ];
 
 const router = createRouter({
@@ -30,11 +31,13 @@ const router = createRouter({
   routes,
 });
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (!isAuthenticated()) {
+    const authenticated = await isAuthenticated();
+    if (!authenticated) {
+      console.log("no autenticado");
       next({
-        path: "/login",
+        path: "/InvalidAccess",
         query: { redirect: to.fullPath },
       });
     } else {

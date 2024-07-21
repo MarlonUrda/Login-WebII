@@ -10,6 +10,7 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
+import { Edit } from "lucide-vue-next";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import {
@@ -22,51 +23,45 @@ import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 
-const objectiveName = ref("");
-const objectiveDesc = ref("");
-const dates = ref(new CalendarDate(2024, 1, 2));
+const props = defineProps(["name", "description", "objectiveId"]);
 
-const props = defineProps(["idProject"]);
+const objectiveName = ref(props.name);
+const objectiveDesc = ref(props.description);
+const date = ref(new CalendarDate(2024, 1, 2));
 
 const df = new DateFormatter("en-US", {
   dateStyle: "short",
 });
 
-const createObjective = async () => {
-  const limitFormatted = dates.value.toString();
-  const data = await toProcess("Proyecto", "Objectives", "createObjective", {
-    nameP: objectiveName.value,
-    objdesc: objectiveDesc.value,
-    idProject: props.idProject,
-    dateLimit: limitFormatted,
+const updateObjective = async () => {
+  const limitFormatted = date.value.toString();
+  const data = await toProcess("Proyecto", "Objectives", "updateObjective", {
+    newName: objectiveName.value,
+    newDesc: objectiveDesc.value,
+    newDateLimit: limitFormatted,
+    idOb: props.objectiveId,
   });
 
   return data;
-  console.log("hi");
 };
 </script>
 
 <template>
   <Sheet>
     <SheetTrigger as-child>
-      <Button
-        type="submit"
-        variant="default"
-        class="text-black bg-white w-[12.8%] h-[6%] top-[25%] left-[79%] absolute text-lg hover:text-white border-2 border-white"
-      >
-        <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Nuevo Objetivo</Button
-      >
+      <button type="submit">
+        <Edit class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600" />
+      </button>
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Nuevo Objetivo</SheetTitle>
+        <SheetTitle>Actualizar Objetivo: {{ props.name }}</SheetTitle>
         <SheetDescription>
-          Hazle saber a tus compañeros de trabajo que metas deben lograr!. No te
-          preocupes por equivocarte, siempre podras modificar los detalles del
-          objetivo.
+          A continuacion, sustituye la informacion de los campos que quieres
+          actualizar
         </SheetDescription>
       </SheetHeader>
-      <form @submit.prevent="createObjective()">
+      <form @submit.prevent="updateObjective()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="objective-name" class="text-right">
@@ -96,19 +91,19 @@ const createObjective = async () => {
                 <Button variant="outline" type="button">
                   <CalendarFold class="mr-2 h-4 m-4" />
                   {{
-                    dates
-                      ? df.format(dates.toDate(getLocalTimeZone()))
+                    date
+                      ? df.format(date.toDate(getLocalTimeZone()))
                       : "Escoge una fecha"
                   }}
                 </Button>
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
-                <Calendar v-model="dates" initial-focus />
+                <Calendar v-model="date" initial-focus />
               </PopoverContent>
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Crear Objetivo</Button>
+        <Button variant="default" type="submit">Actualizar</Button>
       </form>
     </SheetContent>
   </Sheet>

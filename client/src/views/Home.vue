@@ -9,9 +9,9 @@ import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Edit } from "lucide-vue-next";
 import { Trash2 } from "lucide-vue-next";
 import { LogOut } from "lucide-vue-next";
+import UpdateSheet from "../components/UpdateSheet.vue";
 import {
   Table,
   TableBody,
@@ -58,6 +58,16 @@ const deleteProject = async (idProject) => {
   });
 
   projects.value = projects.value.filter((project) => project.id !== idProject);
+  return data;
+};
+
+const leaveProject = async (idPerson, idProject) => {
+  const data = await toProcess("Proyecto", "Project", "leaveProject", {
+    idPerson: idPerson,
+    idProject: idProject,
+  });
+  console.log("yei");
+
   return data;
 };
 
@@ -164,35 +174,22 @@ const viewProject = (projectId, nameProject, role) => {
               project.end_date.split("T")[0]
             }}</TableCell>
             <TableCell class="text-center">
-              <button type="submit">
+              <button
+                type="submit"
+                @click="leaveProject(userdata.idPerson, project.project_id)"
+              >
                 <LogOut class="h-6 w-6 inline hover:text-red-500" />
               </button>
 
-              <button
-                type="submit"
+              <UpdateSheet
+                :name-p="project.project_name"
+                :type-p="project.type"
+                :id-project="project.project_id"
                 v-if="
                   project.profile_desc == 'Project Manager' ||
                   project.profile_desc == 'Arquitecto Software'
                 "
-              >
-                <Edit
-                  v-if="
-                    project.profile_desc == 'Project Manager' ||
-                    project.profile_desc == 'Arquitecto Software'
-                  "
-                  class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600"
-                />
-              </button>
-              <button
-                type="submit"
-                v-if="
-                  project.profile_desc !== 'Project Manager' &&
-                  project.profile_desc !== 'Arquitecto Software'
-                "
-                disabled
-              >
-                <Edit class="ml-4 mr-5 h-6 w-6 inline text-gray-400" />
-              </button>
+              />
 
               <button
                 type="submit"

@@ -15,11 +15,15 @@ import {
     <CardHeader>
       <CardTitle class="text-3xl">404 Not found </CardTitle>
       <CardDescription>
-      
+        <div class="text-center text-sm mt-2">
+          <router-link to="/Login" class="underline">
+            Volver al inicio de sesión
+          </router-link>
+        </div>
       </CardDescription>
     </CardHeader>
     <CardContent>
- 
+
     </CardContent>
   </Card>
 </div>

@@ -15,10 +15,16 @@ import {
     <CardHeader>
       <CardTitle class="text-3xl">Invalid Access </CardTitle>
       <CardDescription>
+        <div class="text-center text-sm mt-2">
+          <router-link to="/Login" class="underline">
+            Volver al inicio de sesión
+          </router-link>
+        </div>
       
       </CardDescription>
     </CardHeader>
     <CardContent>
+
  
     </CardContent>
   </Card>

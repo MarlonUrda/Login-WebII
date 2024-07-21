@@ -9,10 +9,10 @@ import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Edit } from "lucide-vue-next";
 import { Trash2 } from "lucide-vue-next";
 import { UserRoundPlus } from "lucide-vue-next";
 import { ChevronLeft } from "lucide-vue-next";
+import UpdateObjective from "../components/UpdateObjective.vue";
 import {
   Table,
   TableBody,
@@ -23,6 +23,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess";
+import GoalsSheet from "@/components/GoalsSheet.vue";
 
 const goals = ref([]);
 const router = useRouter();
@@ -69,6 +70,16 @@ onMounted(async () => {
   }
 });
 
+const deleteObjective = async (objectiveId) => {
+  const data = await toProcess("Proyecto", "Objectives", "deleteObjective", {
+    objectiveId: objectiveId,
+  });
+
+  console.log("ou yea");
+
+  return data;
+};
+
 const goBack = () => {
   router.push({ path: "/Home" });
 };
@@ -90,7 +101,8 @@ const goBack = () => {
     variant="default"
     @click="goBack"
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
-    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button>
+    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
+  >
 
   <div id="nomorepos">
     <Card
@@ -109,6 +121,8 @@ const goBack = () => {
       </CardHeader>
     </Card>
   </div>
+
+  <GoalsSheet :id-project="idProject" />
 
   <div
     id="projectlist"
@@ -145,33 +159,14 @@ const goBack = () => {
               goal.deadline.split("T")[0]
             }}</TableCell>
             <TableCell class="text-center">
-              <button
-                type="submit"
+              <UpdateObjective
                 v-if="
                   role === 'Project Manager' || role === 'Arquitecto Software'
                 "
-              >
-                <Edit
-                  v-if="
-                    role === 'Project Manager' || role === 'Arquitecto Software'
-                  "
-                  class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600"
-                />
-              </button>
-              <button
-                type="submit"
-                v-if="
-                  role !== 'Project Manager' && role !== 'Arquitecto Software'
-                "
-                disabled
-              >
-                <Edit
-                  v-if="
-                    role !== 'Project Manager' && role !== 'Arquitecto Software'
-                  "
-                  class="ml-4 mr-5 h-6 w-6 inline text-gray-400"
-                />
-              </button>
+                :name="goal.objective_name"
+                :description="goal.objective_desc"
+                :objective-id="goal.objective_id"
+              />
 
               <button
                 type="submit"
@@ -184,6 +179,7 @@ const goBack = () => {
                     role === 'Project Manager' || role === 'Arquitecto Software'
                   "
                   class="h-6 w-6 inline hover:text-red-700"
+                  @click="deleteObjective(goal.objective_id)"
                 />
               </button>
               <button

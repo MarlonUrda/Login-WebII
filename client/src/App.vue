@@ -4,7 +4,7 @@ import TitleCard from "./views/TitleCard.vue";
 import Titlebar from "./components/Titlebar.vue";
 import Integrantes from "./components/Integrantes.vue";
 import ProjectSheet from "./components/ProjectSheet.vue";
-import GoalsSheet from "./components/GoalsSheet.vue";
+//import GoalsSheet from "./components/GoalsSheet.vue";
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 
@@ -16,18 +16,20 @@ export default {
     TitleCard,
     Titlebar,
     ProjectSheet,
-    GoalsSheet,
+    //GoalsSheet,
   },
   setup() {
     const route = useRoute();
     const showComponents = computed(() => {
-      return !["/Home", "/Goals"].includes(route.path);
+      const pathLower = route.path.toLowerCase();
+      return !["/home", "/goals","/activities"].includes(pathLower);
     });
     const showGoalSheet = computed(() => {
-      return route.path === "/Goals";
+      return route.path.toLowerCase() === "/goals";
     });
     const showIntegrantes = computed(() => {
-      return !["/Home", "/Goals"].includes(route.path);
+      const pathLower = route.path.toLowerCase();
+      return !["/home", "/goals"].includes(pathLower);
     });
     return { showComponents, showGoalSheet, showIntegrantes };
   },
@@ -39,8 +41,8 @@ export default {
     <TitleCard v-if="showComponents" />
     <Titlebar v-if="!showComponents" />
     <Integrantes v-if="showGoalSheet" />
-    <ProjectSheet v-if="!showComponents"/>
-    <GoalsSheet v-if="showGoalSheet"/>
+    <ProjectSheet v-if="!showComponents" />
+    <!-- <GoalsSheet v-if="showGoalSheet" /> -->
     <Background />
     <router-view />
   </div>
