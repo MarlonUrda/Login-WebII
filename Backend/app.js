@@ -11,6 +11,7 @@ import ResetControler from "./controller/ResetControler.js";
 import { toProcess } from "./controller/toProcess.js";
 import "./instances/dbinstances.js";
 import { updateRole } from "./controller/updateRole.js";
+import { isAuthenticated } from "./controller/isAuthenticated.js";
 import "./instances/dbinstances.js";
 
 const app = express();
@@ -43,7 +44,9 @@ app.use(
 
 app.use(express.json());
 
-app.get("/user-data", userData); //home
+app.get("/user-data", userData); 
+
+app.get("/isAuthenticated", isAuthenticated);
 
 app.get("/logout", logout);
 
