@@ -13,10 +13,11 @@ import {
   <div id="pos">
   <Card class="shadow-none border-none">
     <CardHeader>
-      <CardTitle class="text-3xl">Invalid Access </CardTitle>
-      <CardDescription>
-        <div class="text-center text-sm mt-2">
-          <router-link to="/Login" class="underline">
+      <CardTitle class=" mt-32 text-4xl underline">Acceso Inválido</CardTitle>
+      <CardDescription class="font-semibold mt-2">
+        Debes iniciar sesión para acceder a esta página.
+        <div class="text-center text-lg mt-8">
+          <router-link to="/Login" class="hover:underline">
             Volver al inicio de sesión
           </router-link>
         </div>
