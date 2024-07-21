@@ -42,7 +42,7 @@ class DbQueries {
   async insertUser(email, password, username, person_id) {
     try {
       const result = await this.pool.query(
-        "INSERT INTO users (password, username, person_id, email) VALUES ($1, $2, $3, $4)",
+        "INSERT INTO users (password, username, person_id, email) VALUES ($1, $2, $3, $4) RETURNING users_id",
         [password, username, person_id, email]
       );
       if (1 != result.rowCount) {
@@ -59,7 +59,7 @@ class DbQueries {
     try {
       const result = await this.pool.query(
         `INSERT INTO person (name, lastname, ident) VALUES ($1, $2, $3) 
-             RETURNING id_persona
+             RETURNING person_id
             `,
         [name, lastname, ident]
       );
@@ -192,6 +192,7 @@ class DbQueries {
           pj.project_id, 
           pj.project_name,
           pr.profile_desc,
+          pj.type,
           pj.start_date,
           pj.end_date, 
             (SELECT ps2.name ||' '|| ps2.lastname
@@ -212,15 +213,14 @@ class DbQueries {
     }
   }
 
-  async updateProject(newName, newType, newState, newStart, newEnd, idProject) {
+  async updateProject(newName, newType, newStart, newEnd, idProject) {
     try {
       const result = await this.pool.query(
-        `UPDATE project SET project_name = $1,
+        `UPDATE projects SET project_name = $1,
         type = $2,
-        state_id = $3,
-        start_date = $4,
-        end_date = $5 WHERE project_id = $6`,
-        [newName, newType, newState, newStart, newEnd, idProject]
+        start_date = $3,
+        end_date = $4 WHERE project_id = $5`,
+        [newName, newType, newStart, newEnd, idProject]
       );
       return result;
     } catch (error) {
@@ -245,6 +245,18 @@ class DbQueries {
       const result = await this.pool.query(
         "DELETE FROM member WHERE project_id = $1",
         [idProject]
+      );
+      return result;
+    } catch (error) {
+      console.log("Error: ", error.message);
+    }
+  }
+
+  async leaveProject(idPerson, idProject) {
+    try {
+      const result = await this.pool.query(
+        "DELETE FROM member WHERE person_id = $1 AND project_id = $2",
+        [idPerson, idProject]
       );
       return result;
     } catch (error) {

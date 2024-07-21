@@ -14,7 +14,7 @@ export const register = async (req, res) => {
       return res.status(400).json({ message: "Error al insertar la persona" });
     }
 
-    const idPersone = personeQuery.rows[0].id_persona;
+    const idPersone = personeQuery.rows[0].person_id;
 
     if (!idPersone) return;
 

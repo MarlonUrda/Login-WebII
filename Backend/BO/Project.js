@@ -3,14 +3,7 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Project {
   constructor() {}
 
-  static async createProject(
-    nameP,
-    typeP,
-    startDate,
-    endDate,
-    idPerson,
-    membersDefault = []
-  ) {
+  static async createProject(nameP, typeP, startDate, endDate, idPerson) {
     try {
       const query = await dbQueries.insertProject(
         nameP,
@@ -36,25 +29,6 @@ class Project {
           };
         }
 
-        if (membersDefault.length > 0) {
-          for (const member of membersDefault) {
-            await dbQueries.insertMember(
-              member.person_id,
-              member.profile_id,
-              idProject
-            );
-          }
-
-          console.log("Miembros adicionados con exito!");
-
-          return {
-            success: true,
-            message: `Proyecto: ${nameP} creado y miembros añadidos!`,
-            idProject: idProject,
-          };
-        } else {
-          console.log("No se encontraron miembros");
-        }
         return {
           success: true,
           message: `Proyecto: ${nameP} creado exitosamente!`,
@@ -78,19 +52,11 @@ class Project {
     }
   }
 
-  static async updateProject(
-    newName,
-    newType,
-    newState,
-    newStart,
-    newEnd,
-    idProject
-  ) {
+  static async updateProject(newName, newType, newStart, newEnd, idProject) {
     try {
       const query = await dbQueries.updateProject(
         newName,
         newType,
-        newState,
         newStart,
         newEnd,
         idProject
@@ -181,6 +147,32 @@ class Project {
         success: false,
         code: 500,
         message: "Error al conectar con la base de datos.",
+      };
+    }
+  }
+
+  static async leaveProject(idPerson, idProject) {
+    try {
+      const query = await dbQueries.leaveProject(idPerson, idProject);
+
+      if (query) {
+        console.log("Dejaste el proyecto");
+        return {
+          succes: true,
+          message: "Has salido del proyecto con éxito.",
+        };
+      } else {
+        return {
+          success: false,
+          code: 500,
+          message: "Error al dejar el proyecto.",
+        };
+      }
+    } catch (error) {
+      return {
+        success: false,
+        code: 500,
+        message: "Error interno del servidor.",
       };
     }
   }
