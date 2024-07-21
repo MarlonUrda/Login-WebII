@@ -6,9 +6,11 @@ import { CirclePlus } from 'lucide-vue-next';
 import { LogOut } from 'lucide-vue-next';
 import { CircleUserRound } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import ProyectSheet from './ProyectSheet.vue';
 
 const userdata = ref({})
 const router = useRouter()
+const showSheet = ref(false)
 
 const closeSession = async () => {
   try {
@@ -45,6 +47,10 @@ const getSession = async () => {
   }
 };
 
+const handleClick = () => {
+  showSheet.value = true;
+}
+
 onMounted(async () => {
   userdata.value = await getSession();
   console.log(userdata);
@@ -58,7 +64,8 @@ onMounted(async () => {
         <div class="w-[12%] h-[12%] top-[0%] left-[0.5%] absolute"><img src="@/imgs/Logo.png"></img></div>
         
         <div>
-            <Button type="submit" variant="default" class="bg-blue-500 w-[10.3%] top-[1.5%] left-[13%] absolute"> <CirclePlus class=" mt-[2%] mr-2 h-4 w-4"/>Nuevo Proyecto</Button>
+            <Button type="submit" variant="default" class="bg-blue-500 w-[10.3%] top-[1.5%] left-[13%] absolute" @click="handleClick"> <CirclePlus class=" mt-[2%] mr-2 h-4 w-4"/>Nuevo Proyecto</Button>
+            <ProyectSheet :showSheet="showSheet" @close="showSheet = false"/>
             <h1 class=" text-gray-500 text-lg underline-offset-4 -translate-x-full tracking-tight italic font-semibold top-[2%] left-[86.3%] absolute"><CircleUserRound class=" mt-[-2%] mr-2 h-6 w-6 inline"/>{{ userdata.name + " " + userdata.lastname }} - @{{ userdata.user }}</h1>
             <Button type="submit" variant="link" class="bg-slate-800 text-white w-[9.5%] h-[5%] top-[1.5%] left-[98%] -translate-x-full absolute" @click="closeSession"> <LogOut class=" mt-[2%] mr-2 h-4 w-4"/>Cerrar Sesión</Button>
         </div>
