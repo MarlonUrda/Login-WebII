@@ -5,53 +5,34 @@ import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow,} 
 import { onMounted,ref } from "vue";
 
 const activities = ref([]);
-
+const role =  ref("Basico")
 
 const props = defineProps({
   id_proyecto: Number,
   id_objetivo: Number,
+  activities: Array
 });  
 
-const tasks=[{
-  "task_id": 1,
-  "task_name": "Hola",
-  "objective_id": 10,
-  "task_desc": "pipipupu la poia es lo mejor",
-  "startdate": "2024-01-10",
-  "deadline": "2024-01-11"
-},
-{"task_id": 1,
-  "task_name": "Hola",
-  "objective_id": 10,
-  "task_desc": "pipipupu la poia es lo mejor",
-  "startdate": "2024-01-10",
-  "deadline": "2024-01-11"
-}
-]
+
 
 /* const id_objetivo = 1
 const id_proyecto  = 1 */
 
 onMounted(async () => {
   try {
+
     console.log("id_proyecto",props.id_proyecto);
     console.log("id_objetivo",props.id_objetivo);
-
-    //const task = await getActivities(id_proyecto,id_objetivo);
-   
-
-    activities.value = [...tasks];
+    console.log("fff")
+    
     console.log("activities", activities.value);
+    activities.value = props.activities
 
   }catch (error) {
     console.log(error.message);
   }
 });
 
-const getActivities = async (id_proyecto,id_objetivo) => {
-  const data = await toProcess("Proyecto", "Activities", "getTask", {id_proyecto,id_objetivo});
-  return data.getActivities;
-};
 
 </script>
 
@@ -103,12 +84,6 @@ const getActivities = async (id_proyecto,id_objetivo) => {
             >
 
             <TableCell class="text-center">
-              <UpdateObjective
-                v-if="role === 'Project Manager' || role === 'Arquitecto Software'"
-                :name="activity.task_name"
-                :description="activity.task_desc"
-                :objective-id="activity.task_id"
-              />
 
               <button
                 type="submit"

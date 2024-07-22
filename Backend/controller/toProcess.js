@@ -11,13 +11,13 @@ export const toProcess = async (req, res) => {
 
 
     const validate = await security.validPermissions(req, req.session.perfil);
-
+    /*
     //Validar si el usuario tiene permisos para ejecutar el metodo solicitado
     if (!validate) {
         console.log("no tiene permisos");
       return res.status(401).send({ error: "No tiene autorizacion para ejecutar el metodo!" });
     }
-
+    */
     const obj = await import(`../BO/${req.body.clase}.js`);
 
     //Validar si el metodo solicitado es una función

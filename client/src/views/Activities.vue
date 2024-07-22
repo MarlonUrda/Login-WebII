@@ -22,39 +22,47 @@ const objectiveToken = ref(0);
 const project = ref()
 const role = ref()
 const objective = ref("cargando...")
+const task = ref([])
 
-const tasks=[{
-  "task_id": 1,
-  "task_name": "Hola",
-  "objective_id": 10,
-  "task_desc": "pipipupu la poia es lo mejor",
-  "startdate": "2024-01-10",
-  "deadline": "2024-01-11"
-},
-{"task_id": 1,
-  "task_name": "Hola",
-  "objective_id": 10,
-  "task_desc": "pipipupu la poia es lo mejor",
-  "startdate": "2024-01-10",
-  "deadline": "2024-01-11"
-}
-]
+
 
 
 
 
 onMounted(async () => {
   try {
-    projectToken.value = route.params.projectToken; 
-    objectiveToken.value = route.params.objectiveToken;
+    projectToken.value = parseInt(route.params.projectToken); 
+    objectiveToken.value =parseInt( route.params.objectiveToken);
     const profileloaded = await updateProfile();
-    const task = await getActivities(id_proyecto,id_objetivo);
+    task.value = await getActivities(projectToken.value,objectiveToken.value);
+    console.log(route.params.objectiveToken,route.params.projectToken)
     
   }catch (error) {
     console.log(error.message);
   }
 
 });
+
+const getActivities = async () => {
+    const tasks=[{
+    "task_id": 1,
+    "task_name": "Hola",
+    "objective_id": 10,
+    "task_desc": "pipipupu la poia es lo mejor",
+    "startdate": "2024-01-10",
+    "deadline": "2024-01-11"
+  },
+  {"task_id": 1,
+    "task_name": "Hola",
+    "objective_id": 10,
+    "task_desc": "pipipupu la poia es lo mejor",
+    "startdate": "2024-01-10",
+    "deadline": "2024-01-11"
+  }
+  ]
+  return  tasks
+
+}
 
 const updateProfile = async () => {
   try{
@@ -129,9 +137,11 @@ const goBack = () => {
 
 
   <NewActivitiySheet/>
+  
   <TableActivities
   :id_proyecto = "projectToken"
   :id_objetivo = "objectiveToken"
+  :activities = "task"
    />
 
 </template>
