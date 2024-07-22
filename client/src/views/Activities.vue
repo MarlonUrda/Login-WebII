@@ -14,10 +14,31 @@ import TableActivities from "../components/TableActivities.vue";
 import NewActivitiySheet from "../components/NewActivitiySheet.vue";
 
 
-const goals = ref([]);
+
 const router = useRouter();
 const route = useRoute();
 const projectToken = ref(0);
+const objectiveToken = ref(0);
+const project = ref()
+const role = ref()
+const objective = ref("cargando...")
+
+const tasks=[{
+  "task_id": 1,
+  "task_name": "Hola",
+  "objective_id": 10,
+  "task_desc": "pipipupu la poia es lo mejor",
+  "startdate": "2024-01-10",
+  "deadline": "2024-01-11"
+},
+{"task_id": 1,
+  "task_name": "Hola",
+  "objective_id": 10,
+  "task_desc": "pipipupu la poia es lo mejor",
+  "startdate": "2024-01-10",
+  "deadline": "2024-01-11"
+}
+]
 
 
 
@@ -25,15 +46,41 @@ const projectToken = ref(0);
 onMounted(async () => {
   try {
     projectToken.value = route.params.projectToken; 
-    console.log("projectToken", projectToken.value);
-
+    objectiveToken.value = route.params.objectiveToken;
+    const profileloaded = await updateProfile();
+    const task = await getActivities(id_proyecto,id_objetivo);
+    
   }catch (error) {
     console.log(error.message);
   }
 
 });
 
+const updateProfile = async () => {
+  try{
+    const response = await fetch("http://localhost:3000/update-role", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        projectId: projectToken.value
+      }),
+    });
 
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.message[0]);
+      console.log("Profile updated");
+      project.value = data.message[0].project_name;
+      role.value =data.message[0].profile_desc;
+      return true;
+    }
+  }catch (error) {
+    console.log(error.message);
+  }
+};
 
 
 const goBack = () => {
@@ -69,13 +116,10 @@ const goBack = () => {
 
         <div>
           <CardDescription class="text-lg text-white italic">
-            Proyecto actual: {{ nameProject }}
+            Proyecto actual: {{ project }}
           </CardDescription>
           <CardDescription class="text-lg text-white italic">
-            Objetivo actual: {{ nameProject }}
-          </CardDescription>
-          <CardDescription class="text-lg text-white font-bold">
-            Elige el objetivo en el que deseas entrar:
+            Objetivo actual: {{ objective }}
           </CardDescription>
         </div>
       </CardHeader>
@@ -85,7 +129,10 @@ const goBack = () => {
 
 
   <NewActivitiySheet/>
-  <TableActivities />
+  <TableActivities
+  :id_proyecto = "projectToken"
+  :id_objetivo = "objectiveToken"
+   />
 
 </template>
 

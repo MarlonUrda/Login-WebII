@@ -80,9 +80,8 @@ const updateProfile = async () => {
       console.log(data.message[0]);
       console.log("Profile updated");
       project.value = data.message[0].project_name;
-      data.message[0].profile_desc === "Project Manager"
-        ? (role.value = "Project Manager")
-        : (role.value = "Developer");
+      project.value = data.message[0].project_name;
+      role.value =data.message[0].profile_desc;
       return true;
     }
   }catch (error) {

@@ -1,24 +1,56 @@
 <script setup>
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-vue-next";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
+import { onMounted,ref } from "vue";
+
+const activities = ref([]);
+
 
 const props = defineProps({
-  id_proyecto,
-  id_objetivo,
+  id_proyecto: Number,
+  id_objetivo: Number,
+});  
+
+const tasks=[{
+  "task_id": 1,
+  "task_name": "Hola",
+  "objective_id": 10,
+  "task_desc": "pipipupu la poia es lo mejor",
+  "startdate": "2024-01-10",
+  "deadline": "2024-01-11"
+},
+{"task_id": 1,
+  "task_name": "Hola",
+  "objective_id": 10,
+  "task_desc": "pipipupu la poia es lo mejor",
+  "startdate": "2024-01-10",
+  "deadline": "2024-01-11"
+}
+]
+
+/* const id_objetivo = 1
+const id_proyecto  = 1 */
+
+onMounted(async () => {
+  try {
+    console.log("id_proyecto",props.id_proyecto);
+    console.log("id_objetivo",props.id_objetivo);
+
+    //const task = await getActivities(id_proyecto,id_objetivo);
+   
+
+    activities.value = [...tasks];
+    console.log("activities", activities.value);
+
+  }catch (error) {
+    console.log(error.message);
+  }
 });
 
-const getGoals = async (idProject) => {
-  const data = await toProcess("Proyecto", "Activities", "get", {idProject});
-  return data.objectives;
+const getActivities = async (id_proyecto,id_objetivo) => {
+  const data = await toProcess("Proyecto", "Activities", "getTask", {id_proyecto,id_objetivo});
+  return data.getActivities;
 };
 
 </script>
@@ -35,7 +67,6 @@ const getGoals = async (idProject) => {
             <TableHead class="text-center font-bold">N°.</TableHead>
             <TableHead class="text-center font-bold">Actividad</TableHead>
             <TableHead class="text-center font-bold">Descripcion</TableHead>
-            <TableHead class="text-center font-bold">Fecha Inicio</TableHead>
             <TableHead class="text-center font-bold">Fecha Fin</TableHead>
             <TableHead class="text-center font-bold">Estado</TableHead>
             <TableHead class="text-center font-bold">Opciones</TableHead>
@@ -44,34 +75,39 @@ const getGoals = async (idProject) => {
         <TableBody class="text-base">
           <TableRow
             class="font-medium"
-            v-for="(goal, index) in goals"
-            :key="goal.objective_id"
+            v-for="(activity, index) in activities"
+            :key="activity.task_id"
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500">
                 <button 
                     class="hover:underline" 
-                    @click="viewProject(goal.objective_id,project.project_name,project.profile_desc)"
                 >
-                    {{ goal.objective_name }}
+                    {{ activity.task_name }}
                 </button>
             </TableCell>
 
             <TableCell
               class="text-center overflow-hidden text-nowrap text-ellipsis"
-              >{{ goal.objective_desc }}</TableCell
+              >{{ activity.task_desc }}</TableCell
             >
-            <TableCell class="text-center">{{
-              goal.deadline.split("T")[0]
-            }}</TableCell>
+
+
+            <TableCell class="text-center">
+              {{activity.deadline.split("T")[0]}}
+            </TableCell>
+
+            <TableCell
+              class="text-center overflow-hidden text-nowrap text-ellipsis"
+              >{{ props.id_objetivo }}</TableCell
+            >
+
             <TableCell class="text-center">
               <UpdateObjective
-                v-if="
-                  role === 'Project Manager' || role === 'Arquitecto Software'
-                "
-                :name="goal.objective_name"
-                :description="goal.objective_desc"
-                :objective-id="goal.objective_id"
+                v-if="role === 'Project Manager' || role === 'Arquitecto Software'"
+                :name="activity.task_name"
+                :description="activity.task_desc"
+                :objective-id="activity.task_id"
               />
 
               <button
@@ -85,7 +121,7 @@ const getGoals = async (idProject) => {
                     role === 'Project Manager' || role === 'Arquitecto Software'
                   "
                   class="h-6 w-6 inline hover:text-red-700"
-                  @click="deleteObjective(goal.objective_id)"
+                  @click="deleteActivity(activity.task_id)"
                 />
               </button>
               <button
