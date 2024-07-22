@@ -155,6 +155,29 @@ class DbQueries {
     }
   }
 
+  async getProfile(projectId,idPerson) {
+    try {
+
+
+      console.log("projectId",projectId);
+      console.log("idPerson",idPerson);
+
+      const result = await this.pool.query(
+        `SELECT pro.profile_desc, pr.project_name FROM member m
+         JOIN projects pr ON m.project_id = pr.project_id
+         JOIN person p ON p.person_id = m.person_id
+         JOIN profile pro ON pro.profile_id = m.profile_id
+         WHERE pr.project_id=$1 AND m.person_id=$2`,
+        [projectId, idPerson]
+      );
+
+      return result;
+    } catch (error) {
+      console.error("Error:", error);
+      return false;
+    }
+  }
+
   async getPermissions() {
     try {
       const result = await this.pool.query(

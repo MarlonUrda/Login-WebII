@@ -42,11 +42,11 @@ const createObjective = async () => {
   });
 
   return data;
+  console.log("hi");
 };
 </script>
 
 <template>
-  
   <Sheet>
     <SheetTrigger as-child>
       <Button
@@ -54,39 +54,39 @@ const createObjective = async () => {
         variant="default"
         class="text-black bg-white w-[12.8%] h-[6%] top-[25%] left-[79%] absolute text-lg hover:text-white border-2 border-white"
       >
-        <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Nuevo Objetivo</Button
+        <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Nueva Actividad</Button
       >
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Nuevo Objetivo</SheetTitle>
+        <SheetTitle>Nuevo Actividad</SheetTitle>
         <SheetDescription>
           Hazle saber a tus compañeros de trabajo que metas deben lograr!. No te
           preocupes por equivocarte, siempre podras modificar los detalles del
-          objetivo.
+          Actividad.
         </SheetDescription>
       </SheetHeader>
       <form @submit.prevent="createObjective()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-name" class="text-right">
-              Nombre del objetivo:
+            <Label for="activity-name" class="text-right">
+              Nombre de <label for=""></label> Actividad:
             </Label>
             <Input
               id="objective-name"
               v-model="objectiveName"
-              placeholder="Nombre del objetivo..."
+              placeholder="Nombre del actividad..."
               class="col-span-3"
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-desc" class="text-right">
-              Descripcion del objetivo:
+            <Label for="activity-desc" class="text-right">
+              Descripcion de la Actividad:
             </Label>
             <Textarea
-              id="objective-desc"
-              placeholder="De que se trata el objetivo?.."
-              v-model="objectiveDesc"
+              id="activity-desc"
+              placeholder="De que se trata el actividad?.."
+              v-model="activityDesc"
               class="col-span-3"
             />
           </div>
@@ -108,7 +108,7 @@ const createObjective = async () => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Crear Objetivo</Button>
+        <Button variant="default" type="submit">Crear actividad</Button>
       </form>
     </SheetContent>
   </Sheet>

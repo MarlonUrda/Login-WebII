@@ -27,48 +27,73 @@ import GoalsSheet from "@/components/GoalsSheet.vue";
 
 const goals = ref([]);
 const router = useRouter();
+const userdata = ref({});
 const route = useRoute();
+const projectToken = ref(0);
+const role = ref("");
+const project = ref("");
 
-const { nameProject, role, idProject } = route.params;
 
-console.log(nameProject, role, idProject);
 
-const getGoals = async (idProject) => {
-  const data = await toProcess("Proyecto", "Objectives", "getObjectives", {
-    idProject: idProject,
-  });
-  return data.objectives;
-};
-
-const setProfileandExecute = async (newRole) => {
-  console.log(newRole);
-  const response = await fetch("http://localhost:3000/update-role", {
-    method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      newRole: newRole,
-    }),
-  });
-
-  if (response.ok) {
-    return true;
-  }
-};
 
 onMounted(async () => {
   try {
-    const profileloaded = await setProfileandExecute(role);
-    if (profileloaded) {
-      const goalsData = await getGoals(idProject);
-      goals.value = [...goalsData];
-    }
-  } catch (error) {
+    projectToken.value = route.params.projectToken; 
+    console.log("projectToken", projectToken.value);
+
+    const goalsData = await getGoals(projectToken.value);
+    goals.value = [...goalsData];
+    console.log("goalsss", goalsData);
+    console.log("goalsss", goals.value);
+    const profileloaded = await updateProfile();
+
+  }catch (error) {
     console.log(error.message);
   }
+  
+
+
 });
+
+
+
+const getGoals = async (idProject) => {
+  const data = await toProcess("Proyecto", "Objectives", "getObjectives", {idProject});
+  return data.objectives;
+};
+
+const updateProfile = async () => {
+  try{
+    const response = await fetch("http://localhost:3000/update-role", {
+      method: "POST",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        projectId: projectToken.value
+      }),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.message[0]);
+      console.log("Profile updated");
+      project.value = data.message[0].project_name;
+      data.message[0].profile_desc === "Project Manager"
+        ? (role.value = "Project Manager")
+        : (role.value = "Developer");
+      return true;
+    }
+  }catch (error) {
+    console.log(error.message);
+  }
+};
+
+const viewGoal = (objectiveId) => {
+  console.log("Viewing project:", objectiveId);
+  router.push(`/Goals/${projectToken.value}/Activities/${objectiveId}`); 
+};
 
 const deleteObjective = async (objectiveId) => {
   const data = await toProcess("Proyecto", "Objectives", "deleteObjective", {
@@ -86,6 +111,7 @@ const goBack = () => {
 </script>
 
 <template>
+  
   <div
     id="welcome"
     class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[32%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
@@ -112,7 +138,7 @@ const goBack = () => {
         <CardTitle class="text-4xl text-white">¡Hola, {{ role }}!</CardTitle>
         <div>
           <CardDescription class="text-lg text-white italic">
-            Proyecto actual: {{ nameProject }}
+            Proyecto actual: {{ project }}
           </CardDescription>
           <CardDescription class="text-lg text-white font-bold">
             Elige el objetivo en el que deseas entrar:
@@ -122,9 +148,9 @@ const goBack = () => {
     </Card>
   </div>
 
-  <GoalsSheet :id-project="idProject" />
+   <GoalsSheet :id-project="projectToken.value"/> 
 
-  <div
+   <div
     id="projectlist"
     class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
   >
@@ -147,7 +173,9 @@ const goBack = () => {
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500"
-              ><button class="hover:underline">
+              ><button class="hover:underline"
+              @click="viewGoal(goal.objective_id)"
+              >
                 {{ goal.objective_name }}
               </button></TableCell
             >
@@ -201,7 +229,7 @@ const goBack = () => {
         </TableBody>
       </Table>
     </ScrollArea>
-  </div>
+  </div> 
 </template>
 
 <style scoped>

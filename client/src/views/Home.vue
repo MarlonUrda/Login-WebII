@@ -26,6 +26,16 @@ import { toProcess } from "../utils/toProcess.js";
 const router = useRouter();
 const userdata = ref({});
 const tableChanged = ref(false);
+const projects = ref([]);
+
+onMounted(async () => {
+  userdata.value = await getSession();
+  console.log("userdata", userdata.value);
+
+  const projectData = await getProjects(userdata.value.idPerson);
+
+  projects.value = [...projectData];
+});
 
 const getSession = async () => {
   const res = await fetch("http://localhost:3000/user-data", {
@@ -41,8 +51,6 @@ const getSession = async () => {
     return data;
   }
 };
-
-const projects = ref([]);
 
 const getProjects = async (idPerson) => {
   const data = await toProcess("Proyecto", "Project", "getProjectsByPersone", {
@@ -71,25 +79,11 @@ const leaveProject = async (idPerson, idProject) => {
   return data;
 };
 
-onMounted(async () => {
-  userdata.value = await getSession();
-  console.log("userdata", userdata.value);
 
-  const projectData = await getProjects(userdata.value.idPerson);
 
-  projects.value = [...projectData];
-});
-
-const viewProject = (projectId, nameProject, role) => {
-  console.log("Viewing project:", projectId, nameProject, role);
-  router.push({
-    name: "Goals",
-    params: {
-      idProject: projectId,
-      nameProject: nameProject,
-      role: role,
-    },
-  });
+const viewProject = (projectId) => {
+  console.log("Viewing project:", projectId);
+  router.push(`/Goals/${projectId}`); 
 };
 </script>
 
@@ -152,13 +146,7 @@ const viewProject = (projectId, nameProject, role) => {
             <TableCell class="text-center text-blue-500"
               ><button
                 class="hover:underline"
-                @click="
-                  viewProject(
-                    project.project_id,
-                    project.project_name,
-                    project.profile_desc
-                  )
-                "
+                @click="viewProject(project.project_id,)"
               >
                 {{ project.project_name }}
               </button></TableCell

@@ -1,16 +1,15 @@
+import { dbQueries } from "../instances/dbinstances.js";
+
 export const updateRole = async (req, res) => {
   try {
-    // console.log(req.body.newRole);
-    // console.log(req.session.perfil);
-    if (req.session.role === req.body.newRole)
-      return res.send({ message: "Mismo perfil" });
+    console.log('updateRole');;
+    const  {projectId}= req.body
+    let  {idPerson}= req.session
+    
+    const result =await dbQueries.getProfile(projectId,idPerson)
+    console.log("apunto del return", result.rows);
+    return res.send({ message: result.rows })
 
-    const p = req.body.newRole;
-    req.session.role = p;
-    //console.log(req.session.perfil);
-    res.send({
-      newRole: req.body.newRole,
-    });
   } catch (error) {
     console.log(error.message);
   }
