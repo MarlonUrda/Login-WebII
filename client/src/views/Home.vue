@@ -79,7 +79,7 @@ onMounted(async () => {
   intervalId = setInterval(async () => {
     const projectData = await getProjects(userdata.value.idPerson);
     projects.value = [...projectData];
-  }, 1000);
+  }, 500);
 });
 
 onUnmounted(() => {
