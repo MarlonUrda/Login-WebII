@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -25,6 +25,7 @@ import {
 import { toProcess } from "../utils/toProcess";
 import GoalsSheet from "@/components/GoalsSheet.vue";
 
+let interval;
 const goals = ref([]);
 const router = useRouter();
 const route = useRoute();
@@ -62,12 +63,17 @@ onMounted(async () => {
   try {
     const profileloaded = await setProfileandExecute(role);
     if (profileloaded) {
-      const goalsData = await getGoals(idProject);
-      goals.value = [...goalsData];
+      interval = setInterval(async () => {
+        goals.value = await getGoals(idProject);
+      }, 500);
     }
   } catch (error) {
     console.log(error.message);
   }
+});
+
+onUnmounted(() => {
+  clearInterval(interval);
 });
 
 const deleteObjective = async (objectiveId) => {
@@ -122,7 +128,10 @@ const goBack = () => {
     </Card>
   </div>
 
-  <GoalsSheet :id-project="idProject" />
+  <GoalsSheet
+    :id-project="idProject"
+    v-if="role === 'Project Manager' || role === 'Arquitecto Software'"
+  />
 
   <div
     id="projectlist"
@@ -160,12 +169,10 @@ const goBack = () => {
             }}</TableCell>
             <TableCell class="text-center">
               <UpdateObjective
-                v-if="
-                  role === 'Project Manager' || role === 'Arquitecto Software'
-                "
                 :name="goal.objective_name"
                 :description="goal.objective_desc"
                 :objective-id="goal.objective_id"
+                :role="role"
               />
 
               <button

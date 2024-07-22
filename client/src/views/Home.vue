@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess.js";
 
+let intervalId;
 const router = useRouter();
 const userdata = ref({});
 const tableChanged = ref(false);
@@ -75,9 +76,14 @@ onMounted(async () => {
   userdata.value = await getSession();
   console.log("userdata", userdata.value);
 
-  const projectData = await getProjects(userdata.value.idPerson);
+  intervalId = setInterval(async () => {
+    const projectData = await getProjects(userdata.value.idPerson);
+    projects.value = [...projectData];
+  }, 1000);
+});
 
-  projects.value = [...projectData];
+onUnmounted(() => {
+  clearInterval(intervalId);
 });
 
 const viewProject = (projectId, nameProject, role) => {
@@ -185,10 +191,7 @@ const viewProject = (projectId, nameProject, role) => {
                 :name-p="project.project_name"
                 :type-p="project.type"
                 :id-project="project.project_id"
-                v-if="
-                  project.profile_desc == 'Project Manager' ||
-                  project.profile_desc == 'Arquitecto Software'
-                "
+                :profile-p="project.profile_desc"
               />
 
               <button

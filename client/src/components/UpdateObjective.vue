@@ -19,11 +19,12 @@ import {
   DateFormatter,
 } from "@internationalized/date";
 import { CalendarFold } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { computed, onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 
-const props = defineProps(["name", "description", "objectiveId"]);
+const props = defineProps(["name", "description", "objectiveId", "role"]);
+console.log(props.role);
 
 const objectiveName = ref(props.name);
 const objectiveDesc = ref(props.description);
@@ -32,6 +33,14 @@ const date = ref(new CalendarDate(2024, 1, 2));
 const df = new DateFormatter("en-US", {
   dateStyle: "short",
 });
+
+const isDisabled = computed(() => {
+  return (
+    props.role !== "Project Manager" && props.role !== "Arquitecto Software"
+  );
+});
+
+console.log(isDisabled);
 
 const updateObjective = async () => {
   const limitFormatted = date.value.toString();
@@ -49,8 +58,12 @@ const updateObjective = async () => {
 <template>
   <Sheet>
     <SheetTrigger as-child>
-      <button type="submit">
-        <Edit class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600" />
+      <button type="submit" :disabled="isDisabled">
+        <Edit
+          v-if="isDisabled"
+          class="ml-4 mr-5 h-6 w-6 inline text-gray-400"
+        />
+        <Edit class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600" v-else />
       </button>
     </SheetTrigger>
     <SheetContent>

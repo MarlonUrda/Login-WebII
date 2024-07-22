@@ -18,17 +18,24 @@ import {
   DateFormatter,
 } from "@internationalized/date";
 import { Calendar } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 
-const props = defineProps(["nameP", "typeP", "idProject"]);
+const props = defineProps(["nameP", "typeP", "idProject", "profileP"]);
 
 const projectName = ref(props.nameP);
 const projectType = ref(props.typeP);
 const dates = ref({
   start: new CalendarDate(2024, 1, 20),
   end: new CalendarDate(2024, 1, 20).add({ days: 20 }),
+});
+
+const isDisabled = computed(() => {
+  return (
+    props.profileP !== "Project Manager" &&
+    props.profileP !== "Arquitecto Software"
+  );
 });
 
 const df = new DateFormatter("en-US", {
@@ -57,8 +64,12 @@ onMounted(() => {
 <template>
   <Sheet>
     <SheetTrigger as-child>
-      <button type="submit">
-        <Edit class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600" />
+      <button type="submit" :disabled="isDisabled">
+        <Edit
+          v-if="isDisabled"
+          class="ml-4 mr-5 h-6 w-6 inline text-gray-400"
+        />
+        <Edit class="ml-4 mr-5 h-6 w-6 inline hover:text-blue-600" v-else />
       </button>
     </SheetTrigger>
 
