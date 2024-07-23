@@ -149,6 +149,8 @@ const goBack = () => {
     </Card>
   </div>
 
+  <Integrantes />
+
   <GoalsSheet :id-project="idProject" />
 
   <div
