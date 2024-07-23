@@ -25,8 +25,10 @@ import {
 import { toProcess } from "../utils/toProcess";
 import GoalsSheet from "@/components/GoalsSheet.vue";
 import Integrantes from "@/components/Integrantes.vue";
+import { useToast } from "vue-toast-notification";
 
 let interval;
+const toast = useToast();
 const goals = ref([]);
 const router = useRouter();
 const route = useRoute();
@@ -83,9 +85,25 @@ const deleteObjective = async (objectiveId) => {
     objectiveId: objectiveId,
   });
 
-  console.log("ou yea");
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
 
-  return data;
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
+};
+
+const viewObjective = (objectiveId, objectiveName, role) => {
+  router.push({
+    name: "Task",
+    params: {
+      objectiveId: objectiveId,
+      objectiveName: objectiveName,
+      role: role,
+    },
+  });
 };
 
 const goBack = () => {
@@ -160,7 +178,12 @@ const goBack = () => {
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500"
-              ><button class="hover:underline">
+              ><button
+                class="hover:underline"
+                @click="
+                  viewObjective(goal.objective_id, goal.objective_name, role)
+                "
+              >
                 {{ goal.objective_name }}
               </button></TableCell
             >

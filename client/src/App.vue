@@ -22,7 +22,7 @@ export default {
     const route = useRoute();
     const showComponents = computed(() => {
       const pathLower = route.path.toLowerCase();
-      return !["/home", "/goals", "/activities"].includes(pathLower);
+      return !["/home", "/goals", "/tasks"].includes(pathLower);
     });
     const showGoalSheet = computed(() => {
       return route.path.toLowerCase() === "/goals";

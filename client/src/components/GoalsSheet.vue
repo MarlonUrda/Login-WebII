@@ -22,7 +22,11 @@ import { CalendarFold } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
+const succesMessage = ref("");
+const errorMessage = ref("");
 const objectiveName = ref("");
 const objectiveDesc = ref("");
 const dates = ref(new CalendarDate(2024, 1, 2));
@@ -42,8 +46,24 @@ const createObjective = async () => {
     dateLimit: limitFormatted,
   });
 
-  return data;
-  console.log("hi");
+  if (data.success) {
+    succesMessage.value = data.message;
+    toast.success(succesMessage.value, {
+      duration: 3000,
+      position: "bottom-right",
+    });
+    return data;
+  }
+
+  if (!data.success) {
+    errorMessage.value = data.message;
+    toast.error(errorMessage.value, {
+      duration: 3000,
+      position: "bottom-right",
+    });
+  } else {
+    errorMessage.value = "";
+  }
 };
 </script>
 

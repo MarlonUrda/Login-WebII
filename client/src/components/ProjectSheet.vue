@@ -21,6 +21,9 @@ import { Calendar } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
+import { useToast } from "vue-toast-notification";
+
+const toast = useToast();
 
 const projectName = ref("");
 const projectType = ref("");
@@ -66,7 +69,14 @@ const createProject = async () => {
     idProject: session.value.idPerson,
   });
 
-  return data;
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
+
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
 </script>
 

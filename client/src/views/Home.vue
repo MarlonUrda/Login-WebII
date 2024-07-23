@@ -22,8 +22,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess.js";
+import { useToast } from "vue-toast-notification";
 
 let intervalId;
+const toast = useToast();
 const router = useRouter();
 const userdata = ref({});
 const tableChanged = ref(false);
@@ -58,8 +60,14 @@ const deleteProject = async (idProject) => {
     idProject: idProject,
   });
 
-  projects.value = projects.value.filter((project) => project.id !== idProject);
-  return data;
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
+
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
 
 const leaveProject = async (idPerson, idProject) => {
@@ -67,9 +75,15 @@ const leaveProject = async (idPerson, idProject) => {
     idPerson: idPerson,
     idProject: idProject,
   });
-  console.log("yei");
 
-  return data;
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
+
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
 
 onMounted(async () => {
