@@ -61,7 +61,7 @@ export const login = async (req, res) => {
 export const logout = (req, res) => {
   req.session.destroy();
   res.send({
-    message: "You logged out succesfully!",
+    message: "Cerraste la sesión exitosamente!",
     success: true,
   });
 };

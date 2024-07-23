@@ -5,7 +5,9 @@ import { LogIn } from 'lucide-vue-next';
 import { LogOut } from 'lucide-vue-next';
 import { CircleUserRound } from 'lucide-vue-next';
 import { useRouter } from 'vue-router';
+import { useToast } from 'vue-toast-notification';
 
+const toast = useToast()
 const userdata = ref({})
 const router = useRouter()
 const showSheet = ref(false)
@@ -23,7 +25,11 @@ const closeSession = async () => {
     });
 
     let data = await response.json();
-    console.log(data);
+    
+    if(data.success){
+      toast.success(data.message, { duration: 3000, position: "bottom-right" })
+    }
+
     router.push({path: '/Login'});
   } catch (error) {  
     console.error('Error:', error);

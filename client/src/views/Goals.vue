@@ -196,6 +196,7 @@ const goBack = () => {
                 :name="goal.objective_name"
                 :description="goal.objective_desc"
                 :objective-id="goal.objective_id"
+                :role="role"
               />
 
               <button

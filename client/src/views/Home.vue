@@ -191,10 +191,7 @@ const viewProject = (projectId) => {
                 :name-p="project.project_name"
                 :type-p="project.type"
                 :id-project="project.project_id"
-                v-if="
-                  project.profile_desc == 'Project Manager' ||
-                  project.profile_desc == 'Arquitecto Software'
-                "
+                :profile-p="project.profile_desc"
               />
 
               <button
