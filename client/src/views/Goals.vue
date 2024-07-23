@@ -24,7 +24,10 @@ import {
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess";
 import GoalsSheet from "@/components/GoalsSheet.vue";
+import { useToast } from "vue-toast-notification";
+import Integrantes from "@/components/Integrantes.vue";
 
+const toast = useToast();
 const goals = ref([]);
 const router = useRouter();
 const userdata = ref({});
@@ -32,13 +35,12 @@ const route = useRoute();
 const projectToken = ref(0);
 const role = ref("");
 const project = ref("");
-
-
-
+let idProject;
 
 onMounted(async () => {
   try {
-    projectToken.value = route.params.projectToken; 
+    projectToken.value = route.params.projectToken;
+    idProject = projectToken.value;
     console.log("projectToken", projectToken.value);
 
     const goalsData = await getGoals(projectToken.value);
@@ -46,24 +48,20 @@ onMounted(async () => {
     console.log("goalsss", goalsData);
     console.log("goalsss", goals.value);
     const profileloaded = await updateProfile();
-
-  }catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
-  
-
-
 });
 
-
-
 const getGoals = async (idProject) => {
-  const data = await toProcess("Proyecto", "Objectives", "getObjectives", {idProject});
+  const data = await toProcess("Proyecto", "Objectives", "getObjectives", {
+    idProject,
+  });
   return data.objectives;
 };
 
 const updateProfile = async () => {
-  try{
+  try {
     const response = await fetch("http://localhost:3000/update-role", {
       method: "POST",
       credentials: "include",
@@ -71,7 +69,7 @@ const updateProfile = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        projectId: projectToken.value
+        projectId: projectToken.value,
       }),
     });
 
@@ -81,17 +79,17 @@ const updateProfile = async () => {
       console.log("Profile updated");
       project.value = data.message[0].project_name;
       project.value = data.message[0].project_name;
-      role.value =data.message[0].profile_desc;
+      role.value = data.message[0].profile_desc;
       return true;
     }
-  }catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
 };
 
 const viewGoal = (objectiveId) => {
   console.log("Viewing project:", objectiveId);
-  router.push(`/Goals/${projectToken.value}/Activities/${objectiveId}`); 
+  router.push(`/Goals/${projectToken.value}/Activities/${objectiveId}`);
 };
 
 const deleteObjective = async (objectiveId) => {
@@ -99,9 +97,14 @@ const deleteObjective = async (objectiveId) => {
     objectiveId: objectiveId,
   });
 
-  console.log("ou yea");
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
 
-  return data;
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
 
 const goBack = () => {
@@ -110,7 +113,6 @@ const goBack = () => {
 </script>
 
 <template>
-  
   <div
     id="welcome"
     class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[32%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
@@ -147,9 +149,9 @@ const goBack = () => {
     </Card>
   </div>
 
-   <GoalsSheet :id-project="projectToken.value"/> 
+  <GoalsSheet :id-project="idProject" />
 
-   <div
+  <div
     id="projectlist"
     class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
   >
@@ -172,8 +174,9 @@ const goBack = () => {
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500"
-              ><button class="hover:underline"
-              @click="viewGoal(goal.objective_id)"
+              ><button
+                class="hover:underline"
+                @click="viewGoal(goal.objective_id)"
               >
                 {{ goal.objective_name }}
               </button></TableCell
@@ -228,7 +231,7 @@ const goBack = () => {
         </TableBody>
       </Table>
     </ScrollArea>
-  </div> 
+  </div>
 </template>
 
 <style scoped>

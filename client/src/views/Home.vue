@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -22,7 +22,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess.js";
+import { useToast } from "vue-toast-notification";
 
+let interval;
+
+const toast = useToast();
 const router = useRouter();
 const userdata = ref({});
 const tableChanged = ref(false);
@@ -32,9 +36,13 @@ onMounted(async () => {
   userdata.value = await getSession();
   console.log("userdata", userdata.value);
 
-  const projectData = await getProjects(userdata.value.idPerson);
+  interval = setInterval(async () => {
+    projects.value = await getProjects(userdata.value.idPerson);
+  }, 500);
+});
 
-  projects.value = [...projectData];
+onUnmounted(() => {
+  clearInterval(interval);
 });
 
 const getSession = async () => {
@@ -65,8 +73,14 @@ const deleteProject = async (idProject) => {
     idProject: idProject,
   });
 
-  projects.value = projects.value.filter((project) => project.id !== idProject);
-  return data;
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
+
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
 
 const leaveProject = async (idPerson, idProject) => {
@@ -74,16 +88,20 @@ const leaveProject = async (idPerson, idProject) => {
     idPerson: idPerson,
     idProject: idProject,
   });
-  console.log("yei");
 
-  return data;
+  if (data.success) {
+    toast.success(data.message, { duration: 3000, position: "bottom-right" });
+    return data;
+  }
+
+  if (!data.success) {
+    toast.error(data.message, { duration: 3000, position: "bottom-right" });
+  }
 };
-
-
 
 const viewProject = (projectId) => {
   console.log("Viewing project:", projectId);
-  router.push(`/Goals/${projectId}`); 
+  router.push(`/Goals/${projectId}`);
 };
 </script>
 
@@ -146,7 +164,7 @@ const viewProject = (projectId) => {
             <TableCell class="text-center text-blue-500"
               ><button
                 class="hover:underline"
-                @click="viewProject(project.project_id,)"
+                @click="viewProject(project.project_id)"
               >
                 {{ project.project_name }}
               </button></TableCell

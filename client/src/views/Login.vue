@@ -11,7 +11,9 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
@@ -34,15 +36,22 @@ const sendData = async () => {
 
     const data = await response.json();
 
-
     if (data.success) {
       successMessage.value = data.message;
+      toast.success(successMessage.value, {
+        duration: 3000,
+        position: "top-right",
+      });
       console.log(successMessage.value);
       router.push({ path: "/Home" });
     }
 
-    if (response.status > 303) {
+    if (!data.success) {
       errorMessage.value = data.message;
+      toast.error(errorMessage.value, {
+        duration: 3000,
+        position: "top-right",
+      });
     } else {
       errorMessage.value = "";
     }

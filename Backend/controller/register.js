@@ -38,12 +38,8 @@ export const register = async (req, res) => {
     );
 
     if (result) {
-      res.status(201).send({
-        message: "Datos insertados: ",
-        email,
-        username,
-        password,
-        idPersone,
+      return res.status(201).send({
+        message: "Usuario creado con exito!",
       });
     } else {
       return res.status(400).send({ message: "Error al insertar los datos" });

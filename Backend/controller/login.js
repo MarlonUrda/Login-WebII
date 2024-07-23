@@ -6,7 +6,7 @@ export const login = async (req, res) => {
     if (req.body.email === undefined || req.body.password === undefined) {
       return res.send({
         success: false,
-        message: "Missing email or password",
+        message: "Falta el email o la contraseña",
       });
     }
     console.log(req.body);
@@ -19,7 +19,7 @@ export const login = async (req, res) => {
       console.log("Incorrect Email");
       return res.send({
         success: false,
-        message: "Incorrect Email",
+        message: "Email incorrecto",
       });
     }
 
@@ -28,7 +28,7 @@ export const login = async (req, res) => {
     if (!isPasswordMatch) {
       return res.send({
         success: false,
-        message: "Incorrect Password",
+        message: "Contraseña incorrecta",
       });
     }
 
@@ -47,7 +47,7 @@ export const login = async (req, res) => {
     req.session.role = "";
 
     return res.send({
-      message: "You logged in succesfully!",
+      message: "Inicio de sesión exitoso!",
       success: true,
     });
   } catch (error) {

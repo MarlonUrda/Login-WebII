@@ -11,7 +11,10 @@ import {
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { useRoute, useRouter } from "vue-router";
+import { useToast } from "vue-toast-notification";
 
+const toast = useToast();
+const succesMessage = ref("");
 const email = ref("");
 const password = ref("");
 const username = ref("");
@@ -44,18 +47,25 @@ const sendUser = async () => {
 
     console.log(data);
 
-    if (response.status > 300) {
+    if (data.success) {
+      succesMessage.value = data.message;
+      toast.success(succesMessage.value, {
+        duration: 3000,
+        position: "top-right",
+      });
+      router.push({
+        path: "/Login",
+      });
+    }
+
+    if (!data.success) {
       errorMessage.value = data.message;
+      toast.error(errorMessage.value, {
+        duration: 3000,
+        position: "top-right",
+      });
     } else {
       errorMessage.value = "";
-      router.push({
-        name: "Registered",
-        params: {
-          email: email.value,
-          password: password.value,
-          username: username.value,
-        },
-      });
     }
     email.value = "";
     password.value = "";
