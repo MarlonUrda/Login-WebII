@@ -5,7 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -35,20 +35,27 @@ const route = useRoute();
 const projectToken = ref(0);
 const role = ref("");
 const project = ref("");
+let idProject;
+let interval;
 
 onMounted(async () => {
   try {
     projectToken.value = route.params.projectToken;
     console.log("projectToken", projectToken.value);
 
-    const goalsData = await getGoals(projectToken.value);
-    goals.value = [...goalsData];
-    console.log("goalsss", goalsData);
+    interval = setInterval(async () => {
+      goals.value = await getGoals(projectToken.value);
+    }, 500);
+
     console.log("goalsss", goals.value);
     const profileloaded = await updateProfile();
   } catch (error) {
     console.log(error.message);
   }
+});
+
+onUnmounted(() => {
+  clearInterval(interval);
 });
 
 const getGoals = async (idProject) => {
@@ -164,6 +171,11 @@ const member = () => {
     
   </div>
 
+  <Integrantes />
+
+  <div v-if="role == 'Project Manager' || role == 'Arquitecto Software'">
+    <GoalsSheet :id-project="idProject" />
+  </div>
 
   <div
     id="projectlist"
@@ -204,9 +216,6 @@ const member = () => {
             }}</TableCell>
             <TableCell class="text-center">
               <UpdateObjective
-                v-if="
-                  role === 'Project Manager' || role === 'Arquitecto Software'
-                "
                 :name="goal.objective_name"
                 :description="goal.objective_desc"
                 :objective-id="goal.objective_id"
