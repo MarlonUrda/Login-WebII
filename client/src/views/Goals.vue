@@ -35,12 +35,10 @@ const route = useRoute();
 const projectToken = ref(0);
 const role = ref("");
 const project = ref("");
-let idProject;
 
 onMounted(async () => {
   try {
     projectToken.value = route.params.projectToken;
-    idProject = projectToken.value;
     console.log("projectToken", projectToken.value);
 
     const goalsData = await getGoals(projectToken.value);
@@ -107,8 +105,12 @@ const deleteObjective = async (objectiveId) => {
   }
 };
 
-const goBack = () => {
+const goBack = async() => {
   router.push({ path: "/Home" });
+};
+
+const member = () => {
+  router.push(`/Member/${projectToken.value}`);
 };
 </script>
 
@@ -130,6 +132,18 @@ const goBack = () => {
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
     ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
   >
+  <div>
+    <GoalsSheet :id-project="projectToken" />
+
+  </div>
+  <Button
+      type="submit"
+      variant="default"
+      @click="member"
+      class="text-black bg-white w-[6.2%] h-[5%] top-[26%] left-[70%] absolute hover:text-white border-2 border-white"
+      ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Members</Button
+    >
+
 
   <div id="nomorepos">
     <Card
@@ -147,9 +161,9 @@ const goBack = () => {
         </div>
       </CardHeader>
     </Card>
+    
   </div>
 
-  <GoalsSheet :id-project="idProject" />
 
   <div
     id="projectlist"

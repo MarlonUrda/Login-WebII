@@ -287,6 +287,7 @@ class DbQueries {
 
   async insertObjective(nameO, objdesc, idProject, dateLimit) {
     try {
+
       const result = this.pool.query(
         "INSERT INTO objective (objective_name, objective_desc, project_id, deadline) VALUES ($1, $2, $3, $4) RETURNING objective_id",
         [nameO, objdesc, idProject, dateLimit]

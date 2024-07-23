@@ -12,11 +12,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Calendar } from "./ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import {
-  CalendarDate,
-  getLocalTimeZone,
-  DateFormatter,
-} from "@internationalized/date";
+import {  CalendarDate,getLocalTimeZone,DateFormatter } from "@internationalized/date";
 import { CalendarFold } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
@@ -26,7 +22,10 @@ const activityName = ref("");
 const activityDesc = ref("");
 const dates = ref(new CalendarDate(2024, 1, 2));
 
-const props = defineProps(["idObjective"]);
+const props = defineProps({
+  idObjective: Number,
+});
+const emit = defineEmits(['activityCreated']);
 
 const df = new DateFormatter("en-US", {
   dateStyle: "short",
@@ -40,7 +39,7 @@ const createActivity = async () => {
     idOb: props.idObjective,
     deadline: limitFormatted,
   });
-
+  emit('activityCreated', { /* datos de la actividad */ });
   return data;
 };
 </script>

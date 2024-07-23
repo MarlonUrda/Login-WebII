@@ -4,6 +4,8 @@ class Task {
   constructor() {}
 
   static async createTask(taskName, taskDesc, idOb, deadline) {
+    console.log("Creando actividad", taskName, taskDesc, idOb, deadline);
+
     try {
       const query = await dbQueries.insertTask(
         taskName,
@@ -28,6 +30,7 @@ class Task {
         };
       }
     } catch (error) {
+
       return {
         success: false,
         code: 500,
@@ -45,6 +48,7 @@ class Task {
         query.rows.forEach((row) => {
           activities.push(row);
         });
+        console.log("Actividades encontradas",activities);
         return {
           success: true,
           activities: activities,

@@ -6,6 +6,7 @@ import Background from './components/Background.vue';
 import TitleCard from './views/TitleCard.vue';
 import Titlebar from './components/Titlebar.vue';
 import ProjectSheet from './components/ProjectSheet.vue';
+
 // Import GoalsSheet if needed
 
 const route = useRoute();
@@ -25,18 +26,20 @@ const isGoalRoute = computed(() => {
 const isHomeRoute = computed(() => {
   const regex = /^\/Home(\/|$)/i;
   return regex.test(route.path);
-
 });
+
+const isMemberRoute = computed(() => {
+  const regex = /^\/Member\/.+$/i;
+  return regex.test(route.path);
+});
+
 
 const showComponents = computed(() => {
-  console.log("isHomeRoute",isHomeRoute.value);
-  console.log("isGoalRoute",isGoalRoute.value);
-  console.log("isActivityRoute",isActivityRoute.value);
-  return !isHomeRoute.value && !isGoalRoute.value && !isActivityRoute.value
+  return !isHomeRoute.value && !isGoalRoute.value && !isActivityRoute.value  && !isMemberRoute.value
 });
 
-const showGoalSheet = computed(() => {
-  return !isGoalRoute.value && isActivityRoute.value
+const  showGoalSheet = computed(() => {
+  return !isGoalRoute.value && isActivityRoute.value && !isMemberRoute.value
 });
 
 const showIntegrantes = computed(() => {

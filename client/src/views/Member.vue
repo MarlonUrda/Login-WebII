@@ -10,13 +10,11 @@ import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
-import TableActivities from "../components/TableActivities.vue";
-import NewActivitiySheet from "../components/NewActivitiySheet.vue";
+
 
 const router = useRouter();
 const route = useRoute();
 const projectToken = ref(0);
-const objectiveToken = ref(0);
 const project = ref();
 const role = ref();
 const objective = ref("cargando...");
@@ -29,7 +27,6 @@ onMounted(async () => {
 
   try {
     projectToken.value = parseInt(route.params.projectToken);
-    objectiveToken.value = parseInt(route.params.objectiveToken);
     task.value = await getActivities(objectiveToken.value);
     console.log("tareas",task.value);
     const profileloaded = await updateProfile();
@@ -43,8 +40,6 @@ onMounted(async () => {
 
 watch(() => route.params, (newParams, oldParams) => {
   projectToken.value = parseInt(newParams.projectToken);
-  objectiveToken.value = parseInt(newParams.objectiveToken);
-
   getActivities(objectiveToken.value);
 }, { deep: true });
 
@@ -131,6 +126,7 @@ const goBack = () => {
     ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
   >
 
+
   <div id="nomorepos">
     <Card
       class="top-[10.7%] left-[10%] -translate-x-[50%] shadow-none border-none absolute"
@@ -149,7 +145,6 @@ const goBack = () => {
       </CardHeader>
     </Card>
   </div>
-
   <NewActivitiySheet 
     :id-objective="objectiveToken" 
     @activity-created="updateActivitiesList"
@@ -160,9 +155,8 @@ const goBack = () => {
     :id_proyecto="projectToken"
     :id_objetivo="objectiveToken"
     :activities="task"
-    :role = "role"
-    @activity-created="updateActivitiesList"
   />
+
 </template>
 
 <style scoped>

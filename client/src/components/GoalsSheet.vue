@@ -39,6 +39,7 @@ const df = new DateFormatter("en-US", {
 
 const createObjective = async () => {
   const limitFormatted = dates.value.toString();
+  
   const data = await toProcess("Proyecto", "Objectives", "createObjective", {
     nameP: objectiveName.value,
     objdesc: objectiveDesc.value,

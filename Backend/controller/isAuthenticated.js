@@ -9,7 +9,7 @@ export const isAuthenticated = async (req, res) => {
     
     } catch (error) {
       console.log(error.message);
-        return res.status(500).send({ message: error.message });
+      return res.status(500).send({ message: error.message });
     }
   };
   

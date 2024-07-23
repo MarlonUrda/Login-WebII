@@ -15,25 +15,19 @@ import { toProcess } from "@/utils/toProcess";
 
 const activities = ref([]);
 const role = ref("Basico");
-const emit = defineEmits(['activityCreated']);
 
 const props = defineProps({
   id_proyecto: Number,
-  id_objetivo: Number,
   activities: Array,
-  role: String
 });
 
 
 
-/* const id_objetivo = 1
-const id_proyecto  = 1 */
+
 
 onMounted(async () => {
   try {
     activities.value = props.activities;
-    role.value=  props.role
-    console.log(role.value)
     console.log("activities", activities.value);
   } catch (error) {
     console.log(error.message);
@@ -43,21 +37,17 @@ onMounted(async () => {
 watch(() => props, (newParams, oldParams) => {
   // Actualizar los tokens basados en los nuevos parámetros de la ruta
   activities.value = props.activities;
-  role.value=  props.role
   console.log("activitiessss", activities.value);
 
 }, { deep: true });
 
 const deleteActivity = async (activityId) => {
-  console.log("act",activityId)
   const data = await toProcess("Proyecto", "Task", "deleteTask", {
     activityId,
   });
-  
 
   //Si te sentis en condiciones mi rey ponle el toast, namas fijate en mis cosas, una tonteria
   if (data.success) {
-    emit('activityCreated', { /* datos de la actividad */ });
     return data;
   }
 };

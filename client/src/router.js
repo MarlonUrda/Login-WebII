@@ -12,6 +12,7 @@ import InvalidAcces from "./views/InvalidAcces.vue";
 import NewPerson from "./views/NewPerson.vue";
 import Goals from "./views/Goals.vue";
 import Activities from "./views/Activities.vue";
+import Member from './views/Member.vue';
 
 const routes = [
   { path: "/", redirect: "/Login" },
@@ -26,6 +27,7 @@ const routes = [
   { path: "/Home", component: Home, meta: { requiresAuth: true } },
   { path: "/Goals/:projectToken", name: "Goals", component: Goals, meta: { requiresAuth: true } },
   { path: "/Goals/:projectToken/Activities/:objectiveToken", name: "Activities", component: Activities, meta: { requiresAuth: true } },
+  { path: "/Member/:projectToken", name: "Member", component: Member, meta: { requiresAuth: true } },  
 ];
 
 const router = createRouter({
