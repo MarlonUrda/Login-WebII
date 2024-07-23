@@ -11,7 +11,6 @@ import NotFound from "./views/NotFound.vue";
 import InvalidAcces from "./views/InvalidAcces.vue";
 import NewPerson from "./views/NewPerson.vue";
 import Goals from "./views/Goals.vue";
-import Task from "./views/Task.vue";
 
 const routes = [
   { path: "/", redirect: "/Login" },
@@ -30,7 +29,6 @@ const routes = [
     component: Goals,
     meta: { requiresAuth: true },
   },
-  { path: "/Tasks", name: "Task", component: Task },
 ];
 
 const router = createRouter({
