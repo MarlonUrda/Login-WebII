@@ -6,6 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -75,8 +76,10 @@ onMounted(() => {
 
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Actualizar Proyecto {{ props.nameP }}</SheetTitle>
-        <SheetDescription>
+        <SheetTitle class="text-center"
+          >Actualizar Proyecto {{ props.nameP }}</SheetTitle
+        >
+        <SheetDescription class="text-center">
           A continuacion, sustituye la informacion de los campos que quieres
           actualizar
         </SheetDescription>
@@ -84,14 +87,14 @@ onMounted(() => {
       <form @submit.prevent="updateProject()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="project-name" class="text-right">
+            <Label for="project-name" class="text-center">
               Nombre del proyecto:
             </Label>
             <Input id="project-name" v-model="projectName" class="col-span-3" />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="project-type" class="text-right">
-              De que trata el proyecto?:
+            <Label for="project-type" class="text-center">
+              De que trata el proyecto?
             </Label>
             <Input id="project-name" v-model="projectType" class="col-span-3" />
           </div>
@@ -114,7 +117,7 @@ onMounted(() => {
                   </template>
                 </Button>
               </PopoverTrigger>
-              <PopoverContent class="w-auto p-0">
+              <PopoverContent class="w-auto p-0 text-center">
                 <RangeCalendar
                   v-model="dates"
                   initial-focus
@@ -125,7 +128,9 @@ onMounted(() => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Actualizar Proyecto</Button>
+        <SheetClose>
+          <Button variant="default" type="submit">Actualizar Proyecto</Button>
+        </SheetClose>
       </form>
     </SheetContent>
   </Sheet>

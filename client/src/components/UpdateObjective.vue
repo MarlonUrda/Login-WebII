@@ -6,6 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -68,8 +69,10 @@ const updateObjective = async () => {
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Actualizar Objetivo: {{ props.name }}</SheetTitle>
-        <SheetDescription>
+        <SheetTitle class="text-center"
+          >Actualizar Objetivo: {{ props.name }}</SheetTitle
+        >
+        <SheetDescription class="text-center">
           A continuacion, sustituye la informacion de los campos que quieres
           actualizar
         </SheetDescription>
@@ -77,8 +80,8 @@ const updateObjective = async () => {
       <form @submit.prevent="updateObjective()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-name" class="text-right">
-              Nombre del objetivo:
+            <Label for="objective-name" class="text-center">
+              Nombre del objetivo
             </Label>
             <Input
               id="objective-name"
@@ -88,8 +91,8 @@ const updateObjective = async () => {
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-desc" class="text-right">
-              Descripcion del objetivo:
+            <Label for="objective-desc" class="text-center">
+              Descripcion del objetivo
             </Label>
             <Textarea
               id="objective-desc"
@@ -102,7 +105,7 @@ const updateObjective = async () => {
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline" type="button">
-                  <CalendarFold class="mr-2 h-4 m-4" />
+                  <CalendarFold class="mr-2 h-4 m-4 text-center" />
                   {{
                     date
                       ? df.format(date.toDate(getLocalTimeZone()))
@@ -116,7 +119,9 @@ const updateObjective = async () => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Actualizar</Button>
+        <SheetClose>
+          <Button variant="default" type="submit">Actualizar</Button>
+        </SheetClose>
       </form>
     </SheetContent>
   </Sheet>

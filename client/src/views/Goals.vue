@@ -24,6 +24,7 @@ import {
 } from "@/components/ui/table";
 import { toProcess } from "../utils/toProcess";
 import GoalsSheet from "@/components/GoalsSheet.vue";
+import Integrantes from "@/components/Integrantes.vue";
 
 let interval;
 const goals = ref([]);
@@ -66,6 +67,7 @@ onMounted(async () => {
       interval = setInterval(async () => {
         goals.value = await getGoals(idProject);
       }, 500);
+      // goals.value = await getGoals(idProject);
     }
   } catch (error) {
     console.log(error.message);
@@ -127,6 +129,8 @@ const goBack = () => {
       </CardHeader>
     </Card>
   </div>
+
+  <Integrantes />
 
   <GoalsSheet
     :id-project="idProject"

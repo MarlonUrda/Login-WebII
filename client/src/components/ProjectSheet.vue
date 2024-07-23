@@ -6,6 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -82,8 +83,8 @@ const createProject = async () => {
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Nuevo Proyecto</SheetTitle>
-        <SheetDescription>
+        <SheetTitle class="text-center">Nuevo Proyecto</SheetTitle>
+        <SheetDescription class="text-center">
           Explora lo que es posible al colaborar con tu equipo. Edita los
           detalles del proyecto cuando quieras desde los ajustes.
         </SheetDescription>
@@ -91,8 +92,8 @@ const createProject = async () => {
       <form @submit.prevent="createProject()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="project-name" class="text-right">
-              Nombre del proyecto:
+            <Label for="project-name" class="text-center">
+              Nombre del proyecto
             </Label>
             <Input
               id="project-name"
@@ -102,8 +103,8 @@ const createProject = async () => {
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="project-type" class="text-right">
-              De que trata el proyecto?:
+            <Label for="project-type" class="text-center">
+              De que trata el proyecto?
             </Label>
             <Input
               id="project-name"
@@ -142,7 +143,9 @@ const createProject = async () => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Crear Proyecto</Button>
+        <SheetClose>
+          <Button variant="default" type="submit">Crear Proyecto</Button>
+        </SheetClose>
       </form>
     </SheetContent>
   </Sheet>

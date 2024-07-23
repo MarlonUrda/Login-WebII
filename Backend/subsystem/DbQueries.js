@@ -87,6 +87,29 @@ class DbQueries {
     }
   }
 
+  async getUsers() {
+    try {
+      const result = this.pool.query(
+        `SELECT p.person_id AS pId , p.name || ' ' || p.lastname AS user, p.ident, us.username  FROM person AS p
+          INNER JOIN users AS us ON p.person_id = us.person_id`
+      );
+      return result;
+    } catch (error) {
+      console.error("Error: ", error.message);
+    }
+  }
+
+  async getRoles() {
+    try {
+      const result = this.pool.query(
+        "SELECT profile_id, profile_desc FROM profile WHERE profile_type_id = 6 AND profile_id != 13 AND profile_id != 7"
+      );
+      return result;
+    } catch (error) {
+      log.error("Error: ", error.message);
+    }
+  }
+
   /**
    * Actualizar el token de restablecimiento de contraseña
    * @param {string} email

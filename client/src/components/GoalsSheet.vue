@@ -6,6 +6,7 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
+  SheetClose,
 } from "./ui/sheet";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -59,8 +60,8 @@ const createObjective = async () => {
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Nuevo Objetivo</SheetTitle>
-        <SheetDescription>
+        <SheetTitle class="text-center">Nuevo Objetivo</SheetTitle>
+        <SheetDescription class="text-center">
           Hazle saber a tus compañeros de trabajo que metas deben lograr!. No te
           preocupes por equivocarte, siempre podras modificar los detalles del
           objetivo.
@@ -69,7 +70,7 @@ const createObjective = async () => {
       <form @submit.prevent="createObjective()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-name" class="text-right">
+            <Label for="objective-name" class="text-center">
               Nombre del objetivo:
             </Label>
             <Input
@@ -80,8 +81,8 @@ const createObjective = async () => {
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="objective-desc" class="text-right">
-              Descripcion del objetivo:
+            <Label for="objective-desc" class="text-center">
+              Descripcion del objetivo
             </Label>
             <Textarea
               id="objective-desc"
@@ -94,7 +95,7 @@ const createObjective = async () => {
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline" type="button">
-                  <CalendarFold class="mr-2 h-4 m-4" />
+                  <CalendarFold class="mr-2 h-4 m-4 text-center" />
                   {{
                     dates
                       ? df.format(dates.toDate(getLocalTimeZone()))
@@ -108,7 +109,9 @@ const createObjective = async () => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Crear Objetivo</Button>
+        <SheetClose>
+          <Button variant="default" type="submit">Crear Objetivo</Button>
+        </SheetClose>
       </form>
     </SheetContent>
   </Sheet>

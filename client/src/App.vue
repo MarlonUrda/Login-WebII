@@ -11,7 +11,7 @@ import { useRoute } from "vue-router";
 export default {
   name: "App",
   components: {
-    Integrantes,
+    // Integrantes,
     Background,
     TitleCard,
     Titlebar,
@@ -22,7 +22,7 @@ export default {
     const route = useRoute();
     const showComponents = computed(() => {
       const pathLower = route.path.toLowerCase();
-      return !["/home", "/goals","/activities"].includes(pathLower);
+      return !["/home", "/goals", "/activities"].includes(pathLower);
     });
     const showGoalSheet = computed(() => {
       return route.path.toLowerCase() === "/goals";
@@ -40,7 +40,7 @@ export default {
   <div id="app">
     <TitleCard v-if="showComponents" />
     <Titlebar v-if="!showComponents" />
-    <Integrantes v-if="showGoalSheet" />
+    <!-- <Integrantes v-if="showGoalSheet" /> -->
     <ProjectSheet v-if="!showComponents" />
     <!-- <GoalsSheet v-if="showGoalSheet" /> -->
     <Background />

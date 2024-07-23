@@ -11,6 +11,7 @@ import ResetControler from "./controller/ResetControler.js";
 import { toProcess } from "./controller/toProcess.js";
 import "./instances/dbinstances.js";
 import { updateRole } from "./controller/updateRole.js";
+import { getRoles, getUsers } from "./controller/getters.js";
 import { isAuthenticated } from "./controller/isAuthenticated.js";
 import "./instances/dbinstances.js";
 
@@ -44,7 +45,7 @@ app.use(
 
 app.use(express.json());
 
-app.get("/user-data", userData); 
+app.get("/user-data", userData);
 
 app.get("/isAuthenticated", isAuthenticated);
 
@@ -63,6 +64,10 @@ app.post("/reset/:token", ResetControler.resetPasswordPost);
 app.post("/update-role", updateRole);
 
 app.post("/toProcess", toProcess);
+
+app.get("/get-roles", getRoles);
+
+app.get("/get-users", getUsers);
 
 app.use((req, res) => {
   res.status(404).send({ error: "Not found" });

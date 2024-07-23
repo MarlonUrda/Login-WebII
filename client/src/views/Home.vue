@@ -76,6 +76,9 @@ onMounted(async () => {
   userdata.value = await getSession();
   console.log("userdata", userdata.value);
 
+  // const projectData = await getProjects(userdata.value.idPerson);
+  // projects.value = [...projectData];
+
   intervalId = setInterval(async () => {
     const projectData = await getProjects(userdata.value.idPerson);
     projects.value = [...projectData];
