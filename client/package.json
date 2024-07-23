@@ -30,6 +30,7 @@
     "vue": "^3.4.21",
     "vue-cookies": "^1.8.4",
     "vue-router": "^4.0.13",
+    "vue-toast-notification": "^3.1.2",
     "zod": "^3.23.8"
   },
   "devDependencies": {

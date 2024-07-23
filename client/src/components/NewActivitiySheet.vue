@@ -22,27 +22,26 @@ import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 
-const objectiveName = ref("");
-const objectiveDesc = ref("");
+const activityName = ref("");
+const activityDesc = ref("");
 const dates = ref(new CalendarDate(2024, 1, 2));
 
-const props = defineProps(["idProject"]);
+const props = defineProps(["idObjective"]);
 
 const df = new DateFormatter("en-US", {
   dateStyle: "short",
 });
 
-const createObjective = async () => {
+const createActivity = async () => {
   const limitFormatted = dates.value.toString();
-  const data = await toProcess("Proyecto", "Objectives", "createObjective", {
-    nameP: objectiveName.value,
-    objdesc: objectiveDesc.value,
-    idProject: props.idProject,
-    dateLimit: limitFormatted,
+  const data = await toProcess("Proyecto", "Task", "createTask", {
+    taskName: activityName.value,
+    taskDesc: activityDesc.value,
+    idOb: props.idObjective,
+    deadline: limitFormatted,
   });
 
   return data;
-  console.log("hi");
 };
 </script>
 
@@ -59,33 +58,33 @@ const createObjective = async () => {
     </SheetTrigger>
     <SheetContent>
       <SheetHeader>
-        <SheetTitle>Nuevo Actividad</SheetTitle>
-        <SheetDescription>
-          Hazle saber a tus compañeros de trabajo que metas deben lograr!. No te
-          preocupes por equivocarte, siempre podras modificar los detalles del
-          Actividad.
+        <SheetTitle class="text-center">Nuevo Actividad</SheetTitle>
+        <SheetDescription class="text-center">
+          Comparte con tus compañeros de equipo las actividades que deben
+          completar para cumplir la meta. Te recirdamos que, si te equivocas...
+          No importa!. Siempre puedes modificar la actividad.
         </SheetDescription>
       </SheetHeader>
-      <form @submit.prevent="createObjective()">
+      <form @submit.prevent="createActivity()">
         <div class="grid gap-4 py-4">
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="activity-name" class="text-right">
-              Nombre de <label for=""></label> Actividad:
+            <Label for="activity-name" class="text-center">
+              Nombre de la Actividad
             </Label>
             <Input
-              id="objective-name"
-              v-model="objectiveName"
+              id="activity-name"
+              v-model="activityName"
               placeholder="Nombre del actividad..."
               class="col-span-3"
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="activity-desc" class="text-right">
-              Descripcion de la Actividad:
+            <Label for="activity-desc" class="text-center">
+              Descripcion de la Actividad
             </Label>
             <Textarea
               id="activity-desc"
-              placeholder="De que se trata el actividad?.."
+              placeholder="De que se trata el actividad.."
               v-model="activityDesc"
               class="col-span-3"
             />

@@ -1,46 +1,64 @@
 <script setup>
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Trash2 } from "lucide-vue-next";
-import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table";
-import { onMounted,ref } from "vue";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { onMounted, onUpdated, ref } from "vue";
+import { toProcess } from "@/utils/toProcess";
 
 const activities = ref([]);
-const role =  ref("Basico")
+const role = ref("Basico");
 
 const props = defineProps({
   id_proyecto: Number,
   id_objetivo: Number,
-  activities: Array
-});  
+  activities: Array,
+});
 
+const deleteActivity = async (activityId) => {
+  const data = await toProcess("Proyecto", "Task", "deleteTask", {
+    activityId,
+  });
 
+  //Si te sentis en condiciones mi rey ponle el toast, namas fijate en mis cosas, una tonteria
+  if (data.success) {
+    return data;
+  }
+};
 
 /* const id_objetivo = 1
 const id_proyecto  = 1 */
 
 onMounted(async () => {
   try {
+    console.log("id_proyecto", props.id_proyecto);
+    console.log("id_objetivo", props.id_objetivo);
+    console.log("fff");
 
-    console.log("id_proyecto",props.id_proyecto);
-    console.log("id_objetivo",props.id_objetivo);
-    console.log("fff")
-    
+    activities.value = props.activities;
     console.log("activities", activities.value);
-    activities.value = props.activities
-
-  }catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
 });
 
-
+onUpdated(() => {
+  activities.value = props.activities;
+});
 </script>
 
 <template>
-        <div
-            id="projectlist"
-            class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
-        >
+  <div
+    id="projectlist"
+    class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
+  >
     <ScrollArea class="h-[93%] w-[93%] mt-[0.75%] ml-[3.5%]">
       <Table>
         <TableHeader class="text-lg italic">
@@ -49,7 +67,7 @@ onMounted(async () => {
             <TableHead class="text-center font-bold">Actividad</TableHead>
             <TableHead class="text-center font-bold">Descripcion</TableHead>
             <TableHead class="text-center font-bold">Fecha Fin</TableHead>
-            <TableHead class="text-center font-bold">Estado</TableHead>
+            <TableHead class="text-center font-bold">Objetivo</TableHead>
             <TableHead class="text-center font-bold">Opciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -61,11 +79,9 @@ onMounted(async () => {
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500">
-                <button 
-                    class="hover:underline" 
-                >
-                    {{ activity.task_name }}
-                </button>
+              <button class="hover:underline">
+                {{ activity.task_name }}
+              </button>
             </TableCell>
 
             <TableCell
@@ -73,9 +89,8 @@ onMounted(async () => {
               >{{ activity.task_desc }}</TableCell
             >
 
-
             <TableCell class="text-center">
-              {{activity.deadline.split("T")[0]}}
+              {{ activity.deadline.split("T")[0] }}
             </TableCell>
 
             <TableCell
@@ -84,7 +99,6 @@ onMounted(async () => {
             >
 
             <TableCell class="text-center">
-
               <button
                 type="submit"
                 v-if="
@@ -126,4 +140,3 @@ onMounted(async () => {
   text-shadow: 0px 0px 10px #000000;
 }
 </style>
-

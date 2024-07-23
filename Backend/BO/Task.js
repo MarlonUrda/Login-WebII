@@ -3,13 +3,12 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Task {
   constructor() {}
 
-  static async createTask(taskName, taskDesc, idOb, startDate, deadline) {
+  static async createTask(taskName, taskDesc, idOb, deadline) {
     try {
       const query = await dbQueries.insertTask(
         taskName,
         taskDesc,
         idOb,
-        startDate,
         deadline
       );
 
@@ -66,12 +65,11 @@ class Task {
     }
   }
 
-  static async updateTask(newName, newDesc, newStart, newDeadline, idTask) {
+  static async updateTask(newName, newDesc, newDeadline, idTask) {
     try {
       const query = await dbQueries.updateTask(
         newName,
         newDesc,
-        newStart,
         newDeadline,
         idTask
       );

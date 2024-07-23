@@ -5,67 +5,78 @@ import {
   CardHeader,
   CardTitle,
 } from "../components/ui/card";
-import { onMounted, ref } from "vue";
-import { useRoute, useRouter} from "vue-router";
+import { onMounted, onUnmounted, onUpdated, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
 import TableActivities from "../components/TableActivities.vue";
 import NewActivitiySheet from "../components/NewActivitiySheet.vue";
 
-
+let interval;
+let obId;
 
 const router = useRouter();
 const route = useRoute();
 const projectToken = ref(0);
 const objectiveToken = ref(0);
-const project = ref()
-const role = ref()
-const objective = ref("cargando...")
-const task = ref([])
+const project = ref();
+const role = ref();
+const objective = ref("cargando...");
+const task = ref([]);
+const ready = ref(false);
 
+const isloaded = () => {
+  ready.value = true;
+};
 
+const getActivities = async (idObjective) => {
+  try {
+    const data = await toProcess("Proyecto", "Task", "getTask", {
+      idObjective,
+    });
 
+    console.log(data);
 
-
+    return data.activities;
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
 onMounted(async () => {
   try {
-    projectToken.value = parseInt(route.params.projectToken); 
-    objectiveToken.value =parseInt( route.params.objectiveToken);
+    projectToken.value = parseInt(route.params.projectToken);
+    objectiveToken.value = parseInt(route.params.objectiveToken);
+    obId = objectiveToken.value;
+    interval = setInterval(async () => {
+      task.value = await getActivities(objectiveToken.value);
+    }, 1000);
+    console.log(task.value);
     const profileloaded = await updateProfile();
-    task.value = await getActivities(projectToken.value,objectiveToken.value);
-    console.log(route.params.objectiveToken,route.params.projectToken)
-    
-  }catch (error) {
+    console.log(route.params.objectiveToken, route.params.projectToken);
+    isloaded();
+  } catch (error) {
     console.log(error.message);
   }
-
 });
 
-const getActivities = async () => {
-    const tasks=[{
-    "task_id": 1,
-    "task_name": "Hola",
-    "objective_id": 10,
-    "task_desc": "pipipupu la poia es lo mejor",
-    "startdate": "2024-01-10",
-    "deadline": "2024-01-11"
-  },
-  {"task_id": 1,
-    "task_name": "Hola",
-    "objective_id": 10,
-    "task_desc": "pipipupu la poia es lo mejor",
-    "startdate": "2024-01-10",
-    "deadline": "2024-01-11"
-  }
-  ]
-  return  tasks
+onUnmounted(async () => {
+  clearInterval(interval);
+});
 
-}
+// onUpdated(async () => {
+//   try {
+//     const ye = await getActivities(objectiveToken.value);
+//     task.value = [...task.value, ...ye];
+//     console.log(task.value);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// });
 
 const updateProfile = async () => {
-  try{
+  try {
     const response = await fetch("http://localhost:3000/update-role", {
       method: "POST",
       credentials: "include",
@@ -73,7 +84,7 @@ const updateProfile = async () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        projectId: projectToken.value
+        projectId: projectToken.value,
       }),
     });
 
@@ -82,17 +93,16 @@ const updateProfile = async () => {
       console.log(data.message[0]);
       console.log("Profile updated");
       project.value = data.message[0].project_name;
-      role.value =data.message[0].profile_desc;
+      role.value = data.message[0].profile_desc;
       return true;
     }
-  }catch (error) {
+  } catch (error) {
     console.log(error.message);
   }
 };
 
-
 const goBack = () => {
-  router.push({ path: `/Goals/${projectToken.value}`});
+  router.push({ path: `/Goals/${projectToken.value}` });
 };
 </script>
 
@@ -100,7 +110,7 @@ const goBack = () => {
   <div
     id="welcome"
     class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[32%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
-    />
+  />
   <h1
     id="pos"
     class="absolute text-4xl font-bold italic top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4"
@@ -134,16 +144,14 @@ const goBack = () => {
     </Card>
   </div>
 
+  <NewActivitiySheet :id-objective="obId" />
 
-
-  <NewActivitiySheet/>
-  
+  <div v-if="ready"></div>
   <TableActivities
-  :id_proyecto = "projectToken"
-  :id_objetivo = "objectiveToken"
-  :activities = "task"
-   />
-
+    :id_proyecto="projectToken"
+    :id_objetivo="objectiveToken"
+    :activities="task"
+  />
 </template>
 
 <style scoped>

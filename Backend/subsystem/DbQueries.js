@@ -155,12 +155,10 @@ class DbQueries {
     }
   }
 
-  async getProfile(projectId,idPerson) {
+  async getProfile(projectId, idPerson) {
     try {
-
-
-      console.log("projectId",projectId);
-      console.log("idPerson",idPerson);
+      console.log("projectId", projectId);
+      console.log("idPerson", idPerson);
 
       const result = await this.pool.query(
         `SELECT pro.profile_desc, pr.project_name FROM member m
@@ -338,11 +336,11 @@ class DbQueries {
     }
   }
 
-  async insertTask(taskName, taskDesc, idOb, startDate, deadline) {
+  async insertTask(taskName, taskDesc, idOb, deadline) {
     try {
       const result = this.pool.query(
-        "INSERT INTO tasks (task_name, task_desc, obj_id, start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
-        [taskName, taskDesc, idOb, startDate, deadline]
+        "INSERT INTO tasks (task_name, task_desc, obj_id, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
+        [taskName, taskDesc, idOb, deadline]
       );
 
       return result;
@@ -353,10 +351,9 @@ class DbQueries {
 
   async getTasks(idObj) {
     try {
-      const result = this.pool.query(
-        "SELECT * FROM tasks WHERE objective_id = $1",
-        [idObj]
-      );
+      const result = this.pool.query("SELECT * FROM tasks WHERE obj_id = $1", [
+        idObj,
+      ]);
 
       return result;
     } catch (error) {
@@ -376,15 +373,14 @@ class DbQueries {
     }
   }
 
-  async updateTask(newName, newDesc, newStart, newDeadline, idTask) {
+  async updateTask(newName, newDesc, newDeadline, idTask) {
     try {
       const result = await this.pool.query(
         `UPDATE tasks SET task_name = $1 ,
               task_desc = $2,
-              start_date = $3,
-              deadline = $4,
-              WHERE task_id = $5`,
-        [newName, newDesc, newStart, newDeadline, idTask]
+              deadline = $3,
+              WHERE task_id = $4`,
+        [newName, newDesc, newDeadline, idTask]
       );
       return result;
     } catch (error) {
