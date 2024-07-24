@@ -10,8 +10,8 @@ import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
-import TableActivities from "../components/TableActivities.vue";
-import NewActivitiySheet from "../components/NewActivitiySheet.vue";
+import TableActivities from "../components/activities/TableActivities.vue";
+import NewActivitiySheet from "../components/activities/NewActivitiy.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -142,9 +142,7 @@ const goBack = () => {
           <CardDescription class="text-lg text-white italic">
             Proyecto actual: {{ project }}
           </CardDescription>
-          <CardDescription class="text-lg text-white italic">
-            Objetivo actual: {{ objective }}
-          </CardDescription>
+
         </div>
       </CardHeader>
     </Card>

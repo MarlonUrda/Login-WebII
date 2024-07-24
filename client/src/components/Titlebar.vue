@@ -8,7 +8,7 @@ import { useRouter } from 'vue-router';
 import { useToast } from 'vue-toast-notification';
 
 const toast = useToast()
-const userdata = ref({})
+const userdata = ref({name: 'cargando...', lastname: 'cargando..', user: '@cargando..'})
 const router = useRouter()
 const showSheet = ref(false)
 
@@ -53,7 +53,6 @@ const getSession = async () => {
 
 onMounted(async () => {
   userdata.value = await getSession();
-  console.log(userdata);
 });
 
 </script>

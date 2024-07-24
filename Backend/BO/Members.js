@@ -27,8 +27,10 @@ class Members {
    * @returns {Array} te devuelve la informacion en esta forma {data:[{Member},{lastname},{email}]} si se agrego correctamente
    */
   static async getMembers(idProject) {
+    console.log("Obteniendo miembros del proyecto", idProject);
     try {
-      const result = dbQueries.getMembers(idProject);
+      const result = await dbQueries.getMembers(idProject);
+      console.log("apunto del return", result);
       return { data: result.rows };
     } catch (error) {
       console.log("Error al obtener los miembros");

@@ -7,28 +7,20 @@ class Task {
     console.log("Creando actividad", taskName, taskDesc, idOb, deadline);
 
     try {
-      const query = await dbQueries.insertTask(
-        taskName,
-        taskDesc,
-        idOb,
-        deadline
-      );
+      const query = await dbQueries.insertTask(taskName,taskDesc,idOb, deadline);
+      if (!query) {
+        console.log("Error agregar miembros");
+        throw new Error(error);
+      } 
+      console.log("Actividad creada con exito");
+      let taskId = query.rows[0].task_id;
+      return {
+        success: true,
+        message: `Actividad: ${taskName} creada exitosamente!`,
+        taskId: taskId,
+      };
 
-      if (query) {
-        console.log("Actividad creada con exito");
-        let taskId = query.rows[0].task_id;
-        return {
-          success: true,
-          message: `Actividad: ${taskName} creada exitosamente!`,
-          taskId: taskId,
-        };
-      } else {
-        return {
-          success: false,
-          code: 400,
-          message: "No se pudo crear la actividad",
-        };
-      }
+
     } catch (error) {
 
       return {

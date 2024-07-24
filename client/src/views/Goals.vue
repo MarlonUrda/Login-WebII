@@ -8,24 +8,14 @@ import {
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Trash2 } from "lucide-vue-next";
-import { UserRoundPlus } from "lucide-vue-next";
 import { ChevronLeft } from "lucide-vue-next";
 import UpdateObjective from "../components/UpdateObjective.vue";
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+
 import { toProcess } from "../utils/toProcess";
-import GoalsSheet from "@/components/GoalsSheet.vue";
+import GoalsSheet from "../components/objective/NewObjective.vue";
 import { useToast } from "vue-toast-notification";
-import Integrantes from "@/components/Integrantes.vue";
+import tableBO from "@/components/objective/tableObjective.vue";
+
 
 const toast = useToast();
 const goals = ref([]);
@@ -35,28 +25,23 @@ const route = useRoute();
 const projectToken = ref(0);
 const role = ref("");
 const project = ref("");
-let idProject;
-let interval;
 
 onMounted(async () => {
   try {
     projectToken.value = route.params.projectToken;
     console.log("projectToken", projectToken.value);
+    goals.value = await getGoals(projectToken.value);
 
-    interval = setInterval(async () => {
-      goals.value = await getGoals(projectToken.value);
-    }, 500);
+
 
     console.log("goalsss", goals.value);
-    const profileloaded = await updateProfile();
+    await updateProfile();
   } catch (error) {
     console.log(error.message);
   }
 });
 
-onUnmounted(() => {
-  clearInterval(interval);
-});
+
 
 const getGoals = async (idProject) => {
   const data = await toProcess("Proyecto", "Objectives", "getObjectives", {
@@ -98,25 +83,27 @@ const viewGoal = (objectiveId) => {
 };
 
 const deleteObjective = async (objectiveId) => {
+  console.log("Deleting project:", objectiveId);
   const data = await toProcess("Proyecto", "Objectives", "deleteObjective", {
     objectiveId: objectiveId,
   });
 
-  if (data.success) {
-    toast.success(data.message, { duration: 3000, position: "bottom-right" });
-    return data;
-  }
-
   if (!data.success) {
     toast.error(data.message, { duration: 3000, position: "bottom-right" });
+    return;
   }
+  goals.value = await getGoals(projectToken.value)
+  toast.success(data.message, { duration: 3000, position: "bottom-right" });
+  return data;
+
+
 };
 
 const goBack = async() => {
   router.push({ path: "/Home" });
 };
 
-const member = () => {
+const goMember = () => {
   router.push(`/Member/${projectToken.value}`);
 };
 </script>
@@ -132,24 +119,29 @@ const member = () => {
   >
     Lista de Objetivos
   </h1>
+
   <Button
     type="submit"
     variant="default"
     @click="goBack"
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
-    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
   >
+    <ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver
+  </Button>
+
+  <Button
+    type="submit"
+    variant="default"
+    @click="goMember"
+    class="text-black bg-white w-[6.2%] h-[5%] top-[18%] left-[2%] absolute hover:text-white border-2 border-white z-1000"
+  >
+    <ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Members
+  </Button>
+
   <div>
     <GoalsSheet :id-project="projectToken" />
-
   </div>
-  <Button
-      type="submit"
-      variant="default"
-      @click="member"
-      class="text-black bg-white w-[6.2%] h-[5%] top-[26%] left-[70%] absolute hover:text-white border-2 border-white"
-      ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Members</Button
-    >
+
 
 
   <div id="nomorepos">
@@ -171,91 +163,17 @@ const member = () => {
     
   </div>
 
-  <Integrantes />
-
   <div v-if="role == 'Project Manager' || role == 'Arquitecto Software'">
-    <GoalsSheet :id-project="idProject" />
+    <GoalsSheet :id-project="projectToken" />
   </div>
 
-  <div
-    id="projectlist"
-    class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
-  >
-    <ScrollArea class="h-[93%] w-[93%] mt-[0.75%] ml-[3.5%]">
-      <Table>
-        <TableHeader class="text-lg italic">
-          <TableRow>
-            <TableHead class="text-center font-bold">N°.</TableHead>
-            <TableHead class="text-center font-bold">Objetivo</TableHead>
-            <TableHead class="text-center font-bold">Descripción</TableHead>
-            <TableHead class="text-center font-bold">Fecha Objetivo</TableHead>
-            <TableHead class="text-center font-bold">Opciones</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody class="text-base">
-          <TableRow
-            class="font-medium"
-            v-for="(goal, index) in goals"
-            :key="goal.objective_id"
-          >
-            <TableCell class="text-center">{{ index + 1 }}</TableCell>
-            <TableCell class="text-center text-blue-500"
-              ><button
-                class="hover:underline"
-                @click="viewGoal(goal.objective_id)"
-              >
-                {{ goal.objective_name }}
-              </button></TableCell
-            >
-            <TableCell
-              class="text-center overflow-hidden text-nowrap text-ellipsis"
-              >{{ goal.objective_desc }}</TableCell
-            >
-            <TableCell class="text-center">{{
-              goal.deadline.split("T")[0]
-            }}</TableCell>
-            <TableCell class="text-center">
-              <UpdateObjective
-                :name="goal.objective_name"
-                :description="goal.objective_desc"
-                :objective-id="goal.objective_id"
-                :role="role"
-              />
-
-              <button
-                type="submit"
-                v-if="
-                  role === 'Project Manager' || role === 'Arquitecto Software'
-                "
-              >
-                <Trash2
-                  v-if="
-                    role === 'Project Manager' || role === 'Arquitecto Software'
-                  "
-                  class="h-6 w-6 inline hover:text-red-700"
-                  @click="deleteObjective(goal.objective_id)"
-                />
-              </button>
-              <button
-                type="submit"
-                v-if="
-                  role !== 'Project Manager' && role !== 'Arquitecto Software'
-                "
-                disabled
-              >
-                <Trash2
-                  v-if="
-                    role !== 'Project Manager' && role !== 'Arquitecto Software'
-                  "
-                  class="h-6 w-6 inline text-gray-400"
-                />
-              </button>
-            </TableCell>
-          </TableRow>
-        </TableBody>
-      </Table>
-    </ScrollArea>
-  </div>
+  <tableBO
+    :data="goals"
+    :headers="['ID', 'Nombre', 'Descripción',  'Fecha de Fin','Opciones']"
+    :permit="role"
+    @delete="deleteObjective"
+    @goto="viewGoal"
+  />
 </template>
 
 <style scoped>

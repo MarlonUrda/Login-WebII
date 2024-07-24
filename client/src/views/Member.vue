@@ -10,16 +10,17 @@ import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
+import tableBO from "../components/member/tableMember.vue";
+
+
 
 
 const router = useRouter();
 const route = useRoute();
 const projectToken = ref(0);
-const project = ref();
-const role = ref();
-const objective = ref("cargando...");
-const task = ref([]);
-const ready = ref(false);
+const dataTable = ref([]);
+const member = ref([]);
+const headers = ref(["ID", "Nombre", "Usuario", "Email",'Opciones']);
 
 
 
@@ -27,8 +28,8 @@ onMounted(async () => {
 
   try {
     projectToken.value = parseInt(route.params.projectToken);
-    task.value = await getActivities(objectiveToken.value);
-    console.log("tareas",task.value);
+    dataTable.value = await getMembers(projectToken.value);
+    console.log("datos",dataTable.value);
     const profileloaded = await updateProfile();
 
   } catch (error) {
@@ -40,41 +41,21 @@ onMounted(async () => {
 
 watch(() => route.params, (newParams, oldParams) => {
   projectToken.value = parseInt(newParams.projectToken);
-  getActivities(objectiveToken.value);
+  getMembers(projectToken.value);
 }, { deep: true });
 
-const updateActivitiesList = async () => {
-
-  task.value = await getActivities(objectiveToken.value);
-};
-
-const getActivities = async (idObjective) => {
-  
+const getMembers = async (project) => {
   try {
-    const data = await toProcess("Proyecto", "Task", "getTask", {
-      idObjective,
+    console.log('estoy en getMembers, ', project);
+    const data = await toProcess("Basico", "Members", "getMembers", {
+      project,
     });
-
-    console.log('estaaa',data);
-
-    return data.activities;
+    return data.data;
   } catch (error) {
+    console.log('error.message');
     console.log(error.message);
   }
 };
-
-
-
-
-// onUpdated(async () => {
-//   try {
-//     const ye = await getActivities(objectiveToken.value);
-//     task.value = [...task.value, ...ye];
-//     console.log(task.value);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
 
 const updateProfile = async () => {
   try {
@@ -88,15 +69,18 @@ const updateProfile = async () => {
         projectId: projectToken.value,
       }),
     });
+    let x =await response.json();
+    console.log(x);
+  } catch (error) {
+    console.log(error.message);
+  }
+};
 
-    if (response.ok) {
-      const data = await response.json();
-      console.log(data.message[0]);
-      console.log("Profile updated");
-      project.value = data.message[0].project_name;
-      role.value = data.message[0].profile_desc;
-      return true;
-    }
+const deleteMember = async (id) => {
+  try {
+    console.log('estoy en deleteMember', id);
+    await getMembers(projectToken.value);
+
   } catch (error) {
     console.log(error.message);
   }
@@ -116,7 +100,7 @@ const goBack = () => {
     id="pos"
     class="absolute text-4xl font-bold italic top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4"
   >
-    Lista de Actividad
+    Lista de Miembros
   </h1>
   <Button
     type="submit"
@@ -145,17 +129,14 @@ const goBack = () => {
       </CardHeader>
     </Card>
   </div>
-  <NewActivitiySheet 
-    :id-objective="objectiveToken" 
-    @activity-created="updateActivitiesList"
-    />
 
-  <div v-if="ready"></div>
-  <TableActivities
-    :id_proyecto="projectToken"
-    :id_objetivo="objectiveToken"
-    :activities="task"
+  <table-b-o
+  :data="dataTable"
+  :headers="headers"
+  :permit = "role"
+  @delete="deleteMember"
   />
+
 
 </template>
 

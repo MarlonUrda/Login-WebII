@@ -325,7 +325,7 @@ class DbQueries {
   async getObjectivesFromProject(idProject) {
     try {
       const result = this.pool.query(
-        "SELECT * FROM objective WHERE project_id = $1",
+        "SELECT objective_id,objective_name,objective_desc,deadline FROM objective WHERE project_id = $1",
         [idProject]
       );
 
@@ -369,7 +369,7 @@ class DbQueries {
 
       return result;
     } catch (error) {
-      console.log("Error: ", error);
+      throw new Error("Error al insertar tarea");
     }
   }
 
@@ -472,7 +472,7 @@ class DbQueries {
     try {
       const result = await this.pool.query(
         `
-            SELECT name member, lastname,email 
+            SELECT m.member_id ,name || lastname,username,email 
             FROM projects p
             JOIN member m ON m.project_id = p.project_id
             JOIN person per ON per.person_id = m.person_id

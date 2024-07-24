@@ -4,6 +4,7 @@ class Objectives {
   constructor() {}
 
   static async createObjective(nameO, objdesc, idProject, dateLimit) {
+    console.log("create", nameO,objdesc,idProject,dateLimit)
     try {
       const query = await dbQueries.insertObjective(
         nameO,

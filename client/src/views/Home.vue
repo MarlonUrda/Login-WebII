@@ -211,7 +211,7 @@ const viewProject = (projectId) => {
                   project.profile_desc !== 'Arquitecto Software'
                 "
               >
-                <Trash2 class="h-6 w-6 inline text-gray-400" />
+                
               </button>
             </TableCell>
           </TableRow>
