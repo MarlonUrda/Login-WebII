@@ -360,10 +360,10 @@ class DbQueries {
     }
   }
 
-  async insertTask(taskName, taskDesc, idOb, deadline) {
+  async insertTask(taskName, taskDesc, idOb, start_date ,deadline) {
     try {
       const result = this.pool.query(
-        "INSERT INTO tasks (task_name, task_desc, obj_id, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
+        "INSERT INTO tasks (task_name, task_desc, obj_id,start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
         [taskName, taskDesc, idOb, deadline]
       );
 

@@ -44,11 +44,18 @@ onMounted(async () => {
 
 
 const getGoals = async (idProject) => {
+  console.log("Getting goals for project:", idProject);
   const data = await toProcess("Proyecto", "Objectives", "getObjectives", {
     idProject,
   });
   return data.objectives;
 };
+
+const updateGoals = async () => {
+  goals.value = await getGoals(projectToken.value);
+  return;
+};
+
 
 const updateProfile = async () => {
   try {
@@ -77,10 +84,7 @@ const updateProfile = async () => {
   }
 };
 
-const viewGoal = (objectiveId) => {
-  console.log("Viewing project:", objectiveId);
-  router.push(`/Goals/${projectToken.value}/Activities/${objectiveId}`);
-};
+
 
 const deleteObjective = async (objectiveId) => {
   console.log("Deleting project:", objectiveId);
@@ -95,8 +99,6 @@ const deleteObjective = async (objectiveId) => {
   goals.value = await getGoals(projectToken.value)
   toast.success(data.message, { duration: 3000, position: "bottom-right" });
   return data;
-
-
 };
 
 const goBack = async() => {
@@ -105,6 +107,11 @@ const goBack = async() => {
 
 const goMember = () => {
   router.push(`/Member/${projectToken.value}`);
+};
+
+const goGoal = (objectiveId) => {
+  console.log("Viewing project:", objectiveId);
+  router.push(`/Goals/${projectToken.value}/Activities/${objectiveId}`);
 };
 </script>
 
@@ -138,9 +145,11 @@ const goMember = () => {
     <ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Members
   </Button>
 
-  <div>
-    <GoalsSheet :id-project="projectToken" />
-  </div>
+
+  <GoalsSheet :id-project="projectToken" 
+  @create="updateGoals"
+  />
+  
 
 
 
@@ -163,16 +172,14 @@ const goMember = () => {
     
   </div>
 
-  <div v-if="role == 'Project Manager' || role == 'Arquitecto Software'">
-    <GoalsSheet :id-project="projectToken" />
-  </div>
+
 
   <tableBO
     :data="goals"
     :headers="['ID', 'Nombre', 'Descripción',  'Fecha de Fin','Opciones']"
     :permit="role"
     @delete="deleteObjective"
-    @goto="viewGoal"
+    @goto="goGoal"
   />
 </template>
 

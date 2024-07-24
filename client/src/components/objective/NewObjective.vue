@@ -40,33 +40,34 @@ const df = new DateFormatter("en-US", {
 });
 
 const createObjective = async () => {
-  const limitFormatted = dates.value.toString();
-  
-  const data = await toProcess("Proyecto", "Objectives", "createObjective", {
-    nameP: objectiveName.value,
-    objdesc: objectiveDesc.value,
-    idProject: props.idProject,
-    dateLimit: limitFormatted,
-  });
+  try {
+    const limitFormatted = dates.value.toString();
+    const data = await toProcess("Proyecto", "Objectives", "createObjective", {
+      nameP: objectiveName.value,
+      objdesc: objectiveDesc.value,
+      idProject: props.idProject,
+      dateLimit: limitFormatted,
+    });
 
-  if (data.success) {
+    if (!data.success) {
+      errorMessage.value = data.message;
+      toast.error(errorMessage.value, {duration: 3000,position: "bottom-right"});
+    } 
+    
     succesMessage.value = data.message;
     toast.success(succesMessage.value, {
       duration: 3000,
       position: "bottom-right",
     });
+    emit("create");
     return data;
+    
+  } catch (error) {
+    console.log(error.message);
+    
   }
 
-  if (!data.success) {
-    errorMessage.value = data.message;
-    toast.error(errorMessage.value, {
-      duration: 3000,
-      position: "bottom-right",
-    });
-  } else {
-    errorMessage.value = "";
-  }
+  
 };
 </script>
 

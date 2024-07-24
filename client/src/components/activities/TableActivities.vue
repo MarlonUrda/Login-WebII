@@ -79,6 +79,8 @@ onUpdated(() => {
             <TableHead class="text-center font-bold">N°.</TableHead>
             <TableHead class="text-center font-bold">Actividad</TableHead>
             <TableHead class="text-center font-bold">Descripcion</TableHead>
+                        
+            <TableHead class="text-center font-bold">Fecha Inicio</TableHead>
             <TableHead class="text-center font-bold">Fecha Fin</TableHead>
             <TableHead class="text-center font-bold">Objetivo</TableHead>
             <TableHead class="text-center font-bold">Opciones</TableHead>
@@ -100,6 +102,11 @@ onUpdated(() => {
             <TableCell
               class="text-center overflow-hidden text-nowrap text-ellipsis"
               >{{ activity.task_desc }}</TableCell
+            >
+
+            <TableCell
+              class="text-center overflow-hidden text-nowrap text-ellipsis"
+              >{{ activity.start_date }}</TableCell
             >
 
             <TableCell class="text-center">

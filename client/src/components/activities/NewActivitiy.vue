@@ -5,7 +5,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger,SheetClose
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -39,6 +39,8 @@ const createActivity = async () => {
     idOb: props.idObjective,
     deadline: limitFormatted,
   });
+
+
   emit('activityCreated', { /* datos de la actividad */ });
   return data;
 };
@@ -55,12 +57,13 @@ const createActivity = async () => {
         <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Nueva Actividad</Button
       >
     </SheetTrigger>
+    
     <SheetContent>
       <SheetHeader>
         <SheetTitle class="text-center">Nuevo Actividad</SheetTitle>
         <SheetDescription class="text-center">
           Comparte con tus compañeros de equipo las actividades que deben
-          completar para cumplir la meta. Te recirdamos que, si te equivocas...
+          completar para cumplir la meta. Te recordamos que, si te equivocas...
           No importa!. Siempre puedes modificar la actividad.
         </SheetDescription>
       </SheetHeader>
@@ -89,6 +92,9 @@ const createActivity = async () => {
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
+            <Label for="objective-desc" class="text-center">
+              Fecha 
+            </Label>
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline" type="button">
@@ -106,7 +112,9 @@ const createActivity = async () => {
             </Popover>
           </div>
         </div>
-        <Button variant="default" type="submit">Crear actividad</Button>
+        <SheetClose>
+          <Button variant="default" type="submit">Crear actividad</Button>
+        </SheetClose>
       </form>
     </SheetContent>
   </Sheet>
