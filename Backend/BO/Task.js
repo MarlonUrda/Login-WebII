@@ -3,15 +3,16 @@ import { dbQueries } from "../instances/dbinstances.js";
 class Task {
   constructor() {}
 
-  static async createTask(taskName, taskDesc, idOb, deadline) {
-    console.log("Creando actividad", taskName, taskDesc, idOb, deadline);
+  static async createTask(taskName, taskDesc, idOb,start, deadline) {
+    console.log("Creando actividad", taskName, taskDesc, idOb,start, deadline);
 
     try {
-      const query = await dbQueries.insertTask(taskName,taskDesc,idOb, deadline);
+      const query = await dbQueries.insertTask(taskName,taskDesc,idOb, start,deadline);
       if (!query) {
-        console.log("Error agregar miembros");
+        console.log("Error agregar Actividad");
         throw new Error(error);
       } 
+
       console.log("Actividad creada con exito");
       let taskId = query.rows[0].task_id;
       return {
@@ -22,6 +23,7 @@ class Task {
 
 
     } catch (error) {
+      console.log("Error en la creación de la actividad", error);
 
       return {
         success: false,

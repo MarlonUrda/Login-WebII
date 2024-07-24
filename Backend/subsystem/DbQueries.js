@@ -360,11 +360,11 @@ class DbQueries {
     }
   }
 
-  async insertTask(taskName, taskDesc, idOb, start_date ,deadline) {
+  async insertTask(taskName, taskDesc, idOb, start ,deadline) {
     try {
       const result = this.pool.query(
-        "INSERT INTO tasks (task_name, task_desc, obj_id,start_date, deadline) VALUES ($1, $2, $3, $4) RETURNING task_id",
-        [taskName, taskDesc, idOb, deadline]
+        "INSERT INTO tasks (task_name, task_desc, obj_id,start_date, deadline) VALUES ($1, $2, $3, $4, $5) RETURNING task_id",
+        [taskName, taskDesc, idOb,start, deadline]
       );
 
       return result;
@@ -425,6 +425,18 @@ class DbQueries {
   }
 
   async insertMember(idPerson, idProfile, idProject) {
+    try {
+      const result = await this.pool.query(
+        "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3) RETURNING member_id",
+        [idPerson, idProfile, idProject]
+      );
+      return result;
+    } catch (error) {
+      throw new Error("Error al obtener miembros");
+    }
+  }
+
+  async updateMember(idPerson, idProfile, idProject) {
     try {
       const result = await this.pool.query(
         "INSERT INTO member (person_id, profile_id, project_id) VALUES ($1, $2, $3) RETURNING member_id",
@@ -502,6 +514,18 @@ class DbQueries {
       return "Eliminado miembro correctamente";
     } catch (error) {
       throw new Error("Error al eliminar miembro");
+    }
+  }
+
+  async getPerson(idPerson) {
+    try {
+      const result = await this.pool.query(
+        "SELECT * FROM person WHERE person_id = $1",
+        [idPerson]
+      );
+      return result;
+    } catch (error) {
+      console.error("Error: ", error);
     }
   }
 }

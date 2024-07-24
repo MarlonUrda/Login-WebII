@@ -88,6 +88,10 @@ const leaveData = async () => {
             <TableCell class="text-center" v-for="(valor, i) in Object.values(objeto).slice(2)" :key="`cell-${index}-${i}`">
               {{ valor }}
             </TableCell>
+
+            <TableCell class="text-center">
+                <button class="hover:underline">ffffff</button>
+            </TableCell>
           
 
 

@@ -60,26 +60,13 @@ const getActivities = async (idObjective) => {
       idObjective,
     });
 
-    console.log('estaaa',data);
+    console.log('getActivities',data);
 
     return data.activities;
   } catch (error) {
     console.log(error.message);
   }
 };
-
-
-
-
-// onUpdated(async () => {
-//   try {
-//     const ye = await getActivities(objectiveToken.value);
-//     task.value = [...task.value, ...ye];
-//     console.log(task.value);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
 
 const updateProfile = async () => {
   try {
@@ -108,6 +95,7 @@ const updateProfile = async () => {
 };
 
 const goBack = () => {
+  console.log("goBack", projectToken.value);
   router.push({ path: `/Goals/${projectToken.value}` });
 };
 </script>
