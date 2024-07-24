@@ -12,6 +12,8 @@ import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
 import TableActivities from "../components/activities/TableActivities.vue";
 import NewActivitiySheet from "../components/activities/NewActivitiy.vue";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Gantt from "../components/Gantt.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -22,9 +24,7 @@ const role = ref();
 const objective = ref("cargando...");
 const task = ref([]);
 const ready = ref(false);
-
-
-
+        
 onMounted(async () => {
 
   try {
@@ -68,19 +68,6 @@ const getActivities = async (idObjective) => {
   }
 };
 
-
-
-
-// onUpdated(async () => {
-//   try {
-//     const ye = await getActivities(objectiveToken.value);
-//     task.value = [...task.value, ...ye];
-//     console.log(task.value);
-//   } catch (error) {
-//     console.log(error.message);
-//   }
-// });
-
 const updateProfile = async () => {
   try {
     const response = await fetch("http://localhost:3000/update-role", {
@@ -113,7 +100,30 @@ const goBack = () => {
 </script>
 
 <template>
-  <div
+<Button
+    type="submit"
+    variant="default"
+    @click="goBack"
+    class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
+    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button>
+
+    <Gantt/>
+
+<Tabs default-value="actividades">
+    <TabsList class=" bg-slate-600 text-white grid w-[15%] grid-cols-2 absolute left-1/2 top-[1.5%] -translate-x-1/2">
+      <TabsTrigger value="resumen">
+        Resumen
+      </TabsTrigger>
+      <TabsTrigger value="actividades">
+        Actividades
+      </TabsTrigger>
+    </TabsList>
+
+    <TabsContent value="resumen">
+    </TabsContent>
+
+    <TabsContent value="actividades">
+      <div
     id="welcome"
     class="absolute bg-gradient-to-tr from-blue-700 to-blue-400 top-[12%] left-[50%] -translate-x-[50%] w-[32%] h-[18%] rounded-[35px] border-8 border-white shadow-xl"
   />
@@ -121,15 +131,8 @@ const goBack = () => {
     id="pos"
     class="absolute text-4xl font-bold italic top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4"
   >
-    Lista de Actividad
+    Lista de Actividades
   </h1>
-  <Button
-    type="submit"
-    variant="default"
-    @click="goBack"
-    class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
-    ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button
-  >
 
   <div id="nomorepos">
     <Card
@@ -161,10 +164,6 @@ const goBack = () => {
     :role = "role"
     @activity-created="updateActivitiesList"
   />
+    </TabsContent>
+</Tabs>
 </template>
-
-<style scoped>
-#pos {
-  text-shadow: 0px 0px 10px #000000;
-}
-</style>

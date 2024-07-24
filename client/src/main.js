@@ -4,6 +4,7 @@ import App from "./App.vue";
 import router from "./router";
 import ToastPlugin from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-bootstrap.css";
+import { registerLicense } from '@syncfusion/ej2-base';
 
 /* import the fontawesome core */
 import { library } from "@fortawesome/fontawesome-svg-core";
@@ -70,6 +71,8 @@ library.add(
   faHourglassHalf,
   faSitemap
 );
+
+registerLicense('Ngo9BigBOggjHTQxAR8/V1NCaF1cWWhBYVF1WmFZfVpgcF9EZ1ZVRmY/P1ZhSXxXdkJhXX5YcnNRRWVdUEY=');
 
 createApp(App)
   .use(router)

@@ -6,6 +6,7 @@ import Background from "./components/Background.vue";
 import TitleCard from "./views/TitleCard.vue";
 import Titlebar from "./components/Titlebar.vue";
 import ProjectSheet from "./components/ProjectSheet.vue";
+import Gantt from "./components/Gantt.vue";
 // Import GoalsSheet if needed
 
 const route = useRoute();
@@ -30,7 +31,6 @@ const isMemberRoute = computed(() => {
   return regex.test(route.path);
 });
 
-
 const showComponents = computed(() => {
   return !isHomeRoute.value && !isGoalRoute.value && !isActivityRoute.value  && !isMemberRoute.value
 });
@@ -46,6 +46,7 @@ const showIntegrantes = computed(() => {
 
 <template>
   <div id="app">
+    
     <TitleCard v-if="showComponents" />
     <Titlebar v-if="!showComponents" />
     <!-- <Integrantes v-if="showGoalSheet" /> -->

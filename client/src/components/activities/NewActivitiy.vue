@@ -60,11 +60,11 @@ const createActivity = async () => {
     
     <SheetContent>
       <SheetHeader>
-        <SheetTitle class="text-center">Nuevo Actividad</SheetTitle>
+        <SheetTitle class="text-center">Nueva Actividad</SheetTitle>
         <SheetDescription class="text-center">
           Comparte con tus compañeros de equipo las actividades que deben
           completar para cumplir la meta. Te recordamos que, si te equivocas...
-          No importa!. Siempre puedes modificar la actividad.
+          ¡No importa! Siempre puedes modificar la actividad.
         </SheetDescription>
       </SheetHeader>
       <form @submit.prevent="createActivity()">
