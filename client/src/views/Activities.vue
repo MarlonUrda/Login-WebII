@@ -110,19 +110,20 @@ const goBack = () => {
 
     
 
-<Tabs default-value="aaa">
+<Tabs default-value="actividades">
     <TabsList class=" bg-slate-600 text-white grid w-[15%] grid-cols-2 absolute left-1/2 top-[1.5%] -translate-x-1/2">
       <TabsTrigger value="resumen">
         Resumen
       </TabsTrigger>
-      <TabsTrigger value="aaa">
+      <TabsTrigger value="actividades">
         Actividades
       </TabsTrigger>
     </TabsList>
     
+    <Gantt/>
 
-    <TabsContent value="aaa">
-      <Gantt/>
+    <TabsContent value="resumen">
+
       
       
     </TabsContent>
@@ -171,4 +172,5 @@ const goBack = () => {
     </TabsContent>
 </Tabs>
 </template>
+
 
