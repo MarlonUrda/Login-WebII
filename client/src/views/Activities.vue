@@ -60,7 +60,7 @@ const getActivities = async (idObjective) => {
       idObjective,
     });
 
-    console.log('estaaa',data);
+    console.log('getActivities',data);
 
     return data.activities;
   } catch (error) {
@@ -95,6 +95,7 @@ const updateProfile = async () => {
 };
 
 const goBack = () => {
+  console.log("goBack", projectToken.value);
   router.push({ path: `/Goals/${projectToken.value}` });
 };
 </script>

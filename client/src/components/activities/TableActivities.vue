@@ -33,7 +33,6 @@ onMounted(async () => {
   try {
     activities.value = props.activities;
     role.value=  props.role
-    console.log(role.value)
     console.log("activities", activities.value);
   } catch (error) {
     console.log(error.message);
@@ -44,12 +43,12 @@ watch(() => props, (newParams, oldParams) => {
   // Actualizar los tokens basados en los nuevos parámetros de la ruta
   activities.value = props.activities;
   role.value=  props.role
-  console.log("activitiessss", activities.value);
+  console.log("change props activities", activities.value);
 
 }, { deep: true });
 
 const deleteActivity = async (activityId) => {
-  console.log("act",activityId)
+  console.log("deleteActivity",activityId)
   const data = await toProcess("Proyecto", "Task", "deleteTask", {
     activityId,
   });
@@ -106,11 +105,11 @@ onUpdated(() => {
 
             <TableCell
               class="text-center overflow-hidden text-nowrap text-ellipsis"
-              >{{ activity.start_date }}</TableCell
+              >{{ activity.start_date ? activity.start_date.split("T")[0] : ''}}</TableCell
             >
 
             <TableCell class="text-center">
-              {{ activity.deadline.split("T")[0] }}
+              {{ activity.deadline ? activity.deadline.split("T")[0] : ''}}
             </TableCell>
 
             <TableCell

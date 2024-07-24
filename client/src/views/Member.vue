@@ -20,7 +20,7 @@ const route = useRoute();
 const projectToken = ref(0);
 const dataTable = ref([]);
 const member = ref([]);
-const headers = ref(["ID", "Nombre", "Usuario", "Email",'Opciones']);
+const headers = ref(["ID", "Nombre", "Usuario", "Email",'rol','Opciones']);
 
 
 

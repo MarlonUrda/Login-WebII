@@ -98,6 +98,11 @@ const leaveData = async () => {
                 {{ Object.values(objeto)[3].split('T')[0] }}
             </TableCell>
 
+            <TableCell class="text-center">
+                {{ Object.values(objeto)[3].split('T')[0] }}
+            </TableCell>
+
+
     
           
 
