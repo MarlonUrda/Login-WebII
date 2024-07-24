@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@syncfusion/ej2-vue-gantt": "^26.2.4",
     "@tanstack/react-table": "^8.19.3",
     "lucide-vue-next": "^0.408.0"
   },

@@ -64,6 +64,7 @@ const sendData = async () => {
 </script>
 
 <template>
+  <Gantt/>
   <div id="pos">
     <Card class="shadow-none border-none">
       <CardHeader>
