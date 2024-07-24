@@ -108,19 +108,23 @@ const goBack = () => {
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
     ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button>
 
-    <Gantt/>
+    
 
-<Tabs default-value="actividades">
+<Tabs default-value="aaa">
     <TabsList class=" bg-slate-600 text-white grid w-[15%] grid-cols-2 absolute left-1/2 top-[1.5%] -translate-x-1/2">
       <TabsTrigger value="resumen">
         Resumen
       </TabsTrigger>
-      <TabsTrigger value="actividades">
+      <TabsTrigger value="aaa">
         Actividades
       </TabsTrigger>
     </TabsList>
+    
 
-    <TabsContent value="resumen">
+    <TabsContent value="aaa">
+      <Gantt/>
+      
+      
     </TabsContent>
 
     <TabsContent value="actividades">
@@ -157,7 +161,6 @@ const goBack = () => {
     @activity-created="updateActivitiesList"
     />
 
-  <div v-if="ready"></div>
   <TableActivities
     :id_proyecto="projectToken"
     :id_objetivo="objectiveToken"
@@ -168,3 +171,4 @@ const goBack = () => {
     </TabsContent>
 </Tabs>
 </template>
+
