@@ -11,8 +11,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
 import tableBO from "../components/member/tableMember.vue";
-
-
+import newMember from "@/components/member/newMember.vue";
 
 
 const router = useRouter();
@@ -129,6 +128,9 @@ const goBack = () => {
       </CardHeader>
     </Card>
   </div>
+
+  <newMember/>
+
 
   <table-b-o
   :data="dataTable"

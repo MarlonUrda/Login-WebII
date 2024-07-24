@@ -89,11 +89,6 @@ const leaveData = async () => {
               {{ valor }}
             </TableCell>
 
-            <TableCell class="text-center">
-                <button class="hover:underline">ffffff</button>
-            </TableCell>
-          
-
 
             <TableCell class="text-center" v-if="role">
               <button>

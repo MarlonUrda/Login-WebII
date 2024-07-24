@@ -6,17 +6,28 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "./ui/sheet";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
-import { Textarea } from "./ui/textarea";
-import { Calendar } from "./ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+} from "../ui/sheet";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
+import { Textarea } from "../ui/textarea";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {  CalendarDate,getLocalTimeZone,DateFormatter } from "@internationalized/date";
 import { CalendarFold } from "lucide-vue-next";
 import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
+import dataTable from "@/components/member/dataTable.vue";
 
 const activityName = ref("");
 const activityDesc = ref("");
@@ -45,69 +56,36 @@ const createActivity = async () => {
 </script>
 
 <template>
-  <Sheet>
-    <SheetTrigger as-child>
+  <Dialog>
+    <DialogTrigger as-child>
       <Button
         type="submit"
         variant="default"
         class="text-black bg-white w-[12.8%] h-[6%] top-[25%] left-[79%] absolute text-lg hover:text-white border-2 border-white"
       >
-        <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Nueva Actividad</Button
+        <CirclePlus class="mt-[1%] mr-2 h-4 w-4" />Añadir Miembros</Button
       >
-    </SheetTrigger>
-    <SheetContent>
-      <SheetHeader>
-        <SheetTitle class="text-center">Nuevo Actividad</SheetTitle>
-        <SheetDescription class="text-center">
-          Comparte con tus compañeros de equipo las actividades que deben
-          completar para cumplir la meta. Te recirdamos que, si te equivocas...
-          No importa!. Siempre puedes modificar la actividad.
-        </SheetDescription>
-      </SheetHeader>
-      <form @submit.prevent="createActivity()">
-        <div class="grid gap-4 py-4">
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="activity-name" class="text-center">
-              Nombre de la Actividad
-            </Label>
-            <Input
-              id="activity-name"
-              v-model="activityName"
-              placeholder="Nombre del actividad..."
-              class="col-span-3"
-            />
-          </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Label for="activity-desc" class="text-center">
-              Descripcion de la Actividad
-            </Label>
-            <Textarea
-              id="activity-desc"
-              placeholder="De que se trata el actividad.."
-              v-model="activityDesc"
-              class="col-span-3"
-            />
-          </div>
-          <div class="grid grid-cols-4 items-center gap-4">
-            <Popover>
-              <PopoverTrigger>
-                <Button variant="outline" type="button">
-                  <CalendarFold class="mr-2 h-4 m-4" />
-                  {{
-                    dates
-                      ? df.format(dates.toDate(getLocalTimeZone()))
-                      : "Escoge una fecha"
-                  }}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent class="w-auto p-0">
-                <Calendar v-model="dates" initial-focus />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        <Button variant="default" type="submit">Crear actividad</Button>
-      </form>
-    </SheetContent>
-  </Sheet>
+    </DialogTrigger>
+    <DialogContent class="custom-dialog-content">
+      
+      <DialogHeader>
+        <DialogTitle class="text-center">Añadir Miembros</DialogTitle>
+        <DialogDescription class="text-center">
+          Busca y añade miembros al proyecto para que puedan colaborar en las tareas. 
+        </DialogDescription>
+      </DialogHeader>
+
+      <data-table/>
+    </DialogContent>
+  </Dialog>
 </template>
+
+<style>
+.custom-dialog-content {
+  width: 90vw; /* Ajusta la anchura al 90% del ancho de la ventana */
+  height: 80vh; /* Ajusta la altura al 80% del alto de la ventana */
+  max-width: 1000px; /* Opcional: establece un ancho máximo */
+  max-height: 600px; /* Opcional: establece una altura máxima */
+  /* Agrega cualquier otro estilo que necesites */
+}
+</style>

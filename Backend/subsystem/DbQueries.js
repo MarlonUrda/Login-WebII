@@ -484,12 +484,13 @@ class DbQueries {
     try {
       const result = await this.pool.query(
         `
-            SELECT m.member_id ,name || lastname,username,email 
+            SELECT m.member_id ,name || lastname,username,email ,profile_desc 
             FROM projects p
             JOIN member m ON m.project_id = p.project_id
             JOIN person per ON per.person_id = m.person_id
             JOIN users u ON u.person_id = per.person_id
-            WHERE p.project_id = $1 
+right JOIN profile prof on prof.profile_id = m.profile_id
+            WHERE p.project_id = $1
           `,
         [idProject]
       );
