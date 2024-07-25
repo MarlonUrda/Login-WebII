@@ -12,6 +12,7 @@ import { ChevronLeft } from "lucide-vue-next";
 import { toProcess } from "../utils/toProcess";
 import tableBO from "../components/member/tableMember.vue";
 import newMember from "@/components/member/newMember.vue";
+import Members from "../components/Integrantes.vue";
 
 
 const router = useRouter();
@@ -109,7 +110,7 @@ const goBack = () => {
     id="pos"
     class="absolute text-4xl font-bold italic top-[25%] left-[18%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4"
   >
-    Lista de Miembros
+    Listado de Integrantes
   </h1>
   <Button
     type="submit"
@@ -131,13 +132,17 @@ const goBack = () => {
           <CardDescription class="text-lg text-white italic">
             Proyecto actual: {{ project }}
           </CardDescription>
+          <CardDescription class="text-lg text-white font-bold">
+            Aquí puedes manejar los integrantes del proyecto:
+          </CardDescription>
         </div>
       </CardHeader>
     </Card>
   </div>
 
-  <newMember/>
-
+  <!-- <newMember/> -->
+   <!-- <Members :id_project="projectToken" /> -->
+<Members/>
 
   <table-b-o
   :data="dataTable"

@@ -156,13 +156,6 @@ const formSchema = toTypedSchema(
 const { handleSubmit, setFieldValue, values } = useForm({
   validationSchema: formSchema,
 });
-// Ejemplo de onSubmit que creaba un toast con el valor puesto pero no usamos toast ni está instalado
-// const onSubmit = handleSubmit((values) => {
-//   toast({
-//     title: 'You submitted the following values:',
-//     description: h('pre', { class: 'mt-2 w-[340px] rounded-md bg-slate-950 p-4' }, h('code', { class: 'text-white' }, JSON.stringify(values, null, 2))),
-//   })
-// })
 </script>
 
 <template>
@@ -171,12 +164,10 @@ const { handleSubmit, setFieldValue, values } = useForm({
       <Button
         type="submit"
         variant="default"
-        class="text-white bg-blue-400 w-[11.5%] h-[5%] top-[11%] left-[98%] -translate-x-full absolute hover:bg-white hover:text-black"
-        ><UserRoundPlus class="mt-[2%] mr-2 h-4 w-4 inline" />Manejar
-        Integrantes</Button
-      >
+        class="text-white bg-blue-400 w-[15%] h-[6%] top-[25%] left-[93%] -translate-x-full absolute text-lg hover:bg-white hover:text-black"
+        ><UserRoundPlus class="mt-[1%] mr-2 h-5 w-5 inline" />Añadir Integrantes</Button>
     </SheetTrigger>
-    <SheetContent class="sm:w-full" side="bottom">
+    <SheetContent class="sm:w-full" side="top">
       <SheetHeader>
         <SheetTitle class="text-center">Lista de Integrantes</SheetTitle>
         <SheetDescription class="text-center mb-4">
