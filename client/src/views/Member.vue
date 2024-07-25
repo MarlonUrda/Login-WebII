@@ -20,6 +20,8 @@ const projectToken = ref(0);
 const dataTable = ref([]);
 const member = ref([]);
 const headers = ref(["ID", "Nombre", "Usuario", "Email",'rol','Opciones']);
+const role = ref();
+const project = ref();
 
 
 
@@ -68,8 +70,16 @@ const updateProfile = async () => {
         projectId: projectToken.value,
       }),
     });
-    let x =await response.json();
-    console.log(x);
+
+    if (response.ok) {
+      const data = await response.json();
+      console.log(data.message[0]);
+      console.log("Profile updated");
+      project.value = data.message[0].project_name;
+      role.value = data.message[0].profile_desc;
+      return true;
+    }
+
   } catch (error) {
     console.log(error.message);
   }
@@ -120,9 +130,6 @@ const goBack = () => {
         <div>
           <CardDescription class="text-lg text-white italic">
             Proyecto actual: {{ project }}
-          </CardDescription>
-          <CardDescription class="text-lg text-white italic">
-            Objetivo actual: {{ objective }}
           </CardDescription>
         </div>
       </CardHeader>

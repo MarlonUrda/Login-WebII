@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/table";
 import { onMounted, onUpdated, ref, watch } from "vue";
 import { toProcess } from "@/utils/toProcess";
+import Reports from "@/components/activities/Report.vue";
 
 const activities = ref([]);
 const role = ref("Basico");
@@ -42,7 +43,7 @@ onMounted(async () => {
 watch(() => props, (newParams, oldParams) => {
   // Actualizar los tokens basados en los nuevos parámetros de la ruta
   activities.value = props.activities;
-  role.value=  props.role
+  role.value=  props.role 
   console.log("change props activities", activities.value);
 
 }, { deep: true });
@@ -67,8 +68,10 @@ onUpdated(() => {
 </script>
 
 <template>
+  
+
+
   <div
-    id="projectlist"
     class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
   >
     <ScrollArea class="h-[93%] w-[93%] mt-[0.75%] ml-[3.5%]">
@@ -93,9 +96,10 @@ onUpdated(() => {
           >
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500">
-              <button class="hover:underline">
-                {{ activity.task_name }}
-              </button>
+              <Reports
+                :nombre="activity.task_name"
+                :id_objetivo="props.id_objetivo"
+              />
             </TableCell>
 
             <TableCell
@@ -152,10 +156,14 @@ onUpdated(() => {
       </Table>
     </ScrollArea>
   </div>
+
 </template>
 
 <style scoped>
 #pos {
   text-shadow: 0px 0px 10px #000000;
 }
+
+
+
 </style>
