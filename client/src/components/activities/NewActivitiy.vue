@@ -10,17 +10,21 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
+import { Calendar } from "lucide-vue-next";
+import { RangeCalendar } from "@/components/ui/range-calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {  CalendarDate,getLocalTimeZone,DateFormatter } from "@internationalized/date";
-import { CalendarFold } from "lucide-vue-next";
+import {  CalendarDate, getLocalTimeZone, DateFormatter } from "@internationalized/date";
 import { onMounted, ref } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 
 const activityName = ref("");
 const activityDesc = ref("");
-const dates = ref(new CalendarDate(2024, 1, 2));
+// const dates = ref(new CalendarDate(2024, 1, 2));
+const dates = ref({
+  start: new CalendarDate(2024, 7, 25),
+  end: new CalendarDate(2024, 7, 25).add({ days: 20 }),
+});
 
 const props = defineProps({
   idObjective: Number,
@@ -32,12 +36,16 @@ const df = new DateFormatter("en-US", {
 });
 
 const createActivity = async () => {
-  const limitFormatted = dates.value.toString();
+  const startFormatted = dates.value.start.toString();
+  const endFormatted = dates.value.end.toString();
+  // const limitFormatted = dates.value.toString();
   const data = await toProcess("Proyecto", "Task", "createTask", {
     taskName: activityName.value,
     taskDesc: activityDesc.value,
     idOb: props.idObjective,
-    deadline: limitFormatted,
+    startDate: startFormatted,
+    endDate: endFormatted,
+    // deadline: limitFormatted,
   });
 
 
@@ -76,7 +84,7 @@ const createActivity = async () => {
             <Input
               id="activity-name"
               v-model="activityName"
-              placeholder="Nombre del actividad..."
+              placeholder="Nombre de la actividad..."
               class="col-span-3"
             />
           </div>
@@ -86,19 +94,19 @@ const createActivity = async () => {
             </Label>
             <Textarea
               id="activity-desc"
-              placeholder="De que se trata el actividad.."
+              placeholder="¿De qué se trata el actividad?"
               v-model="activityDesc"
               class="col-span-3"
             />
           </div>
-          <div class="grid grid-cols-4 items-center gap-4">
+          <!-- <div class="grid grid-cols-4 items-center gap-4">
             <Label for="objective-desc" class="text-center">
-              Fecha 
+              Fechas de Inicio y Fin
             </Label>
             <Popover>
               <PopoverTrigger>
                 <Button variant="outline" type="button">
-                  <CalendarFold class="mr-2 h-4 m-4" />
+                  <CalendarFold class="-ml-2 mr-2 h-4 m-4" />
                   {{
                     dates
                       ? df.format(dates.toDate(getLocalTimeZone()))
@@ -108,6 +116,38 @@ const createActivity = async () => {
               </PopoverTrigger>
               <PopoverContent class="w-auto p-0">
                 <Calendar v-model="dates" initial-focus />
+              </PopoverContent>
+            </Popover>
+          </div> -->
+          <div class="grid grid-cols-4 items-center gap-4">
+            <Label for="objective-desc" class="text-center">
+              Fechas de Inicio y Fin
+            </Label>
+            <Popover>
+              <PopoverTrigger>
+                <Button variant="default" class="col-span-3" type="button">
+                  <Calendar class="-ml-1 mr-2 h-4 m-4" />
+                  <template v-if="dates.start">
+                    <template v-if="dates.end">
+                      {{ df.format(dates.start.toDate(getLocalTimeZone())) }} -
+                      {{ df.format(dates.end.toDate(getLocalTimeZone())) }}
+                    </template>
+                    <template v-else>
+                      {{ df.format(dates.start.toDate(getLocalTimeZone())) }}
+                    </template>
+                  </template>
+                  <template v-else>
+                    <div>Seleccione las fechas del proyecto</div>
+                  </template>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent class="w-auto p-0">
+                <RangeCalendar
+                  v-model="dates"
+                  initial-focus
+                  :number-of-months="2"
+                  @update:start-value="(startDate) => (dates.start = startDate)"
+                />
               </PopoverContent>
             </Popover>
           </div>

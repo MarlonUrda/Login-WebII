@@ -114,7 +114,7 @@ const createProject = async () => {
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="project-type" class="text-center">
-              De que trata el proyecto?
+              ¿De qué trata el proyecto?
             </Label>
             <Input
               id="project-name"
@@ -124,10 +124,13 @@ const createProject = async () => {
             />
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
+            <Label for="objective-desc" class="text-center">
+              Fechas de Inicio y Fin
+            </Label>
             <Popover>
               <PopoverTrigger>
                 <Button variant="default" class="col-span-3" type="button">
-                  <Calendar class="mr-2 h-4 m-4" />
+                  <Calendar class="-ml-1 mr-2 h-4 m-4" />
                   <template v-if="dates.start">
                     <template v-if="dates.end">
                       {{ df.format(dates.start.toDate(getLocalTimeZone())) }} -

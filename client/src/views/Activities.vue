@@ -146,7 +146,9 @@ const goBack = () => {
           <CardDescription class="text-lg text-white italic">
             Proyecto actual: {{ project }}
           </CardDescription>
-
+          <CardDescription class="text-lg text-white font-bold">
+            Reporta tu progreso en actividades o revisa lo hecho:
+          </CardDescription>
         </div>
       </CardHeader>
     </Card>
