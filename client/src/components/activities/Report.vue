@@ -32,6 +32,7 @@ import { Label } from '@/components/ui/label';
 
 
 const project_id = ref(0);
+const userdata = ref({});
 
 
 
@@ -50,11 +51,27 @@ const props = defineProps({
   },
 });
 
-onMounted(() => {
+onMounted(async () => {
   project_id.value = props.idProject;
+  userdata.value = await getSession();
 
   
 });
+
+const getSession = async () => {
+  const res = await fetch("http://localhost:3000/user-data", {
+    method: "GET",
+    credentials: "include",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+  if (res.ok) {
+    const data = await res.json();
+    console.log("data", data);
+    return data;
+  }
+};
 
 watch(() => props, (newParams, oldParams) => {
   console.log("changevvggg props", newParams);
@@ -66,7 +83,7 @@ const objectiveDesc = ref("");
 const activityPercentage = ref(0);
 
 
-const emit = defineEmits(['activityCreated']);
+
 
 
 
@@ -76,15 +93,13 @@ const sendReport = async () => {
     const  progreso = activityPercentage.value;
     const  comentario = objectiveDesc.value;
     const fechaMilisegundos = Date.now();
-    // Convertir el timestamp a un objeto Date de JavaScript
     const fechaObjeto = new Date(fechaMilisegundos);
-    // Convertir el objeto Date a una cadena en formato ISO 8601
-    // y luego ajustar el formato a 'YYYY-MM-DD HH:MM:SS' si es necesario
+
     const fechaISO = fechaObjeto.toISOString().replace('T', ' ').substring(0, 19);
     console.log("fechaISO", fechaISO);
     const fecha = fechaISO;
     const response = await toProcess("Basico", "Report", "newReport", {
-        nombre: props.nombre, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
+        nombre: userdata.value.name + ' '+userdata.value.lastname, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
         actividad: props.actividad,
         progreso,
         comentario,
@@ -102,7 +117,11 @@ const sendReport = async () => {
   } catch (error) {  
     console.error('Error:', error);
   }
-}
+};
+
+
+
+
 
 
 </script>

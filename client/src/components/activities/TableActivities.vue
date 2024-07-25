@@ -97,7 +97,7 @@ const deleteActivity = async (activityId) => {
             <TableCell class="text-center">{{ index + 1 }}</TableCell>
             <TableCell class="text-center text-blue-500">
               <Reports
-                :nombre="activity.task_name"
+                :actividad="activity.task_name"
                 :id_objetivo="props.id_objetivo"
                 :idProject="project_id"
               />

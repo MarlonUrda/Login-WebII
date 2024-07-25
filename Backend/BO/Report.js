@@ -10,6 +10,7 @@ class Report {
    */
   static async newReport(nombre,actividad,progreso,comentario,fecha,idProject) {
     try {
+      
     console.log("llego a la funcion", nombre,actividad,progreso,comentario,fecha,idProject);
       const result = await dbQueries.newReport(nombre,actividad,progreso,comentario,fecha,idProject);
       console.log("apunto del return", result);
