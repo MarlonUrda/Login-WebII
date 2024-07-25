@@ -33,6 +33,7 @@ import { Label } from '@/components/ui/label';
 
 const project_id = ref(0);
 const userdata = ref({});
+const actividad = ref("");
 
 
 
@@ -52,9 +53,11 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  project_id.value = props.idProject;
   userdata.value = await getSession();
-
+  
+  project_id.value = props.idProject;
+  actividad.value = props.actividad;
+  console.log("changevvgggfff props", project_id.value, actividad.value);
   
 });
 
@@ -68,14 +71,14 @@ const getSession = async () => {
   });
   if (res.ok) {
     const data = await res.json();
-    console.log("data", data);
     return data;
   }
 };
 
 watch(() => props, (newParams, oldParams) => {
-  console.log("changevvggg props", newParams);
   project_id.value = props.idProject;
+  actividad.value = props.actividad;
+  console.log("changevvgggfff props", project_id.value, actividad.value);
 
 }, { deep: true });
 
@@ -100,7 +103,7 @@ const sendReport = async () => {
     const fecha = fechaISO;
     const response = await toProcess("Basico", "Report", "newReport", {
         nombre: userdata.value.name + ' '+userdata.value.lastname, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
-        actividad: props.actividad,
+        actividad: actividad.value,
         progreso,
         comentario,
         fecha,
@@ -134,7 +137,7 @@ const sendReport = async () => {
     <DialogTrigger as-child>
 
       <button class="hover:underline">
-        {{props.nombre}}
+        {{actividad}}
               </button>
 
     </DialogTrigger>
