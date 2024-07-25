@@ -117,7 +117,7 @@ const createObjective = async () => {
           </div>
           <div class="grid grid-cols-4 items-center gap-4">
             <Label for="objective-desc" class="text-center">
-              Fecha limite
+              Fecha Inicio
             </Label>
             <Popover>
               <PopoverTrigger>

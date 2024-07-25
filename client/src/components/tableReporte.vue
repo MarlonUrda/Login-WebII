@@ -45,7 +45,7 @@ onMounted(async () => {
   const response = await toProcess("Basico", "Report", "getReport", {
     id_proyecto: id_proyecto.value,
   }).then((data) => {
-    console.log("data", data.data);
+
 
     for (let objeto of data.data){
 
@@ -57,7 +57,6 @@ onMounted(async () => {
         reporte: `${objeto.nombre} cambió el progreso de la actividad ${objeto.actividad} a ${objeto.progreso}% con el siguiente anuncio: "${objeto.comentario}".`,
       });
     }
-    console.log("invoices", invoices.value);
 
   });
 
@@ -66,13 +65,14 @@ onMounted(async () => {
 });
 
 watch(props, (newParams, oldParams) => {
-    console.log("change props", newParams);
+
     id_proyecto.value = props.id_proyecto;
   }, { deep: true });
 
 
 
   function formatISODateToCustomString(isoDateString) {
+    
     const date = new Date(isoDateString);
     const day = date.getDate();
     const month = date.getMonth() + 1; // Los meses en JavaScript comienzan en 0
@@ -82,7 +82,7 @@ watch(props, (newParams, oldParams) => {
     const ampm = hours >= 12 ? 'pm' : 'am';
     hours = hours % 12;
     hours = hours ? hours : 12; // La hora '0' debe ser '12'
-    const formatted = `${day}-${month}-${year} ${hours}:${minutes < 10 ? '0' + minutes : minutes}${ampm}`;
+    const formatted = `${day}-${month}-${year}`;
     return formatted;
   }
   

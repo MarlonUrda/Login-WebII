@@ -36,6 +36,7 @@ onMounted(async () => {
     activities.value = props.activities;
     role.value=  props.role
     project_id.value = props.id_proyecto;
+    console.log("changeggg props", project_id.value, activities.value, role.value);
 
   } catch (error) {
     console.log(error.message);
@@ -47,8 +48,7 @@ watch(() => props, (newParams, oldParams) => {
   activities.value = props.activities;
   role.value=  props.role 
   project_id.value = props.id_proyecto;
-  console.log("changeggg props", project_id.value);
-
+  console.log("changeggg props", project_id.value, activities.value, role.value);
 }, { deep: true });
 
 const deleteActivity = async (activityId) => {

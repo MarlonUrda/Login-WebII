@@ -176,7 +176,7 @@ const goGoal = (objectiveId) => {
 
   <tableBO
     :data="goals"
-    :headers="['ID', 'Nombre', 'Descripción',  'Fecha de Fin','Opciones']"
+    :headers="['ID', 'Nombre', 'Descripción',  'Fecha Inicio','Opciones']"
     :permit="role"
     @delete="deleteObjective"
     @goto="goGoal"

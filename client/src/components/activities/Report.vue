@@ -33,6 +33,7 @@ import { Label } from '@/components/ui/label';
 
 const project_id = ref(0);
 const userdata = ref({});
+const actividad = ref("");
 
 
 
@@ -52,10 +53,10 @@ const props = defineProps({
 });
 
 onMounted(async () => {
-  project_id.value = props.idProject;
   userdata.value = await getSession();
-
   
+  project_id.value = props.idProject;
+  actividad.value = props.actividad;
 });
 
 const getSession = async () => {
@@ -68,46 +69,37 @@ const getSession = async () => {
   });
   if (res.ok) {
     const data = await res.json();
-    console.log("data", data);
     return data;
   }
 };
 
 watch(() => props, (newParams, oldParams) => {
-  console.log("changevvggg props", newParams);
   project_id.value = props.idProject;
+  actividad.value = props.actividad;
 
 }, { deep: true });
 
 const objectiveDesc = ref("");
 const activityPercentage = ref(0);
 
-
-
-
-
-
 const sendReport = async () => {
   try {
-    console.log("sendReport");
     const  progreso = activityPercentage.value;
     const  comentario = objectiveDesc.value;
     const fechaMilisegundos = Date.now();
     const fechaObjeto = new Date(fechaMilisegundos);
 
     const fechaISO = fechaObjeto.toISOString().replace('T', ' ').substring(0, 19);
-    console.log("fechaISO", fechaISO);
     const fecha = fechaISO;
     const response = await toProcess("Basico", "Report", "newReport", {
         nombre: userdata.value.name + ' '+userdata.value.lastname, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
-        actividad: props.actividad,
+        actividad: actividad.value,
         progreso,
         comentario,
         fecha,
         idProject: project_id.value,
     });
 
-    console.log("response", response);
     
     if(response.success){
 
@@ -119,11 +111,6 @@ const sendReport = async () => {
   }
 };
 
-
-
-
-
-
 </script>
 
 <template>
@@ -134,7 +121,7 @@ const sendReport = async () => {
     <DialogTrigger as-child>
 
       <button class="hover:underline">
-        {{props.nombre}}
+        {{actividad}}
               </button>
 
     </DialogTrigger>
@@ -143,7 +130,7 @@ const sendReport = async () => {
     <DialogContent >
 
       <DialogHeader>
-        <DialogTitle class="text-center font-bold text-2xl text-gray-800 my-1">Reporte de actividad:{{ props.nombre }}</DialogTitle>
+        <DialogTitle class="text-center font-bold text-2xl text-gray-800 my-1">Reporte de actividad:{{ actividad }}</DialogTitle>
       </DialogHeader>
 
       <form @submit.prevent="sendReport()">
