@@ -57,8 +57,6 @@ onMounted(async () => {
   
   project_id.value = props.idProject;
   actividad.value = props.actividad;
-  console.log("changevvgggfff props", project_id.value, actividad.value);
-  
 });
 
 const getSession = async () => {
@@ -78,28 +76,20 @@ const getSession = async () => {
 watch(() => props, (newParams, oldParams) => {
   project_id.value = props.idProject;
   actividad.value = props.actividad;
-  console.log("changevvgggfff props", project_id.value, actividad.value);
 
 }, { deep: true });
 
 const objectiveDesc = ref("");
 const activityPercentage = ref(0);
 
-
-
-
-
-
 const sendReport = async () => {
   try {
-    console.log("sendReport");
     const  progreso = activityPercentage.value;
     const  comentario = objectiveDesc.value;
     const fechaMilisegundos = Date.now();
     const fechaObjeto = new Date(fechaMilisegundos);
 
     const fechaISO = fechaObjeto.toISOString().replace('T', ' ').substring(0, 19);
-    console.log("fechaISO", fechaISO);
     const fecha = fechaISO;
     const response = await toProcess("Basico", "Report", "newReport", {
         nombre: userdata.value.name + ' '+userdata.value.lastname, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
@@ -110,7 +100,6 @@ const sendReport = async () => {
         idProject: project_id.value,
     });
 
-    console.log("response", response);
     
     if(response.success){
 
@@ -121,11 +110,6 @@ const sendReport = async () => {
     console.error('Error:', error);
   }
 };
-
-
-
-
-
 
 </script>
 
@@ -146,7 +130,7 @@ const sendReport = async () => {
     <DialogContent >
 
       <DialogHeader>
-        <DialogTitle class="text-center font-bold text-2xl text-gray-800 my-1">Reporte de actividad:{{ props.nombre }}</DialogTitle>
+        <DialogTitle class="text-center font-bold text-2xl text-gray-800 my-1">Reporte de actividad:{{ actividad }}</DialogTitle>
       </DialogHeader>
 
       <form @submit.prevent="sendReport()">

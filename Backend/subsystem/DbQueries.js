@@ -555,6 +555,25 @@ right JOIN profile prof on prof.profile_id = m.profile_id
       console.error("Error: ", error);
     }
   }
+
+  ganntData(idProject){
+    try {
+      console.log("llego a la funcion", idProject);
+      const result = this.pool.query(
+        `SELECT objective_name, o.deadline as objectiveStart , task_name, t.start_date, t.deadline
+FROM projects p
+JOIN objective o on  p.project_id = o.project_id
+JOIN tasks t on  o.objective_id = t.obj_id
+where p.project_id = $1`,
+        [idProject]
+      );
+      console.log("apunto del return", result);
+      return result;
+    } catch (error) {
+      console.log("Error al obtener los datos de gannt");
+      throw new Error(error);
+  }
+}
 }
 
 export default DbQueries;

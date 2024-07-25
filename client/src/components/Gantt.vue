@@ -1,7 +1,84 @@
-<script setup lang="ts">
+<script setup >
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { GanttComponent as EjsGantt, ColumnsDirective as EColumns, ColumnDirective as EColumn } from '@syncfusion/ej2-vue-gantt';
-let data = [{
+import { ref,defineProps, onMounted } from "vue";
+import { toProcess } from "@/utils/toProcess";
+
+const data = ref([]);
+const dataGannt= ref([])
+const props = defineProps({
+  idProject:{
+    type: Number,
+    default: 15,
+  }});
+
+
+onMounted(async () => {
+  try {
+    console.log("props", props.idProject);
+    data.value = await toProcess("Basico", "Gannt", "ganntData", {
+      idProject: props.idProject,
+    });
+
+    dataGannt.value= changer(data.value);
+
+    console.log("dataesta es ", dataGannt.value);
+
+  } catch (error) {
+    console.log(error.message);
+  }
+});
+
+const difference = (date1,date2) => {
+const date1F = new Date(date1)
+const date2F = new Date(date2)
+console.log('date',date2F)
+console.log(new Date('02/03/2017'))
+const diffTime = Math.abs(date2F - date1F)
+const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+return diffDays
+}
+
+const changer = (data) => {
+  let dataG = []
+let idCounter = 1;
+data.message.forEach(object => {
+    let existingObjective = dataG.find(obj => obj.TaskName === object.objective_name);
+
+    if (existingObjective) {
+        existingObjective.subtasks.push({
+          TaskID : idCounter++, 
+            TaskName: object.task_name,
+            StartDate: new Date(object.start_date),
+            EndDate: new Date(object.deadline),
+            Duration: difference(object.start_date, object.deadline)
+        });
+    } else {
+        let newObjective = {
+          TaskID : idCounter++,
+            TaskName: object.objective_name,
+            StartDate: new Date(object.objectivestart), 
+            subtasks: [{
+              TaskID: idCounter++, 
+                TaskName: object.task_name,
+                StartDate: new Date(object.start_date),
+                EndDate: new Date(object.deadline),
+                Duration: difference(object.start_date, object.deadline),
+            }]
+        };
+
+        dataG.push(newObjective);
+    }
+});
+console.log('dddddd',dataG);
+return dataG
+}
+ 
+ 
+
+
+
+let pruebas = [{
      TaskID: 1,
      TaskName: 'Planning',
      StartDate: new Date('02/07/2017'),
@@ -26,8 +103,9 @@ let data = [{
          { TaskID: 11, TaskName: 'Design complete', StartDate: new Date('02/14/2017'), EndDate: new Date('02/14/2017'), Duration: 2,  },
          { TaskID: 12, TaskName: 'Design complete', StartDate: new Date('02/14/2017'), EndDate: new Date('02/14/2017'), Duration: 5, }
      ]
- }],
-    taskFields = {
+ }]
+    
+ const taskFields = {
       id: 'TaskID',
          name: 'TaskName',
          startDate: 'StartDate',
@@ -49,7 +127,7 @@ let data = [{
     class="absolute bg-white top-[23%] left-[98%] -translate-x-full w-[62%] h-[71.5%] rounded-[25px] shadow-xl"
   >
   <ScrollArea class="h-[90%] w-[97%] mt-[1%] ml-[1%]">
-    <ejs-gantt id="ganttt" class="mt-[2.5%]" :dataSource='data' :treeColumnIndex='1' child='subtasks' :taskFields= 'taskFields'>
+    <ejs-gantt id="ganttt" class="mt-[2.5%]" :dataSource='dataGannt' :treeColumnIndex='1' child='subtasks' :taskFields= 'taskFields'>
           <e-columns>
               <e-column field='TaskID' headerText='Task ID' textAlign='Right' width=70></e-column>
               <e-column field='TaskName' headerText='Task Name' textAlign='Left' width=200></e-column>

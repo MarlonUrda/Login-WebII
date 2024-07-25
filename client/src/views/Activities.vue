@@ -171,7 +171,9 @@ const goBack = () => {
     </TabsContent>
 </Tabs>
 
-<Gantt v-if="currentTab === 'resumen'"/>
+<Gantt v-if="currentTab === 'resumen'"
+:idProject="projectToken"
+/>
 </template>
 
 
