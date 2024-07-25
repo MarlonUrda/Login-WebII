@@ -96,16 +96,7 @@ const leaveData = async () => {
 
             <TableCell class="text-center">
                 {{ Object.values(objeto)[3].split('T')[0] }}
-            </TableCell>
-
-            <TableCell class="text-center">
-                {{ Object.values(objeto)[3].split('T')[0] }}
-            </TableCell>
-
-
-    
-          
-
+            </TableCell>    
 
             <TableCell class="text-center" v-if="role">
               <button>
