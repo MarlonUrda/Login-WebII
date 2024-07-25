@@ -85,7 +85,6 @@ const deleteActivity = async (activityId) => {
                         
             <TableHead class="text-center font-bold">Fecha Inicio</TableHead>
             <TableHead class="text-center font-bold">Fecha Fin</TableHead>
-            <TableHead class="text-center font-bold">Objetivo</TableHead>
             <TableHead class="text-center font-bold">Opciones</TableHead>
           </TableRow>
         </TableHeader>
@@ -118,10 +117,7 @@ const deleteActivity = async (activityId) => {
               {{ activity.deadline ? activity.deadline.split("T")[0] : ''}}
             </TableCell>
 
-            <TableCell
-              class="text-center overflow-hidden text-nowrap text-ellipsis"
-              >{{ props.id_objetivo }}</TableCell
-            >
+
 
             <TableCell class="text-center">
               <button
