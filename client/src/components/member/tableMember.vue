@@ -56,7 +56,6 @@ const leaveData = async () => {
 
 <template>
   <div
-    id="projectlist"
     class="absolute bg-white top-[34%] left-[50%] -translate-x-[50%] w-[92.5%] h-[57.5%] rounded-[70px] shadow-xl"
   >
     <ScrollArea class="h-[93%] w-[93%] mt-[0.75%] ml-[3.5%]">

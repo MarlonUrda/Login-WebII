@@ -529,6 +529,30 @@ right JOIN profile prof on prof.profile_id = m.profile_id
       console.error("Error: ", error);
     }
   }
+
+  async newReport(nombre,actividad,progreso,comentario,fecha,idProject) {
+    try {
+      const result = await this.pool.query(
+        `INSERT INTO "public".envio
+	    (nombre, actividad, progreso, comentario, fecha, project_id) VALUES ( $1, $2, $3, $4, $5, $6 );`,
+        [nombre,actividad,progreso,comentario,fecha,idProject]
+      );
+      return result;
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  }
+  async getReports(idProject) {
+    try {
+      const result = await this.pool.query(
+        `SELECT * FROM "public".envio WHERE project_id = $1`,
+        [idProject]
+      );
+      return result;
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  }
 }
 
 export default DbQueries;
