@@ -14,6 +14,7 @@ import TableActivities from "../components/activities/TableActivities.vue";
 import NewActivitiySheet from "../components/activities/NewActivitiy.vue";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Gantt from "../components/Gantt.vue";
+import tableReporte from "../components/tableReporte.vue";
 
 const router = useRouter();
 const route = useRoute();
@@ -24,7 +25,8 @@ const role = ref();
 const objective = ref("cargando...");
 const task = ref([]);
 const ready = ref(false);
-        
+const currentTab = ref("actividades");
+
 onMounted(async () => {
 
   try {
@@ -108,9 +110,7 @@ const goBack = () => {
     class="text-black bg-white w-[6.2%] h-[5%] top-[11%] left-[2%] absolute hover:text-white border-2 border-white"
     ><ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Volver</Button>
 
-    
-
-<Tabs default-value="actividades">
+<Tabs v-model="currentTab" default-value="actividades">
     <TabsList class=" bg-slate-600 text-white grid w-[15%] grid-cols-2 absolute left-1/2 top-[1.5%] -translate-x-1/2">
       <TabsTrigger value="resumen">
         Resumen
@@ -119,13 +119,8 @@ const goBack = () => {
         Actividades
       </TabsTrigger>
     </TabsList>
-    
-    <Gantt/>
-
     <TabsContent value="resumen">
-
-      
-      
+      <tableReporte/>
     </TabsContent>
 
     <TabsContent value="actividades">
@@ -171,6 +166,8 @@ const goBack = () => {
   />
     </TabsContent>
 </Tabs>
+
+<Gantt v-if="currentTab === 'resumen'"/>
 </template>
 
 

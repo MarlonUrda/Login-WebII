@@ -8,7 +8,7 @@ import {
 import { onMounted, onUnmounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft } from "lucide-vue-next";
+import { ChevronLeft, UserRoundPlus } from "lucide-vue-next";
 import UpdateObjective from "../components/UpdateObjective.vue";
 
 import { toProcess } from "../utils/toProcess";
@@ -137,13 +137,13 @@ const goGoal = (objectiveId) => {
   </Button>
 
   <Button
-    type="submit"
-    variant="default"
-    @click="goMember"
-    class="text-black bg-white w-[6.2%] h-[5%] top-[18%] left-[2%] absolute hover:text-white border-2 border-white z-1000"
-  >
-    <ChevronLeft class="mt-[2%] mr-2 h-4 w-4 inline" />Members
-  </Button>
+        type="submit"
+        variant="default"
+            @click="goMember"
+        class="text-white bg-blue-400 w-[12%] h-[5%] top-[11%] left-[98%] -translate-x-full absolute hover:bg-white hover:text-black"
+        ><UserRoundPlus class="mt-[2%] mr-2 h-4 w-4 inline" />Manejar
+        Integrantes</Button
+      >
 
 
   <GoalsSheet :id-project="projectToken" 

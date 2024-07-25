@@ -1,5 +1,5 @@
 <script setup lang="ts">
-
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { GanttComponent as EjsGantt, ColumnsDirective as EColumns, ColumnDirective as EColumn } from '@syncfusion/ej2-vue-gantt';
 let data = [{
      TaskID: 1,
@@ -27,7 +27,8 @@ let data = [{
          { TaskID: 8, TaskName: 'Develop prototype', StartDate: new Date('02/10/2017'), EndDate: new Date('02/12/2017'), duration: 3, Progress: 100,},
          { TaskID: 9, TaskName: 'Get approval from customer', startDate: new Date('02/13/2017'), EndDate: new Date('02/14/2017'), Duration: 2, Progress: 100, },
          { TaskID: 10, TaskName: 'Design Documentation', startDate: new Date('02/13/2017'), endDate: new Date('02/14/2017'), duration: 2, Progress: 100, },
-         { TaskID: 11, TaskName: 'Design complete', StartDate: new Date('02/14/2017'), EndDate: new Date('02/14/2017'), Duration: 0, Progress: 0,  }
+         { TaskID: 11, TaskName: 'Design complete', StartDate: new Date('02/14/2017'), EndDate: new Date('02/14/2017'), Duration: 0, Progress: 0, },
+         { TaskID: 12, TaskName: 'Design complete', StartDate: new Date('02/14/2017'), EndDate: new Date('02/14/2017'), Duration: 0, Progress: 0,  }
      ]
  }],
     taskFields = {
@@ -42,11 +43,17 @@ let data = [{
 </script>
 
 <template>
-  <div
-    id="projectlist"
-    class="absolute bg-white top-[10%] left-[50%] -translate-x-[50%] w-[50%] h-[80%] rounded-[70px] shadow-xl"
+      <h1
+    class="absolute text-4xl font-bold italic top-[14%] right-[17%] -translate-x-[50%] tracking-tight text-white underline underline-offset-4"
   >
-  <ejs-gantt id="ganttt" class="mt-16" :dataSource='data' :treeColumnIndex='1' child='subtasks' :taskFields= 'taskFields'>
+    Línea de Tiempo
+  </h1>
+  <div
+    id="ganttdiv"
+    class="absolute bg-white top-[23%] left-[98%] -translate-x-full w-[62%] h-[71.5%] rounded-[25px] shadow-xl"
+  >
+  <ScrollArea class="h-[90%] w-[97%] mt-[1%] ml-[1%]">
+    <ejs-gantt id="ganttt" class="mt-[2.5%]" :dataSource='data' :treeColumnIndex='1' child='subtasks' :taskFields= 'taskFields'>
           <e-columns>
               <e-column field='TaskID' headerText='Task ID' textAlign='Right' width=70></e-column>
               <e-column field='TaskName' headerText='Task Name' textAlign='Left' width=200></e-column>
@@ -54,11 +61,14 @@ let data = [{
               <e-column field='Duration' headerText='Duration' textAlign='Right' width=80></e-column>
          </e-columns>
       </ejs-gantt>
+  </ScrollArea>
+
+
     </div>
 
   </template>
   
-<style >
+<style>
    @import "/node_modules/@syncfusion/ej2-base/styles/material.css";
    @import "/node_modules/@syncfusion/ej2-buttons/styles/material.css";
    @import "/node_modules/@syncfusion/ej2-calendars/styles/material.css";
@@ -72,7 +82,7 @@ let data = [{
    @import "/node_modules/@syncfusion/ej2-treegrid/styles/material.css";
    @import "/node_modules/@syncfusion/ej2-vue-gantt/styles/material.css";
 
-   #projectlist{
+   #ganttdiv{
     z-index: 10000;
   }
 
