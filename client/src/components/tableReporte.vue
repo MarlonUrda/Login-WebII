@@ -9,7 +9,16 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
+import { toProcess } from "@/utils/toProcess";
+import { set } from "zod";
+
+const props=defineProps({
+  id_proyecto: Number,
+
+});
+
+const id_proyecto = ref(0);
 
 const invoices = ref([
   {
@@ -21,6 +30,31 @@ const invoices = ref([
     reporte: `andres garcia (@atlas) cambió el progreso de la actividad Vacas II a 100% con el siguiente anuncio: "Conectado el front al back con exito.".`,
   },
 ]);
+
+onMounted(async () => {
+  id_proyecto.value = props.id_proyecto;
+  const response = await toProcess("Basico", "Report", "getReport", {
+    id_proyecto: id_proyecto.value,
+  }).then((data) => {
+    console.log("data", data.data);
+    for (let objeto of data.data){
+      invoices.value.push({
+        fecha: objeto.fecha,
+        reporte: `${objeto.usuario} cambió el progreso de la actividad ${objeto.actividad} a ${objeto.progreso}% con el siguiente anuncio: "${objeto.comentario}".`,
+      });
+    }
+    console.log("invoices", invoices.value);
+    invoices.value = data;
+  });
+
+
+
+});
+
+watch(props, (newParams, oldParams) => {
+    console.log("change props", newParams);
+    id_proyecto.value = props.id_proyecto;
+  }, { deep: true });
 
 </script>
 

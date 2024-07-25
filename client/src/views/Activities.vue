@@ -120,7 +120,9 @@ const goBack = () => {
       </TabsTrigger>
     </TabsList>
     <TabsContent value="resumen">
-      <tableReporte/>
+      <tableReporte
+      :id_proyecto="projectToken"
+      />
     </TabsContent>
 
     <TabsContent value="actividades">

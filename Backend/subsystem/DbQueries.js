@@ -532,6 +532,8 @@ right JOIN profile prof on prof.profile_id = m.profile_id
 
   async newReport(nombre,actividad,progreso,comentario,fecha,idProject) {
     try {
+      console.log("llego a la funcion", nombre,actividad,progreso,comentario,fecha,idProject);
+      
       const result = await this.pool.query(
         `INSERT INTO "public".envio
 	    (nombre, actividad, progreso, comentario, fecha, project_id) VALUES ( $1, $2, $3, $4, $5, $6 );`,

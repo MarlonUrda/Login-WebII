@@ -48,6 +48,7 @@ const createActivity = async () => {
     taskName: activityName.value,
     taskDesc: activityDesc.value,
     idOb: props.idObjective,
+    
     deadline: limitFormatted,
   });
   emit('activityCreated', { /* datos de la actividad */ });

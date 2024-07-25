@@ -17,6 +17,7 @@ import Reports from "@/components/activities/Report.vue";
 const activities = ref([]);
 const role = ref("Basico");
 const emit = defineEmits(['activityCreated']);
+const project_id = ref(0);
 
 const props = defineProps({
   id_proyecto: Number,
@@ -34,7 +35,8 @@ onMounted(async () => {
   try {
     activities.value = props.activities;
     role.value=  props.role
-    console.log("activities", activities.value);
+    project_id.value = props.id_proyecto;
+
   } catch (error) {
     console.log(error.message);
   }
@@ -44,7 +46,8 @@ watch(() => props, (newParams, oldParams) => {
   // Actualizar los tokens basados en los nuevos parámetros de la ruta
   activities.value = props.activities;
   role.value=  props.role 
-  console.log("change props activities", activities.value);
+  project_id.value = props.id_proyecto;
+  console.log("changeggg props", project_id.value);
 
 }, { deep: true });
 
@@ -62,9 +65,7 @@ const deleteActivity = async (activityId) => {
   }
 };
 
-onUpdated(() => {
-  activities.value = props.activities;
-});
+
 </script>
 
 <template>
@@ -99,6 +100,7 @@ onUpdated(() => {
               <Reports
                 :nombre="activity.task_name"
                 :id_objetivo="props.id_objetivo"
+                :idProject="project_id"
               />
             </TableCell>
 

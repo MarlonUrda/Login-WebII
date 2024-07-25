@@ -14,7 +14,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import {  CalendarDate,getLocalTimeZone,DateFormatter } from "@internationalized/date";
 import { CalendarFold } from "lucide-vue-next";
-import { onMounted, ref } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { toProcess } from "@/utils/toProcess";
 import { CirclePlus } from "lucide-vue-next";
 import {
@@ -31,9 +31,8 @@ import { Label } from '@/components/ui/label';
 
 
 
-const activityName = ref("");
-const activityDesc = ref("");
-const dates = ref(new CalendarDate(2024, 1, 2));
+const project_id = ref(0);
+
 
 
 const props = defineProps({
@@ -52,11 +51,16 @@ const props = defineProps({
 });
 
 onMounted(() => {
-  console.log("mounted");
-  console.log("nombre", props.nombre);
+  project_id.value = props.idProject;
+
   
 });
 
+watch(() => props, (newParams, oldParams) => {
+  console.log("changevvggg props", newParams);
+  project_id.value = props.idProject;
+
+}, { deep: true });
 
 const objectiveDesc = ref("");
 const activityPercentage = ref(0);
@@ -68,21 +72,29 @@ const emit = defineEmits(['activityCreated']);
 
 const sendReport = async () => {
   try {
+    console.log("sendReport");
     const  progreso = activityPercentage.value;
     const  comentario = objectiveDesc.value;
-    const fecha = Date.now();
+    const fechaMilisegundos = Date.now();
+    // Convertir el timestamp a un objeto Date de JavaScript
+    const fechaObjeto = new Date(fechaMilisegundos);
+    // Convertir el objeto Date a una cadena en formato ISO 8601
+    // y luego ajustar el formato a 'YYYY-MM-DD HH:MM:SS' si es necesario
+    const fechaISO = fechaObjeto.toISOString().replace('T', ' ').substring(0, 19);
+    console.log("fechaISO", fechaISO);
+    const fecha = fechaISO;
     const response = await toProcess("Basico", "Report", "newReport", {
         nombre: props.nombre, // Asumiendo que `props` es un objeto accesible y `nombre` es una propiedad de ese objeto
-        actividad,
+        actividad: props.actividad,
         progreso,
         comentario,
         fecha,
-        idProject
+        idProject: project_id.value,
     });
 
-    let data = await response.json();
+    console.log("response", response);
     
-    if(data.success){
+    if(response.success){
 
       toast.success(data.message, { duration: 3000, position: "bottom-right" })
     } 
